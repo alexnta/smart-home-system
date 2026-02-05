@@ -1,4 +1,4 @@
-﻿-- 1. Tạo Database (Nếu chưa có)
+﻿-- 1. Tạo Database (Nếu chưa có) 05/02
 CREATE DATABASE SmartHomeDB;
 GO
 USE SmartHomeDB;
