@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+</head>
+<style>
+    #main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    /* Nested Dropdown Styles */
+    .dropdown-item-wrapper {
+        position: relative;
+    }
+
+    .dropdown-item-wrapper:hover .dropdown-menu-nested,
+    .dropdown-item-wrapper .dropdown-toggle-custom.show~.dropdown-menu-nested {
+        display: block;
+    }
+
+    .dropdown-menu-nested {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        min-width: 160px;
+        padding: 0.5rem 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .dropdown-menu-nested .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 0.25rem 1.5rem;
+        clear: both;
+        font-weight: 400;
+        color: #212529;
+        text-align: inherit;
+        text-decoration: none;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .dropdown-menu-nested .dropdown-item:hover {
+        color: #0c63e4;
+        background-color: #f8f9fa;
+    }
+
+    .dropdown-toggle-custom::after {
+        display: inline-block;
+        margin-left: 0.5rem;
+        vertical-align: 0.255em;
+        content: "";
+        border-top: 0.3em solid;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0;
+        border-left: 0.3em solid transparent;
+    }
+
+    .card{
+        padding-bottom: 15px;
+        width: 350px;
+    }
+
+    .submit_form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input_data{
+        width: 50%;
+        min-width: 220px;
+    }
+
+    .submit_button{
+        transition: all 0.5s;
+        transform-origin: center;
+        margin-bottom: 16px;
+        width: 25%;
+    }
+
+    .button_container {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    h5 {
+        margin-top: 10px;
+    }
+
+    @media (max-width: 318px) {
+        .btn {
+            width: 50%;
+        }
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Smart Door</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">User management</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Create user</a></li>
+                            <li><a class="dropdown-item" href="#">User adjustment</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">House management</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Add facilities</a></li>
+                            <li class="dropdown-item-wrapper">
+                                <a class="dropdown-item dropdown-toggle-custom" href="#" role="button">Adjust
+                                    facilities</a>
+                                <ul class="dropdown-menu-nested">
+                                    <li><a class="dropdown-item" href="#">Houses</a></li>
+                                    <li><a class="dropdown-item" href="#">Rooms</a></li>
+                                    <li><a class="dropdown-item" href="#">Devices</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Rules management</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Create rule</a></li>
+                            <li><a class="dropdown-item" href="#">Adjust rule</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item-wrapper">
+                                <a class="dropdown-item dropdown-toggle-custom" href="#" role="button">Sub Menu</a>
+                                <ul class="dropdown-menu-nested">
+                                    <li><a class="dropdown-item" href="#">Nested Item 1</a></li>
+                                    <li><a class="dropdown-item" href="#">Nested Item 2</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="card" style="width: 600px;">
+            <h5 class="card-title" style="text-align: center;">Create user</h5>
+            <form class="d-flex submit_form" role="submit">
+                <input class="form-control mx-auto mt-3 mb-0 input_data" type="text" placeholder="Enter name"
+                    aria-label="username">
+                <select class="form-select input_data mx-auto mt-3 mb-0" aria-label="Default select example">
+                    <option selected>Choose role</option>
+                    <option value="1">House owner</option>
+                    <option value="2">Technician</option>
+                    <option value="3">Viewer</option>
+                </select>
+                <div class="button_container">
+                    <button class="btn btn-outline-danger mx-1 mt-3 mb-0 submit_button" type="submit">Cancel</button>
+                    <button class="btn btn-outline-success mx-1 mt-3 mb-0 submit_button" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Handle nested dropdown toggle
+        document.querySelectorAll('.dropdown-toggle-custom').forEach(toggle => {
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.toggle('show');
+            });
+        });
+
+        // Close nested dropdown when clicking elsewhere
+        document.addEventListener('click', function (e) {
+            document.querySelectorAll('.dropdown-toggle-custom.show').forEach(toggle => {
+                if (!toggle.closest('.dropdown-item-wrapper').contains(e.target)) {
+                    toggle.classList.remove('show');
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
