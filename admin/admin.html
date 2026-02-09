@@ -92,17 +92,17 @@
     }
 
     /*Create User Card*/
-    .user_create_container {
+    .section_container {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
     }
 
-    .create_user_card_container {
+    .card_container {
         padding-bottom: 15px;
         background: white;
-        width: 600px;
+        width: 500px;
         max-width: 90%;
         padding: 24px;
         border-radius: 10px;
@@ -113,7 +113,7 @@
         text-align: center;
     }
 
-    .create_user_submit_form {
+    .submit_form {
         display: flex;
         flex-direction: column;
     }
@@ -230,10 +230,10 @@
         </div>
     </nav>
     <div id="create_user_section" class="item_list">
-        <div class="container-fluid user_create_container">
-            <div class="card create_user_card_container">
+        <div class="container-fluid section_container">
+            <div class="card card_container">
                 <h5 class="card-title">Create User</h5>
-                <form class="d-flex create_user_submit_form" role="submit" id="create_user_form">
+                <form class="d-flex submit_form" role="submit" id="create_user_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_user_name" aria-label="Name"
                         type="text" placeholder="Enter name">
                     <select class="form-select input_data mx-auto mt-3 mb-0 role_select" aria-label="Default select"
@@ -244,6 +244,32 @@
                         <option value="3">Viewer</option>
                     </select>
                     <div class="button_container" id="button_container">
+                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_user_button"
+                            type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div id="user_management_section" class="item_list" style="display: none;">
+    </div>
+
+    <div id="add_facilities_section" class="item_list" style="display: none;">
+        <div class="container-fluid section_container">
+            <div class="card card_container">
+                <h5 class="card-title">Add facility</h5>
+                <form class="d-flex submit_form" role="submit" id="create_facility_form">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_facility_name" aria-label="Name"
+                        type="text" placeholder="Enter facility name">
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="facility_type_select">
+                        <option class="role_options" selected>Choose facility type</option>
+                        <option value="1">House</option>
+                        <option value="2">Room</option>
+                        <option value="3">Device</option>
+                    </select>
+                    <div class="button_container" id="button_container">
                         <button class="btn btn-outline-success mx-1 mt-3 mb-0 submit_button"
                             type="submit">Create</button>
                     </div>
@@ -252,11 +278,6 @@
 
         </div>
     </div>
-<div id="user_management_section" class="item_list" style="display: none;">
-    <div class="container-fluid">
-        <div class="row" id="user_list_row"></div>
-    </div>
-</div>
     <script>
         // Handle nested dropdown toggle
         document.querySelectorAll('.dropdown-toggle-custom').forEach(toggle => {
@@ -278,103 +299,114 @@
 
         //CREATE USER COMPONENT
         //Overlay
+        const selectRole = document.getElementsByClassName("role_select")[0];
+
         const overlay = document.createElement("div");
         overlay.className = "overlay";
 
-        //Create User Card
-        // let createUserCardContainer = document.createElement("div");
-        // createUserCardContainer.className = "container-fluid user_create_container";
+        let updateUserCardContainer = document.createElement("div");
+        updateUserCardContainer.className = "container-fluid section_container";
 
-        // let createUserCard = document.createElement("div");
-        // createUserCard.className = "card create_user_card_container";
+        let updateUserCard = document.createElement("div");
+        updateUserCard.className = "card card_container";
 
-        // let cardTitle = document.createElement("h5");
-        // cardTitle.className = "card-title";
-        // cardTitle.textContent = "Create User";
+        let updateUserCardTitle = document.createElement("h5");
+        updateUserCardTitle.className = "card-title";
+        updateUserCardTitle.textContent = "Update User";
 
-        // let createUserForm = document.createElement("form");
-        // createUserForm.className = "d-flex create_user_submit_form";
-        // createUserForm.setAttribute("role", "submit");
-        // createUserForm.setAttribute("id", "create_user_form");
+        let updateUserForm = document.createElement("form");
+        updateUserForm.className = "d-flex submit_form";
+        updateUserForm.setAttribute("role", "submit");
+        updateUserForm.setAttribute("id", "update_user_form");
 
 
-        // let inputUserName = document.createElement("input");
-        // inputUserName.className = "form-control mx-auto mt-3 mb-0 input_data";
-        // inputUserName.setAttribute("aria-label", "Name");
-        // inputUserName.setAttribute("type", "text");
-        // inputUserName.setAttribute("placeholder", "Enter name");
+        let inputUserName = document.createElement("input");
+        inputUserName.className = "form-control mx-auto mt-3 mb-0 input_data";
+        inputUserName.setAttribute("aria-label", "Name");
+        inputUserName.setAttribute("type", "text");
+        inputUserName.setAttribute("placeholder", "Enter name");
 
-        // let selectRole = document.createElement("select");
-        // selectRole.className = "form-select input_data mx-auto mt-3 mb-0";
-        // selectRole.setAttribute("aria-label", "Default select");
-        // selectRole.setAttribute("id", "role_select");
+        let updateselectRole = document.createElement("select");
+        updateselectRole.className = "form-select input_data mx-auto mt-3 mb-0";
+        updateselectRole.setAttribute("aria-label", "Default select");
+        updateselectRole.setAttribute("id", "update_role_select");
+        
+        let optionDefault = document.createElement("option");
+        optionDefault.className = "role_options";
+        optionDefault.setAttribute("selected", "");
+        optionDefault.textContent = "Choose role";
 
-        // let optionDefault = document.createElement("option");
-        // optionDefault.className = "role_options";
-        // optionDefault.setAttribute("selected", "");
-        // optionDefault.textContent = "Choose role";
+        let optionHouseOwner = document.createElement("option");
+        optionHouseOwner.setAttribute("value", "1");
+        optionHouseOwner.textContent = "House owner";
 
-        // let optionHouseOwner = document.createElement("option");
-        // optionHouseOwner.setAttribute("value", "1");
-        // optionHouseOwner.textContent = "House owner";
+        let optionTechnician = document.createElement("option");
+        optionTechnician.setAttribute("value", "2");
+        optionTechnician.textContent = "Technician";
 
-        // let optionTechnician = document.createElement("option");
-        // optionTechnician.setAttribute("value", "2");
-        // optionTechnician.textContent = "Technician";
+        let optionViewer = document.createElement("option");
+        optionViewer.setAttribute("value", "3");
+        optionViewer.textContent = "Viewer";
 
-        // let optionViewer = document.createElement("option");
-        // optionViewer.setAttribute("value", "3");
-        // optionViewer.textContent = "Viewer";
+        updateselectRole.appendChild(optionDefault);
+        updateselectRole.appendChild(optionHouseOwner);
+        updateselectRole.appendChild(optionTechnician);
+        updateselectRole.appendChild(optionViewer);
 
-        // selectRole.appendChild(optionDefault);
-        // selectRole.appendChild(optionHouseOwner);
-        // selectRole.appendChild(optionTechnician);
-        // selectRole.appendChild(optionViewer);
+        let buttonContainer = document.createElement("div");
+        buttonContainer.className = "button_container";
+        buttonContainer.setAttribute("id", "button_container");
 
-        // let buttonContainer = document.createElement("div");
-        // buttonContainer.className = "button_container";
-        // buttonContainer.setAttribute("id", "button_container");
+        let cancelUpdateButton = document.createElement("button");
+        cancelUpdateButton.className = "btn btn-outline-danger mx-1 mt-3 mb-0 submit_button";
+        cancelUpdateButton.setAttribute("type", "submit");
+        cancelUpdateButton.textContent = "Cancel";
 
-        // let cancelButton = document.createElement("button");
-        // cancelButton.className = "btn btn-outline-danger mx-1 mt-3 mb-0 submit_button";
-        // cancelButton.setAttribute("type", "submit");
-        // cancelButton.textContent = "Cancel";
+        let updateButton = document.createElement("button");
+        updateButton.className = "btn btn-outline-success mx-1 mt-3 mb-0 submit_button";
+        updateButton.setAttribute("type", "submit");
+        updateButton.textContent = "Update";
 
-        // let createButton = document.createElement("button");
-        // createButton.className = "btn btn-outline-success mx-1 mt-3 mb-0 submit_button";
-        // createButton.setAttribute("type", "submit");
-        // createButton.textContent = "Create";
+        buttonContainer.appendChild(cancelUpdateButton);
+        buttonContainer.appendChild(updateButton);
 
-        // buttonContainer.appendChild(cancelButton);
-        // buttonContainer.appendChild(createButton);
+        updateUserForm.appendChild(inputUserName);
+        updateUserForm.appendChild(updateselectRole);
+        updateUserForm.appendChild(buttonContainer);
 
-        // createUserForm.appendChild(inputUserName);
-        // createUserForm.appendChild(selectRole);
-        // createUserForm.appendChild(buttonContainer);
+        updateUserCard.appendChild(updateUserCardTitle);
+        updateUserCard.appendChild(updateUserForm);
 
-        // createUserCard.appendChild(cardTitle);
-        // createUserCard.appendChild(createUserForm);
+        updateUserCardContainer.appendChild(updateUserCard);
 
-        // createUserCardContainer.appendChild(createUserCard);
+                // House ID input for UPDATE user
+let updateHouseInput = document.createElement("input");
+updateHouseInput.id = "update_houseInput";
+updateHouseInput.className = "form-control mx-auto mt-3 input_data";
+updateHouseInput.placeholder = "Enter House ID";
 
-        //Triger to show create user card
-        // const createUserTags = document.querySelector(".create_user_tag");
-        // createUserTags.addEventListener("click", function (e) {
-        //     e.preventDefault();
-        //     overlay.innerHTML = "";
-        //     document.body.appendChild(overlay);
-        //     document.body.appendChild(createUserCardContainer);
-        // });
+updateselectRole.addEventListener("change", () => {
+    const role = updateselectRole.value;
+    const existedHouseInput = document.getElementById("update_houseInput");
 
-        // overlay.addEventListener("click", function () {
-        //     createUserForm.reset();
-        //     createUserCardContainer.remove();
-        //     overlay.remove();
-        // })
+    if (role === "1" || role === "3") {
+        if (!existedHouseInput) {
+            // chèn House ID trước button container
+            updateUserForm.insertBefore(
+                updateHouseInput,
+                buttonContainer
+            );
+        }
+    } else {
+        existedHouseInput?.remove();
+    }
+});
+
+
 
         //create user card
-        document.getElementsByClassName("submit_button")[0].addEventListener("click", function (e) {
-            console.log(document.getElementsByClassName('submit_button')[0]);
+        document.getElementById("submit_user_button").addEventListener("click", function (e) {
+            console.log(document.getElementById('submit_user_button'));
             e.preventDefault();
             let userCardContainer = document.createElement("div");
             userCardContainer.className = "col-6 col-lg-3 card_container";
@@ -388,20 +420,120 @@
             let userCardRole = document.createElement("p");
             userCardRole.className = "card-text";
             userCardRole.textContent = selectRole.options[selectRole.selectedIndex].text;
+            let houseIDText = document.createElement("p");
+            houseIDText.className = "card-text";
+            let houseID = document.getElementById("houseInput");
+            if (houseID) {
+                houseIDText.textContent = "House ID: " + houseID.value;
+            }
             let userCardID = document.createElement("p");
             userCardID.className = "card-text";
-            userCardID.textContent = "ID: " + generateID(IDList);
+            userCardID.textContent = "User ID: " + generateID(IDList);
+            let updateUserButton = document.createElement("button");
+            updateUserButton.className = "btn btn-primary update_user_button";
+            updateUserButton.textContent = "Update";
+
+            let deleteUserButton = document.createElement("button");
+            deleteUserButton.className = "btn btn-danger delete_user_button mx-2";
+            deleteUserButton.textContent = "Delete";
+
+            let userContainerButons = document.createElement("div");
+            userContainerButons.className = "user_card_button_container d-flex mt-1 mb-2 justify-content-center";
+            userContainerButons.appendChild(updateUserButton);
+            userContainerButons.appendChild(deleteUserButton);
             userCardBody.appendChild(userCardTitle);
             userCardBody.appendChild(userCardRole);
+            userCardBody.appendChild(houseIDText);
             userCardBody.appendChild(userCardID);
             userCard.appendChild(userCardBody);
             userCardContainer.appendChild(userCard);
-            document.getElementById("user_list_row").appendChild(userCardContainer);
+            userCard.appendChild(userContainerButons);
+            document.getElementById("user_management_section").appendChild(userCardContainer);
 
 
             document.getElementById("create_user_form").reset();
             // createUserCardContainer.remove();
             // overlay.remove();
+        });
+
+
+
+        //Triger to show update user card
+document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("update_user_button")) {
+        e.preventDefault();
+
+        currentEditingCard = e.target.closest(".user_card");
+
+        const cardBody = currentEditingCard.querySelector(".card-body");
+
+        // LẤY DỮ LIỆU TỪ CARD
+        const name = cardBody.querySelector(".card-title").textContent;
+        const roleText = cardBody.querySelectorAll(".card-text")[0].textContent;
+        const houseText = cardBody.querySelectorAll(".card-text")[1]?.textContent;
+
+        // FILL DATA VÀO FORM
+        inputUserName.value = name;
+
+        [...updateselectRole.options].forEach(opt => {
+            opt.selected = opt.text === roleText;
+        });
+
+        if (houseText && (updateselectRole.value === "1" || updateselectRole.value === "3")) {
+            updateHouseInput.value = houseText.replace("House ID: ", "");
+            updateUserForm.insertBefore(updateHouseInput, buttonContainer);
+        }
+
+        overlay.innerHTML = "";
+        overlay.appendChild(updateUserCardContainer);
+        document.body.appendChild(overlay);
+    }
+});
+
+updateUserForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!currentEditingCard) return;
+
+    const newName = inputUserName.value;
+    const newRoleText = updateselectRole.options[updateselectRole.selectedIndex].text;
+    const newHouseID = updateHouseInput.value;
+
+    const cardBody = currentEditingCard.querySelector(".card-body");
+
+    // UPDATE NAME
+    cardBody.querySelector(".card-title").textContent = newName;
+
+    // UPDATE ROLE
+    cardBody.querySelectorAll(".card-text")[0].textContent = newRoleText;
+
+    // UPDATE HOUSE ID
+    let houseTextEl = cardBody.querySelector(".house-id-text");
+
+    if (updateselectRole.value === "1" || updateselectRole.value === "3") {
+        if (!houseTextEl) {
+            houseTextEl = document.createElement("p");
+            houseTextEl.className = "card-text house-id-text";
+            cardBody.insertBefore(houseTextEl, cardBody.querySelectorAll(".card-text")[1]);
+        }
+        houseTextEl.textContent = "House ID: " + newHouseID;
+    } else {
+        houseTextEl?.remove();
+    }
+
+    // CLEANUP
+    updateUserForm.reset();
+    updateHouseInput.remove();
+    overlay.remove();
+    currentEditingCard = null;
+});
+
+
+        cancelUpdateButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            let userCardContainer = e.target.closest(".card_container");
+            updateUserForm.reset();
+            userCardContainer.remove();
+            overlay.remove();
         });
 
         // cancelButton.addEventListener("click", function (e) {
@@ -411,7 +543,6 @@
         //     overlay.remove();
         // });
         //Display house inpput
-        const selectRole = document.getElementsByClassName("role_select")[0];
         selectRole.addEventListener("change", () => {
             const role = selectRole.value;
             let houseInput = document.getElementById("houseInput");
@@ -432,7 +563,7 @@
                 houseInput?.remove();
             }
         });
-
+        //Display house and room input
 
         //Update User Card
 
