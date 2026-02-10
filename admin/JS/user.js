@@ -34,6 +34,7 @@ function createUserCard(e, selectRole) {
     let userCardID = document.createElement("p");
     userCardID.className = "card-text";
     userCardID.textContent = "User ID: " + generateID(IDList);
+
     let updateUserButton = document.createElement("button");
     updateUserButton.className = "btn btn-primary update_user_button";
     updateUserButton.textContent = "Update";
@@ -73,7 +74,7 @@ function displayHouseInput(selectRole){
 
             document.getElementById("create_user_form").insertBefore(
                 houseInput,
-                document.getElementById("button_container")
+                document.getElementById("create_user_button_container")
             );
         }
     } else {
@@ -114,12 +115,12 @@ function createUpdateUserCard() {
 
     const updateBtn = document.createElement("button");
     updateBtn.type = "submit";
-    updateBtn.className = "btn btn-outline-success update_button";
+    updateBtn.className = "btn btn-outline-success submit_update_user_button";
     updateBtn.textContent = "Update";
 
         const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
-    cancelBtn.className = "btn btn-outline-danger cancel_update_button";
+    cancelBtn.className = "btn btn-outline-danger cancel_update_user_button";
     cancelBtn.textContent = "Cancel";
 
     buttonContainer.appendChild(updateBtn);
@@ -161,7 +162,7 @@ function displayUpdateUserCard(e, updateUI, overlay) {
 
 
 
-function updateData(e, card, overlay, updateUI) {
+function updateUserData(e, card, overlay, updateUI) {
     e.preventDefault();
     if (!card) return;
 
@@ -200,6 +201,6 @@ export{
     displayHouseInput,
     createUpdateUserCard,
     displayUpdateUserCard,
-    updateData,
+    updateUserData,
     showHouseIDInputUpdate
 }

@@ -3,11 +3,13 @@ import {createUserCard,
     displayHouseInput,
     createUpdateUserCard,
     displayUpdateUserCard,
-    updateData,
+    updateUserData,
 showHouseIDInputUpdate } from "./user.js";
+import { createFacilityCard, displayBelongToInput, createUpdateFacilityCard, displayUpdateFacilityCard, updateFacilityData,showBelongToIDInputUpdate } from "./facility.js";
 const navLinks = document.querySelectorAll('.nav-link');
 const itemList = document.querySelectorAll('.item_list');
 const selectRole = document.getElementById("role_select");
+const selectType = document.getElementById("facility_type_select");
 
 
 const overlay = document.createElement("div");
@@ -18,6 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
     navLinks.forEach(link => link.addEventListener("click", (e) => {
         if (e.target.classList.contains("tab_display")) {
             switchTab(navLinks, itemList, e.target);
+            document.getElementById("create_facility_form").reset();
+            document.getElementById("create_user_form").reset();
+            let input = document.getElementById("houseInput");
+            if (input) {
+                input.remove();
+            }
         }
     }
     ));
@@ -56,24 +64,24 @@ document.getElementById("submit_user_button").addEventListener("click", (e) => {
 //Update user card
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_user_button")) {
-        const updateUI = createUpdateUserCard();
+        const updateUserUI = createUpdateUserCard();
 
-        const editingCard = displayUpdateUserCard(
+        const editingUserCard = displayUpdateUserCard(
             e,
-            updateUI,
+            updateUserUI,
             overlay
         );
 
-        showHouseIDInputUpdate(updateUI);
+        showHouseIDInputUpdate(updateUserUI);
 
-        updateUI.form.addEventListener("submit", (ev) => {
-            updateData(ev, editingCard, overlay, updateUI);
+        updateUserUI.form.addEventListener("submit", (ev) => {
+            updateUserData(ev, editingUserCard, overlay, updateUserUI);
         });
     }
 });
 
 document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("cancel_update_button")) {
+    if (e.target.classList.contains("cancel_update_user_button")) {
         
         overlay.remove();
     }
@@ -81,9 +89,54 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete_user_button")) {
-        const card = e.target.closest(".user_card");
-        card?.parentElement.remove();
+        const userCard = e.target.closest(".user_card");
+        userCard?.parentElement.remove();
     }
 });
 
+//Facility
+selectType.addEventListener("change", () => {
+    displayBelongToInput(selectType);
+});
+//create facility card
+document.getElementById("submit_facility_button").addEventListener("click", (e) => {
+    e.preventDefault();
+    createFacilityCard(e, selectType);
+});
+
+
+
+//Update facility card
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("update_facility_button")) {
+        const updateFacilityUI = createUpdateFacilityCard();
+
+        const editingCard = displayUpdateFacilityCard(
+            e,
+            updateFacilityUI,
+            overlay
+        );
+
+        showBelongToIDInputUpdate(updateFacilityUI);
+
+        updateFacilityUI.form.addEventListener("submit", (ev) => {
+            updateFacilityData(ev, editingCard, overlay, updateFacilityUI);
+        });
+    }
+});
+
+
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("cancel_update_facility_button")) {
+        
+        overlay.remove();
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete_facility_button")) {
+        const facilityCard = e.target.closest(".facility_card");
+        facilityCard?.parentElement.remove();
+    }
+});
 

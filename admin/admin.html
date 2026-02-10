@@ -188,11 +188,11 @@
                                     facilities</a>
                                 <ul class="dropdown-menu-nested">
                                     <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="adjust_facilities_houses_section" href="#">Houses</a></li>
+                                            data-target="house_management_section" href="#">Houses</a></li>
                                     <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="adjust_facilities_rooms_section" href="#">Rooms</a></li>
+                                            data-target="room_management_section" href="#">Rooms</a></li>
                                     <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="adjust_facilities_devices_section" href="#">Devices</a></li>
+                                            data-target="device_management_section" href="#">Devices</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -229,6 +229,7 @@
             </div>
         </div>
     </nav>
+        <!-- User management section -->
     <div id="create_user_section" class="item_list">
         <div class="container-fluid section_container">
             <div class="card card_container">
@@ -243,7 +244,7 @@
                         <option value="2">Technician</option>
                         <option value="3">Viewer</option>
                     </select>
-                    <div class="button_container" id="button_container">
+                    <div class="button_container" id="create_user_button_container">
                         <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_user_button"
                             type="submit">Create</button>
                     </div>
@@ -264,20 +265,32 @@
                         type="text" placeholder="Enter facility name">
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="facility_type_select">
-                        <option class="role_options" selected>Choose facility type</option>
+                        <option class="facility_options" selected>Choose facility type</option>
                         <option value="1">House</option>
                         <option value="2">Room</option>
                         <option value="3">Device</option>
                     </select>
-                    <div class="button_container" id="button_container">
-                        <button class="btn btn-outline-success mx-1 mt-3 mb-0 submit_button"
+                    <div class="button_container" id="create_facility_button_container">
+                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_facility_button"
                             type="submit">Create</button>
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
+
+    <div id="house_management_section" class="item_list" style="display: none;"> 
+
+    </div>
+
+        <div id="room_management_section" class="item_list" style="display: none;"> 
+
+    </div>
+
+    <div id="device_management_section" class="item_list" style="display: none;"> 
+
+    </div>
+
     <script type="module" src="./JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
