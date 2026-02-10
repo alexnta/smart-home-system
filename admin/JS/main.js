@@ -79,4 +79,11 @@ document.addEventListener("click", (e) => {
     }
 });
 
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete_user_button")) {
+        const card = e.target.closest(".user_card");
+        card?.parentElement.remove();
+    }
+});
+
 

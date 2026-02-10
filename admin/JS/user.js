@@ -110,7 +110,7 @@ function createUpdateUserCard() {
     `;
 
     const buttonContainer = document.createElement("div");
-    buttonContainer.className = "button_container mt-3 d-flex justify-content-center gap-3";
+    buttonContainer.className = "button_container mt-3 d-flex justify-content-center gap-5";
 
     const updateBtn = document.createElement("button");
     updateBtn.type = "submit";
