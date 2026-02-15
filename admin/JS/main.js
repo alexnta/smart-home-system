@@ -6,6 +6,7 @@ import {createUserCard,
     updateUserData,
 showHouseIDInputUpdate } from "./user.js";
 import { createFacilityCard, displayBelongToInput, createUpdateFacilityCard, displayUpdateFacilityCard, updateFacilityData,showBelongToIDInputUpdate } from "./facility.js";
+import { changeRuleType, createRuleCard, createUpdateRuleCard, displayUpdateRuleCard, updateRuleData, changeRuleTypeUpdate} from "./rule.js";   
 const navLinks = document.querySelectorAll('.nav-link');
 const itemList = document.querySelectorAll('.item_list');
 const selectRole = document.getElementById("role_select");
@@ -26,6 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (input) {
                 input.remove();
             }
+            document.getElementById("create_rule_form").reset();
+            document.getElementById("rule_options_container").innerHTML = "";
         }
     }
     ));
@@ -140,3 +143,49 @@ document.addEventListener("click", (e) => {
     }
 });
 
+//RULE
+document.getElementById("rule_options_select").addEventListener("change",()=>{
+    changeRuleType();
+});
+
+//create rule card
+document.getElementById("submit_rule_button").addEventListener("click",(e)=>{
+    e.preventDefault();
+    createRuleCard();
+});
+
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("update_rule_button")) {
+
+        const updateRuleUI = createUpdateRuleCard();
+
+        const editingCard = displayUpdateRuleCard(
+            e,
+            updateRuleUI,
+            overlay
+        );
+
+        updateRuleUI.form.addEventListener("submit", (ev) => {
+            updateRuleData(ev, editingCard, overlay, updateRuleUI);
+        });
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("cancel_update_rule_button")) {
+        overlay.remove();
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete_rule_button")) {
+        const ruleCard = e.target.closest(".rule_card");
+        ruleCard?.parentElement.remove();
+    }
+});
+
+document.addEventListener("change", (e) => {
+    if (e.target.id === "update_rule_type_select") {
+            changeRuleTypeUpdate();
+    }
+});

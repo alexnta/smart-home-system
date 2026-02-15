@@ -201,9 +201,11 @@
                         <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">Rules</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item tab_display" data-target="create_rule_section" href="#">Create
+                            <li><a class="dropdown-item nav-link tab_display" data-target="create_rule_section"
+                                    href="#">Create
                                     rule</a></li>
-                            <li><a class="dropdown-item tab_display" data-target="edit_rule_section" href="#">Edit
+                            <li><a class="dropdown-item nav-link tab_display" data-target="edit_rule_section"
+                                    href="#">Edit
                                     rule</a></li>
                         </ul>
                     </li>
@@ -229,7 +231,7 @@
             </div>
         </div>
     </nav>
-        <!-- User management section -->
+    <!-- User management section -->
     <div id="create_user_section" class="item_list">
         <div class="container-fluid section_container">
             <div class="card card_container">
@@ -279,23 +281,54 @@
         </div>
     </div>
 
-    <div id="house_management_section" class="item_list" style="display: none;"> 
+    <div id="house_management_section" class="item_list" style="display: none;">
 
     </div>
 
-        <div id="room_management_section" class="item_list" style="display: none;"> 
+    <div id="room_management_section" class="item_list" style="display: none;">
 
     </div>
 
-    <div id="device_management_section" class="item_list" style="display: none;"> 
+    <div id="device_management_section" class="item_list" style="display: none;">
 
     </div>
+    <!--Rule section-->
+    <div id="create_rule_section" class="item_list" style="display: none;">
+        <div class="container-fluid section_container">
+            <div class="card card_container">
+                <h5 class="card-title">Create Rule</h5>
+                <form class="d-flex submit_form" role="submit" id="create_rule_form">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_device_ID" aria-label="Name"
+                        type="text" id="input_device_id" placeholder="Enter device ID">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_rule_name" aria-label="Name"
+                        type="text" placeholder="Enter rule name">
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="rule_options_select">
+                        <option class="rule_options" selected>Choose rule type</option>
+                        <option value="1">Event</option>
+                        <option value="2">Schedule</option>
+                        <option value="3">Threshold</option>
+                    </select>
+                    <div id="rule_options_container" class="d-flex justify-content-center flex-column mt-3 mb-0">
 
+                    </div>
+
+                    <div class="button_container" id="create_rule_button_container">
+                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_rule_button"
+                            type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="edit_rule_section" class="item_list" style="display: none;">
+
+    </div>
     <script type="module" src="./JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
-        
+
 
 </body>
 
