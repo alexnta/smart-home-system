@@ -55,9 +55,8 @@ function createUserCard(e, selectRole) {
     userCardContainer.appendChild(userCard);
     userCard.appendChild(userContainerButons);
     document.getElementById("user_management_section").appendChild(userCardContainer);
-
-
     document.getElementById("create_user_form").reset();
+    document.getElementById("houseInput")?.remove();
     // createUserCardContainer.remove();
     // overlay.remove();
 }

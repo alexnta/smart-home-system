@@ -16,7 +16,6 @@
         flex-direction: column;
         height: 100vh;
     }
-
     /* Nested Dropdown Styles */
     .dropdown-item-wrapper {
         position: relative;
@@ -106,7 +105,7 @@
         max-width: 90%;
         padding: 24px;
         border-radius: 10px;
-        z-index: 9999;
+        /*z-index: 9999;*/
     }
 
     .card-title {
@@ -139,15 +138,25 @@
         transform: scale(1.05);
     }
 
+    .nav-link.active {
+        background-color: #0c63e4;
+        color: white !important;
+    }
+
     h5 {
         margin-top: 10px;
     }
+
 
     @media (max-width: 318px) {
         .btn {
             width: 50%;
         }
     }
+
+    .item_list {
+    position: relative;
+}
 </style>
 
 <body>
@@ -212,19 +221,13 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Dropdown
+                            System setting
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-item-wrapper">
-                                <a class="dropdown-item dropdown-toggle-custom tab_display" href="#" role="button">Sub
-                                    Menu</a>
-                                <ul class="dropdown-menu-nested">
-                                    <li><a class="dropdown-item tab_display" href="#">Nested Item 1</a></li>
-                                    <li><a class="dropdown-item tab_display" href="#">Nested Item 2</a></li>
-                                </ul>
-                            </li>
-                            <li><a class="dropdown-item tab_display" href="#">System setting</a></li>
-                            <li><a class="dropdown-item tab_display" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item nav-link tab_display" data-target="create_system_section"
+                                    href="#">Create setting</a></li>
+                            <li><a class="dropdown-item nav-link tab_display" data-target="edit_system_section"
+                                    href="#">Manage setting</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -238,7 +241,9 @@
                 <h5 class="card-title">Create User</h5>
                 <form class="d-flex submit_form" role="submit" id="create_user_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_user_name" aria-label="Name"
-                        type="text" placeholder="Enter name">
+                        type="text" placeholder="Enter username">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_password" aria-label="Password"
+                        type="text" placeholder="Enter password">
                     <select class="form-select input_data mx-auto mt-3 mb-0 role_select" aria-label="Default select"
                         id="role_select">
                         <option class="role_options" selected>Choose role</option>
@@ -255,7 +260,10 @@
 
         </div>
     </div>
-    <div id="user_management_section" class="item_list" style="display: none;">
+    <div class="container-fluid" >
+        <div id="user_management_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
     </div>
 
     <div id="add_facilities_section" class="item_list" style="display: none;">
@@ -281,16 +289,22 @@
         </div>
     </div>
 
-    <div id="house_management_section" class="item_list" style="display: none;">
+    <div class="container-fluid">
+        <div id="house_management_section" class="row g-3 item_list" style="display: none;">
 
+        </div>
     </div>
 
-    <div id="room_management_section" class="item_list" style="display: none;">
+    <div class="container-fluid">
+        <div id="room_management_section" class="row g-3 item_list" style="display: none;">
 
+        </div>
     </div>
 
-    <div id="device_management_section" class="item_list" style="display: none;">
+    <div class="container-fluid">
+        <div id="device_management_section" class="row g-3 item_list" style="display: none;">
 
+        </div>
     </div>
     <!--Rule section-->
     <div id="create_rule_section" class="item_list" style="display: none;">
@@ -321,8 +335,18 @@
             </div>
         </div>
     </div>
-    <div id="edit_rule_section" class="item_list" style="display: none;">
+    <div class="container-fluid">
+        <div id="edit_rule_section" class="row g-3 item_list" style="display: none;">
 
+        </div>
+    </div>
+    <div id="creates_system_section" class="item_list" style="display: none;">
+
+    </div>
+    <div class="container-fluid">
+        <div id="edit_system_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
     </div>
     <script type="module" src="./JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"

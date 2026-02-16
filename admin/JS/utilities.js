@@ -9,7 +9,7 @@ function switchTab(navLinks, itemList, element) {
             const targetSection = document.getElementById(targetId);
             console.log(targetSection);
             if (targetSection) {
-                targetSection.style.display = 'block';
+                targetSection.style.display = 'flex';
             }
         }
         export {
