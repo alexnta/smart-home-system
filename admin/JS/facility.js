@@ -78,6 +78,7 @@ function createFacilityCard(e, selectFacilityType) {
     }
 
     document.getElementById("create_facility_form").reset();
+    document.getElementById("belongToInput")?.remove();
     // createUserCardContainer.remove();
     // overlay.remove();
 }
