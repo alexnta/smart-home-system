@@ -44,7 +44,7 @@ function createUserCard(e, selectRole) {
     deleteUserButton.textContent = "Delete";
 
     let userContainerButons = document.createElement("div");
-    userContainerButons.className = "user_card_button_container d-flex mt-1 mb-2 justify-content-center";
+    userContainerButons.className = "user_card_button_container d-flex mt-1 mb-2 justify-content-center gap-3";
     userContainerButons.appendChild(updateUserButton);
     userContainerButons.appendChild(deleteUserButton);
     userCardBody.appendChild(userCardTitle);

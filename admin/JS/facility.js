@@ -44,7 +44,7 @@ function createFacilityCard(e, selectFacilityType) {
     deleteFacilityButton.textContent = "Delete";
 
     let facilityContainerButtons = document.createElement("div");
-    facilityContainerButtons.className = "facility_card_button_container d-flex mt-1 mb-2 justify-content-center";
+    facilityContainerButtons.className = "facility_card_button_container d-flex mt-1 mb-2 justify-content-center gap-3";
     facilityContainerButtons.appendChild(updateFacilityButton);
     facilityContainerButtons.appendChild(deleteFacilityButton);
     facilityCardBody.appendChild(facilityCardTitle);

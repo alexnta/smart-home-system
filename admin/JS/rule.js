@@ -11,17 +11,13 @@ function generateID(arr, min = 1, max = 100) {
 function changeRuleType() {
     const rule = document.getElementById("rule_options_select").value;
     const dynamicContainer = document.getElementById("rule_options_container");
-
-
     dynamicContainer.innerHTML = "";
     switch (rule) {
-        case "1":
 
-            break;
         case "2":
 
             let dayContainer = document.createElement("div");
-            dayContainer.className = "d-flex justify-content-center mt-3 mb-0";
+            dayContainer.className = "d-flex justify-content-center mb-0";
             dayContainer.id = "day_container";
             let daySelect = document.createElement("select");
             daySelect.className = "form-select mx-auto mt-3 mb-0 input_data input_day_schedule";
@@ -53,7 +49,7 @@ function changeRuleType() {
             
             `;
             let toContainer = document.createElement("div");
-            toContainer.className = "row mb-3 align-items-center";
+            toContainer.className = "row align-items-center";
             toContainer.id = "to_container";
             toContainer.innerHTML = `
             <label class="col-3 col-form-label text-end">To:</label>
@@ -110,13 +106,17 @@ function createRuleCard() {
     titleText.className = "card-title text-center mt-2";
     titleText.textContent = document.getElementsByClassName("input_rule_name")[0].value;
 
+    const conditionTypeText = document.createElement("p");
+    conditionTypeText.className = "card-text text-center";
+    conditionTypeText.textContent = `Condition: ${document.getElementById("condition_options_select").options[document.getElementById("condition_options_select").selectedIndex].text}`;
+
     const ruleTypeText = document.createElement("p");
     ruleTypeText.className = "card-text text-center";
     ruleTypeText.textContent = `Rule type: ${document.getElementById("rule_options_select").options[document.getElementById("rule_options_select").selectedIndex].text}`;
 
-    const deviceAffected = document.createElement("p");
-    deviceAffected.className = "card-text text-center";
-    deviceAffected.textContent = `Device affected: ${document.getElementById("input_device_id").value}`;
+    const severityTypeText = document.createElement("p");
+    severityTypeText.className = "card-text text-center";
+    severityTypeText.textContent = `Severity: ${document.getElementById("severity_options_select").options[document.getElementById("severity_options_select").selectedIndex].text}`;
 
     const ruleID = document.createElement("p");
     ruleID.className = "card-text text-center";
@@ -131,14 +131,15 @@ function createRuleCard() {
     deleteRuleButton.textContent = "Delete";
 
     let ruleButtonContainer = document.createElement("div");
-    ruleButtonContainer.className = "rule_card_button_container d-flex mt-1 mb-2 justify-content-center";
+    ruleButtonContainer.className = "rule_card_button_container d-flex mt-1 mb-2 justify-content-center gap-3";
     ruleButtonContainer.appendChild(updateRuleButton);
     ruleButtonContainer.appendChild(deleteRuleButton);
 
     ruleCard.appendChild(titleText);
-    ruleCard.appendChild(ruleTypeText);
-    ruleCard.appendChild(deviceAffected);
     ruleCard.appendChild(ruleID);
+    ruleCard.appendChild(ruleTypeText);
+    ruleCard.appendChild(severityTypeText);
+    ruleCard.appendChild(conditionTypeText);
 
     let dynamicContainerCard = document.createElement("div");
     dynamicContainerCard.id = "dynamic_container_card";
@@ -157,7 +158,7 @@ function createRuleCard() {
             timeTo.className = "card-text text-center";
             timeTo.textContent = `Time to: ${document.getElementById("time_to_input").value}`;
 
-            
+
             dynamicContainerCard.appendChild(daySchedule);
             dynamicContainerCard.appendChild(timeFrom);
             dynamicContainerCard.appendChild(timeTo);
@@ -191,8 +192,8 @@ function createRuleCard() {
 
 }
 
-function createUpdateRuleCard(){
-        const container = document.createElement("div");
+function createUpdateRuleCard() {
+    const container = document.createElement("div");
     container.className = "container-fluid section_container";
 
     const card = document.createElement("div");
@@ -219,9 +220,28 @@ function createUpdateRuleCard(){
         <option value="3">Threshold</option>
     `;
 
+        const selectCondition = document.createElement("select");
+    selectCondition.id = "update_rule_condition_select";
+    selectCondition.className = "form-select mx-auto mt-3 input_data";
+    selectCondition.innerHTML = `
+        <option selected>Choose condition</option>
+        <option value="1">On</option>
+        <option value="2">Off</option>
+    `;
+
+    const severitySelect = document.createElement("select");
+    severitySelect.id = "update_rule_severity_select";
+    severitySelect.className = "form-select mx-auto mt-3 input_data";
+    severitySelect.innerHTML = `
+        <option selected>Choose severity</option>
+        <option value="1">Info</option>
+        <option value="2">Warning</option>
+        <option value="3">Critical</option>
+    `
+
     const dynamicUpdateContainer = document.createElement("div");
     dynamicUpdateContainer.id = "rule_update_options_container";
-    dynamicUpdateContainer.className = "mx-auto mt-3";
+    dynamicUpdateContainer.className = "d-flex justify-content-center flex-column mt-3 mb-0";
 
     const buttonContainer = document.createElement("div");
     buttonContainer.className = "button_container mt-3 d-flex justify-content-center gap-5";
@@ -231,14 +251,14 @@ function createUpdateRuleCard(){
     updateBtn.className = "btn btn-outline-success submit_update_rule_button";
     updateBtn.textContent = "Update";
 
-        const cancelBtn = document.createElement("button");
+    const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
     cancelBtn.className = "btn btn-outline-danger cancel_update_rule_button";
     cancelBtn.textContent = "Cancel";
 
     buttonContainer.appendChild(updateBtn);
     buttonContainer.appendChild(cancelBtn);
-    form.append(formTitle, inputRuleName, selectType, dynamicUpdateContainer,buttonContainer);
+    form.append(formTitle, inputRuleName, selectType, selectCondition, severitySelect, dynamicUpdateContainer, buttonContainer);
     card.appendChild(form);
     container.appendChild(card);
 
@@ -247,6 +267,7 @@ function createUpdateRuleCard(){
         form,
         inputRuleName,
         selectType,
+        severitySelect,
         buttonContainer
     };
 }
@@ -260,10 +281,15 @@ function displayUpdateRuleCard(e, updateUI, overlay) {
         body.querySelector(".card-title").textContent;
 
     const typeText = body.querySelector(".card-text").textContent;
+    //const severityText = body.querySelectorAll(".card-text")[1].textContent;
 
     [...updateUI.selectType.options].forEach(opt => {
         opt.selected = typeText.includes(opt.text);
     });
+
+    // [...updateUI.severitySelect.options].forEach(opt => {
+    //     opt.selected = severityText.includes(opt.text);
+    // });
 
     overlay.innerHTML = "";
     overlay.appendChild(updateUI.container);
@@ -292,8 +318,8 @@ function updateRuleData(e, card, overlay, updateUI) {
     let dynamicContainerCard = body.querySelector("#dynamic_container_card");
     if (selectedOption.value === "2") {
         dynamicContainerCard.innerHTML = "";
-        const dayScheduleUpdate = 
-        document.createElement("p");
+        const dayScheduleUpdate =
+            document.createElement("p");
         dayScheduleUpdate.className = "card-text text-center";
         dayScheduleUpdate.textContent = `Day: ${document.getElementById("day_schedule_update_select").value}`;
         const timeFromUpdate = document.createElement("p");
@@ -305,7 +331,7 @@ function updateRuleData(e, card, overlay, updateUI) {
         dynamicContainerCard.appendChild(dayScheduleUpdate);
         dynamicContainerCard.appendChild(timeFromUpdate);
         dynamicContainerCard.appendChild(timeToUpdate);
- 
+
     } else if (selectedOption.value === "3") {
         dynamicContainerCard.innerHTML = "";
         const stateThresholdUpdate = document.createElement("p");
@@ -320,7 +346,7 @@ function updateRuleData(e, card, overlay, updateUI) {
     } else if (selectedOption.value === "1") {
         dynamicContainerCard.innerHTML = "";
     }
-    
+
     overlay.remove();
 }
 
@@ -331,13 +357,11 @@ function changeRuleTypeUpdate() {
 
     dynamicUpdateContainer.innerHTML = "";
     switch (ruleUpdate) {
-        case "1":
 
-            break;
         case "2":
 
             let dayUpdateContainer = document.createElement("div");
-            dayUpdateContainer.className = "d-flex justify-content-center mt-3 mb-0";
+            dayUpdateContainer.className = "d-flex justify-content-center mb-0";
             dayUpdateContainer.id = "dayUpdateContainer";
             let dayUpdateSelect = document.createElement("select");
             dayUpdateSelect.className = "form-select mx-auto mt-3 mb-0 input_data input_day_schedule";
@@ -355,7 +379,7 @@ function changeRuleTypeUpdate() {
             dayUpdateContainer.appendChild(dayUpdateSelect);
             //create time input
             let scheduleTimeUpdateContainer = document.createElement("div");
-            scheduleTimeUpdateContainer.className = "d-flex justify-content-center flex-column mt-3 mb-0";
+            scheduleTimeUpdateContainer.className = "d-flex justify-content-center flex-column mb-0";
             scheduleTimeUpdateContainer.id = "schedule_time_update_container";
 
             let fromUpdateContainer = document.createElement("div");
@@ -368,6 +392,8 @@ function changeRuleTypeUpdate() {
   </div>
             
             `;
+
+
             let toUpdateContainer = document.createElement("div");
             toUpdateContainer.className = "row mb-3 align-items-center";
             toUpdateContainer.id = "to_update_container";
@@ -404,7 +430,7 @@ function changeRuleTypeUpdate() {
 
             dynamicUpdateContainer.appendChild(durationUpdateInput);
             dynamicUpdateContainer.appendChild(stateUpdateSelect);
-          
+
             break;
         default:
             console.log("No rule type selected");

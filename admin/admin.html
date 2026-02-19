@@ -110,7 +110,7 @@
     }
 
     .card-title {
-        number-align: center;
+        text-align: center;
     }
 
     .submit_form {
@@ -235,9 +235,9 @@
                 <h5 class="card-title">Create User</h5>
                 <form class="d-flex submit_form" role="submit" id="create_user_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_user_name" aria-label="Name"
-                        type="number" placeholder="Enter username">
+                        type="text" placeholder="Enter username">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_user_password" aria-label="Password"
-                        type="number" placeholder="Enter password">
+                        type="text" placeholder="Enter password">
                     <select class="form-select input_data mx-auto mt-3 mb-0 role_select" aria-label="Default select"
                         id="role_select">
                         <option class="role_options" selected>Choose role</option>
@@ -306,10 +306,8 @@
             <div class="card card_container">
                 <h5 class="card-title">Create Rule</h5>
                 <form class="d-flex submit_form" role="submit" id="create_rule_form">
-                    <input class="form-control mx-auto mt-3 mb-0 input_data input_device_ID" aria-label="Name"
-                        type="number" id="input_device_id" placeholder="Enter device ID">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_rule_name" aria-label="Name"
-                        type="number" placeholder="Enter rule name">
+                        type="text" placeholder="Enter rule name">
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="rule_options_select">
                         <option class="rule_options" selected>Choose rule type</option>
@@ -320,7 +318,19 @@
                     <div id="rule_options_container" class="d-flex justify-content-center flex-column mt-3 mb-0">
 
                     </div>
-
+                                        <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="severity_options_select">
+                        <option class="rule_options" selected>Choose severity type</option>
+                        <option value="1">Info</option>
+                        <option value="2">Warning</option>
+                        <option value="3">Critical</option>
+                    </select>
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="condition_options_select">
+                        <option class="rule_options" selected>Choose status type</option>
+                        <option value="1">On</option>
+                        <option value="2">Off</option>
+                    </select>
                     <div class="button_container" id="create_rule_button_container">
                         <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_rule_button"
                             type="submit">Create</button>
