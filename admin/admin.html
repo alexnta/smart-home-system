@@ -50,8 +50,8 @@
         clear: both;
         font-weight: 400;
         color: #212529;
-        number-align: inherit;
-        number-decoration: none;
+        text-align: inherit;
+        text-decoration: none;
         white-space: nowrap;
         background-color: transparent;
         border: 0;
@@ -170,11 +170,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
@@ -225,6 +220,14 @@
                         </a>
                     </li>
                 </ul>
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <form class="d-flex" style="max-width: 300px; width: 100%;">
+                        <input class="form-control" type="search" placeholder="Search">
+                    </form>
+                </div>
+                <form class="d-flex" role="search">
+                    <button class="btn btn-outline-success" type="submit">Log out</button>
+                </form>
             </div>
         </div>
     </nav>
@@ -266,7 +269,7 @@
                 <h5 class="card-title">Add facility</h5>
                 <form class="d-flex submit_form" role="submit" id="create_facility_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_facility_name" aria-label="Name"
-                        type="number" placeholder="Enter facility name">
+                        type="text" placeholder="Enter facility name">
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="facility_type_select">
                         <option class="facility_options" selected>Choose facility type</option>
@@ -318,7 +321,7 @@
                     <div id="rule_options_container" class="d-flex justify-content-center flex-column mt-3 mb-0">
 
                     </div>
-                                        <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="severity_options_select">
                         <option class="rule_options" selected>Choose severity type</option>
                         <option value="1">Info</option>
@@ -360,13 +363,6 @@
                         <h5 class="card-title">Alert System Configuration</h5>
                         <input type="checkbox" id="alert_system_checkbox">
                         <label for="alert_system_checkbox">Enable Alert System</label>
-                        <select class="form-select input_data mx-auto mt-3 mb-3 type_select" aria-label="Default select"
-                            id="severity_options_select">
-                            <option class="rule_options" selected>Choose serverity type</option>
-                            <option value="1">Info</option>
-                            <option value="2">Warning</option>
-                            <option value="3">Critical</option>
-                        </select>
                         <div class="row mb-3 align-items-center">
                             <label class="col-3 col-form-label number-end">Night start:</label>
                             <div class="col-9">

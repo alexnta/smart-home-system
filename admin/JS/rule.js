@@ -66,17 +66,6 @@ function changeRuleType() {
 
             break;
         case "3":
-
-
-            let stateSelect = document.createElement("select");
-            stateSelect.className = "form-select mx-auto mt-3 mb-0 input_data input_state_threshold";
-            stateSelect.id = "state_threshold_select";
-            stateSelect.innerHTML = `
-            <option class="state_options" selected>Choose state</option>
-            <option value="on">On</option>
-            <option value="off">Off</option>
-            `;
-
             let durationInput = document.createElement("input");
             durationInput.type = "number";
             durationInput.className = "form-control mx-auto mt-3 mb-0 input_data input_duration_threshold";
@@ -84,7 +73,7 @@ function changeRuleType() {
             durationInput.placeholder = "Duration (minutes)";
 
             dynamicContainer.appendChild(durationInput);
-            dynamicContainer.appendChild(stateSelect);
+ 
             document.getElementById("create_rule_form").insertBefore(dynamicContainer, document.getElementById("create_rule_button_container"));
             break;
         default:
