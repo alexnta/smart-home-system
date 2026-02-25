@@ -63,6 +63,11 @@
         background-color: #f8f9fa;
     }
 
+    .dropdown-item:hover {
+        color: #0c63e4;
+        background-color: #f8f9fa;
+    }
+
     .dropdown-toggle-custom::after {
         display: inline-block;
         margin-left: 0.5rem;
@@ -72,6 +77,90 @@
         border-right: 0.3em solid transparent;
         border-bottom: 0;
         border-left: 0.3em solid transparent;
+    }
+
+    /*Overlay*/
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /*Create User Card*/
+    .section_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .card_container {
+        padding-bottom: 15px;
+        background: white;
+        width: 500px;
+        max-width: 90%;
+        padding: 24px;
+        border-radius: 10px;
+        /*z-index: 9999;*/
+    }
+
+    .card-title {
+        text-align: center;
+    }
+
+    .submit_form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input_data {
+        width: 50%;
+        min-width: 220px;
+    }
+
+    .submit_button {
+        transition: all 0.5s;
+        transform-origin: center;
+        margin-bottom: 16px;
+        width: 25%;
+    }
+
+    .button_container {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    .nav-link.active {
+        background-color: #0c63e4;
+        color: white !important;
+    }
+
+    .nav-link{
+        border-radius: 5px;
+    }
+
+    h5 {
+        margin-top: 10px;
+    }
+
+
+    @media (max-width: 318px) {
+        .btn {
+            width: 50%;
+        }
+    }
+
+    .item_list {
+        position: relative;
     }
 </style>
 
@@ -85,54 +174,54 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Device list</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Assign room</a></li>
-                            <li><a class="dropdown-item" href="#">Update status</a></li>
-                        </ul>
+                        <a class="nav-link tab_display" href="#" role="button" data-target="devices_monitor_section" data-bs-toggle="dropdown"
+                            aria-expanded="false">Devices health monitor</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Device health monitor</a>
+                        <a class="nav-link tab_display" href="#" data-target="devices_list_section" data-bs-target="dropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Devices list</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Assigned alert</a>
+                        <a class="nav-link tab_display" href="#" data-target="assigned_alerts_section" role="button">
+                            Assigned alerts
+                        </a>
                     </li>
                 </ul>
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <form class="d-flex" style="max-width: 300px; width: 100%;">
+                        <input class="form-control" type="search" placeholder="Search">
+                    </form>
+                </div>
+                <form class="d-flex" role="search">
+                    <button class="btn btn-outline-success" type="submit">Log out</button>
+                </form>
             </div>
         </div>
     </nav>
-    <script>
-        // Handle nested dropdown toggle
-        document.querySelectorAll('.dropdown-toggle-custom').forEach(toggle => {
-            toggle.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this.classList.toggle('show');
-            });
-        });
 
-        // Close nested dropdown when clicking elsewhere
-        document.addEventListener('click', function (e) {
-            document.querySelectorAll('.dropdown-toggle-custom.show').forEach(toggle => {
-                if (!toggle.closest('.dropdown-item-wrapper').contains(e.target)) {
-                    toggle.classList.remove('show');
-                }
-            });
-        });
-    </script>
+    <div class="container-fluid">
+        <div id="devices_monitor_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="devices_list_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="assigned_alerts_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+    
+    <script type="module" src="./JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
