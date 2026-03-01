@@ -97,15 +97,23 @@ function createRuleCard() {
 
     const conditionTypeText = document.createElement("p");
     conditionTypeText.className = "card-text text-center";
+    conditionTypeText.id = "condition_type_text";
     conditionTypeText.textContent = `Condition: ${document.getElementById("condition_options_select").options[document.getElementById("condition_options_select").selectedIndex].text}`;
 
     const ruleTypeText = document.createElement("p");
     ruleTypeText.className = "card-text text-center";
+    ruleTypeText.id = "rule_type_text";
     ruleTypeText.textContent = `Rule type: ${document.getElementById("rule_options_select").options[document.getElementById("rule_options_select").selectedIndex].text}`;
 
     const severityTypeText = document.createElement("p");
     severityTypeText.className = "card-text text-center";
+    severityTypeText.id = "severity_type_text";
     severityTypeText.textContent = `Severity: ${document.getElementById("severity_options_select").options[document.getElementById("severity_options_select").selectedIndex].text}`;
+
+    const deviceRuleTypeText = document.createElement("p");
+    deviceRuleTypeText.className = "card-text text-center";
+    deviceRuleTypeText.id = "device_rule_type_text";
+    deviceRuleTypeText.textContent = `Device type: ${document.getElementById("device_options_select").options[document.getElementById("device_options_select").selectedIndex].text}`;
 
     const ruleID = document.createElement("p");
     ruleID.className = "card-text text-center";
@@ -129,6 +137,7 @@ function createRuleCard() {
     ruleCard.appendChild(ruleTypeText);
     ruleCard.appendChild(severityTypeText);
     ruleCard.appendChild(conditionTypeText);
+    ruleCard.appendChild(deviceRuleTypeText);
 
     let dynamicContainerCard = document.createElement("div");
     dynamicContainerCard.id = "dynamic_container_card";
@@ -218,6 +227,15 @@ function createUpdateRuleCard() {
         <option value="2">Off</option>
     `;
 
+    const deviceOptionsSelect = document.createElement("select");
+    deviceOptionsSelect.id = "update_device_rule_type_select";
+    deviceOptionsSelect.className = "form-select mx-auto mt-3 input_data";
+    deviceOptionsSelect.innerHTML = `
+        <option selected>Choose device</option>
+        <option value="1">Door</option>
+        <option value="2">Light</option>
+    `
+    
     const severitySelect = document.createElement("select");
     severitySelect.id = "update_rule_severity_select";
     severitySelect.className = "form-select mx-auto mt-3 input_data";
@@ -247,15 +265,18 @@ function createUpdateRuleCard() {
 
     buttonContainer.appendChild(updateBtn);
     buttonContainer.appendChild(cancelBtn);
-    form.append(formTitle, inputRuleName, selectType, selectCondition, severitySelect, dynamicUpdateContainer, buttonContainer);
+    form.append(formTitle, inputRuleName, selectType, selectCondition, deviceOptionsSelect, severitySelect, dynamicUpdateContainer, buttonContainer);
     card.appendChild(form);
     container.appendChild(card);
 
+    
     return {
         container,
         form,
         inputRuleName,
         selectType,
+        selectCondition,
+        deviceOptionsSelect,
         severitySelect,
         buttonContainer
     };
@@ -263,22 +284,36 @@ function createUpdateRuleCard() {
 function displayUpdateRuleCard(e, updateUI, overlay) {
     e.preventDefault();
 
+
+
     const card = e.target.closest(".rule_card");
     const body = card;
 
     updateUI.inputRuleName.value =
         body.querySelector(".card-title").textContent;
 
-    const typeText = body.querySelector(".card-text").textContent;
-    //const severityText = body.querySelectorAll(".card-text")[1].textContent;
+
+        
+    const conditionText = body.querySelector("#condition_type_text").textContent;
+    const typeText = body.querySelector("#rule_type_text").textContent;
+    const deviceText = body.querySelector("#device_rule_type_text").textContent;
+    const severityText = body.querySelector("#severity_type_text").textContent;
+
+    [...updateUI.selectCondition.options].forEach(opt => {
+        opt.selected = conditionText.includes(opt.text);
+    });
 
     [...updateUI.selectType.options].forEach(opt => {
         opt.selected = typeText.includes(opt.text);
     });
 
-    // [...updateUI.severitySelect.options].forEach(opt => {
-    //     opt.selected = severityText.includes(opt.text);
-    // });
+     [...updateUI.deviceOptionsSelect.options].forEach(opt => {
+         opt.selected = deviceText.includes(opt.text);
+     });
+
+    [...updateUI.severitySelect.options].forEach(opt => {
+        opt.selected = severityText.includes(opt.text);
+    });
 
     overlay.innerHTML = "";
     overlay.appendChild(updateUI.container);
@@ -298,11 +333,25 @@ function updateRuleData(e, card, overlay, updateUI) {
         updateUI.inputRuleName.value;
 
     // update rule type
-    const typeTextEl = body.querySelector(".card-text");
+    const typeTextEl = body.querySelector("#rule_type_text");
     const selectedOption =
         updateUI.selectType.options[updateUI.selectType.selectedIndex];
-
     typeTextEl.textContent = `Rule type: ${selectedOption.text}`;
+
+const conditionTextEl = body.querySelector("#condition_type_text");
+    const selectedConditionOption =
+        updateUI.selectCondition.options[updateUI.selectCondition.selectedIndex];
+    conditionTextEl.textContent = `Condition: ${selectedConditionOption.text}`;
+
+    const severityTypeTextEl = body.querySelector("#severity_type_text");
+    const selectedSeverityOption =
+        updateUI.severitySelect.options[updateUI.severitySelect.selectedIndex];
+    severityTypeTextEl.textContent = `Severity: ${selectedSeverityOption.text}`;
+
+    const deviceRuleTypeTextEl = body.querySelector("#device_rule_type_text");
+    const selectedDeviceOption =
+        updateUI.deviceOptionsSelect.options[updateUI.deviceOptionsSelect.selectedIndex];
+    deviceRuleTypeTextEl.textContent = `Device type: ${selectedDeviceOption.text}`;
 
     let dynamicContainerCard = body.querySelector("#dynamic_container_card");
     if (selectedOption.value === "2") {
@@ -323,13 +372,11 @@ function updateRuleData(e, card, overlay, updateUI) {
 
     } else if (selectedOption.value === "3") {
         dynamicContainerCard.innerHTML = "";
-        const stateThresholdUpdate = document.createElement("p");
-        stateThresholdUpdate.className = "card-text text-center";
-        stateThresholdUpdate.textContent = `State: ${document.getElementById("state_threshold_update_select").value}`;
+
+
         const durationThresholdUpdate = document.createElement("p");
         durationThresholdUpdate.className = "card-text text-center";
         durationThresholdUpdate.textContent = `Duration: ${document.getElementById("duration_threshold_update_input").value} minutes`;
-        dynamicContainerCard.appendChild(stateThresholdUpdate);
         dynamicContainerCard.appendChild(durationThresholdUpdate);
 
     } else if (selectedOption.value === "1") {
@@ -402,14 +449,6 @@ function changeRuleTypeUpdate() {
             break;
         case "3":
 
-            let stateUpdateSelect = document.createElement("select");
-            stateUpdateSelect.className = "form-select mx-auto mt-3 mb-0 input_data input_state_threshold";
-            stateUpdateSelect.id = "state_threshold_update_select";
-            stateUpdateSelect.innerHTML = `
-            <option class="state_update_options" selected>Choose state</option>
-            <option value="on">On</option>
-            <option value="off">Off</option>
-            `;
 
             let durationUpdateInput = document.createElement("input");
             durationUpdateInput.type = "number";
@@ -418,7 +457,6 @@ function changeRuleTypeUpdate() {
             durationUpdateInput.placeholder = "Duration (minutes)";
 
             dynamicUpdateContainer.appendChild(durationUpdateInput);
-            dynamicUpdateContainer.appendChild(stateUpdateSelect);
 
             break;
         default:

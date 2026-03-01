@@ -144,6 +144,10 @@
         color: white !important;
     }
 
+        .nav-link{
+        border-radius: 5px;
+    }
+
     h5 {
         margin-top: 10px;
     }
@@ -318,6 +322,12 @@
                         <option value="2">Schedule</option>
                         <option value="3">Threshold</option>
                     </select>
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="device_options_select">
+                        <option class="rule_options" selected>Choose device type</option>
+                        <option value="1">Light</option>
+                        <option value="2">Door</option>
+                    </select>
                     <div id="rule_options_container" class="d-flex justify-content-center flex-column mt-3 mb-0">
 
                     </div>
@@ -361,8 +371,12 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Alert System Configuration</h5>
+
+                        <div class="input_container mt-2 mb-2">
                         <input type="checkbox" id="alert_system_checkbox">
                         <label for="alert_system_checkbox">Enable Alert System</label>
+                        </div>
+
                         <div class="row mb-3 align-items-center">
                             <label class="col-3 col-form-label number-end">Night start:</label>
                             <div class="col-9">
@@ -378,14 +392,14 @@
                         </div>
                         <input type="checkbox" id="only_night_checkbox">
                         <label for="only_night_checkbox">Enable Night Only Mode</label>
-                        <button type="button" class="btn btn-primary d-block">Confirm</button>
+                        <button type="button" class="btn btn-primary d-block mx-auto mt-1">Confirm</button>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-lg-3 card_container">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Threshold Default Configuration</h5>
+                        <h5 class="card-title"> Offline Threshold Configuration</h5>
                         <div class="d-flex align-items-center flex-column">
 
                             <input type="number" class="mt-2 mb-2 form-control" id="default_threshold"
@@ -404,13 +418,13 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Event Logging Configuration</h5>
-                        <div class="input_container mt-2 mb-2 form-control">
+                        <div class="input_container mt-2 mb-2">
                             <input type="checkbox" id="event_logging_checkbox">
                             <label for="event_logging_checkbox">Enable Event Logging</label>
                         </div>
                         <input type="number" class="mt-2 mb-2 form-control" id="log_retention_days"
                             placeholder="Log Retention (days)">
-                        <div class="input_container mt-2 mb-2 form-control">
+                        <div class="input_container mt-2 mb-2">
                             <input type="checkbox" id="auto_delete_logs_checkbox">
                             <label for="auto_delete_logs_checkbox">Auto Delete Old Logs</label>
                         </div>
