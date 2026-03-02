@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+</head>
+<style>
+    #main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    /* Nested Dropdown Styles */
+    .dropdown-item-wrapper {
+        position: relative;
+    }
+
+    .dropdown-item-wrapper:hover .dropdown-menu-nested,
+    .dropdown-item-wrapper .dropdown-toggle-custom.show~.dropdown-menu-nested {
+        display: block;
+    }
+
+    .dropdown-menu-nested {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        min-width: 160px;
+        padding: 0.5rem 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .dropdown-menu-nested .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 0.25rem 1.5rem;
+        clear: both;
+        font-weight: 400;
+        color: #212529;
+        text-align: inherit;
+        text-decoration: none;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .dropdown-menu-nested .dropdown-item:hover {
+        color: #0c63e4;
+        background-color: #f8f9fa;
+    }
+
+    .dropdown-item:hover {
+        color: #0c63e4;
+        background-color: #f8f9fa;
+    }
+
+    .dropdown-toggle-custom::after {
+        display: inline-block;
+        margin-left: 0.5rem;
+        vertical-align: 0.255em;
+        content: "";
+        border-top: 0.3em solid;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0;
+        border-left: 0.3em solid transparent;
+    }
+
+    /*Overlay*/
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /*Create User Card*/
+    .section_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .card_container {
+        padding-bottom: 15px;
+        background: white;
+        width: 500px;
+        max-width: 90%;
+        padding: 24px;
+        border-radius: 10px;
+        /*z-index: 9999;*/
+    }
+
+    .card-title {
+        text-align: center;
+    }
+
+    .submit_form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input_data {
+        width: 50%;
+        min-width: 220px;
+    }
+
+    .submit_button {
+        transition: all 0.5s;
+        transform-origin: center;
+        margin-bottom: 16px;
+        width: 25%;
+    }
+
+    .button_container {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    .nav-link.active {
+        background-color: #0c63e4;
+        color: white !important;
+    }
+
+        .nav-link{
+        border-radius: 5px;
+    }
+
+    h5 {
+        margin-top: 10px;
+    }
+
+
+    @media (max-width: 318px) {
+        .btn {
+            width: 50%;
+        }
+    }
+
+    .item_list {
+        position: relative;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Smart Door</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">User</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item nav-link tab_display active" data-target="create_user_section"
+                                    href="#">Create user</a></li>
+                            <li><a class="dropdown-item nav-link tab_display" data-target="user_management_section"
+                                    href="#">User management</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Facilities</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item nav-link tab_display" data-target="add_facilities_section"
+                                    href="#">Add facilities</a></li>
+                            <li class="dropdown-item-wrapper">
+                                <a class="dropdown-item dropdown-toggle-custom nav-link tab_display" href="#"
+                                    role="button">Adjust
+                                    facilities</a>
+                                <ul class="dropdown-menu-nested">
+                                    <li><a class="dropdown-item nav-link tab_display"
+                                            data-target="house_management_section" href="#">Houses</a></li>
+                                    <li><a class="dropdown-item nav-link tab_display"
+                                            data-target="room_management_section" href="#">Rooms</a></li>
+                                    <li><a class="dropdown-item nav-link tab_display"
+                                            data-target="device_management_section" href="#">Devices</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Rules</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item nav-link tab_display" data-target="create_rule_section"
+                                    href="#">Create
+                                    rule</a></li>
+                            <li><a class="dropdown-item nav-link tab_display" data-target="manage_rule_section"
+                                    href="#">Manage
+                                    rule</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link tab_display" href="#" data-target="house_rules_section" role="button">
+                            Generate events
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link tab_display" href="#" data-target="my_devices_section" role="button">
+                            My devices
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <form class="d-flex" style="max-width: 300px; width: 100%;">
+                        <input class="form-control" type="search" placeholder="Search">
+                    </form>
+                </div>
+                <form class="d-flex" role="search">
+                    <button class="btn btn-outline-success" type="submit">Log out</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- User management section -->
+    <div id="create_user_section" class="item_list">
+        <div class="container-fluid section_container">
+            <div class="card card_container">
+                <h5 class="card-title">Create User</h5>
+                <form class="d-flex submit_form" role="submit" id="create_user_form">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_name" aria-label="Name"
+                        type="text" placeholder="Enter username">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_password" aria-label="Password"
+                        type="text" placeholder="Enter password">
+                    <select class="form-select input_data mx-auto mt-3 mb-0 role_select" aria-label="Default select"
+                        id="role_select">
+                        <option class="role_options" selected>Choose role</option>
+                        <option value="1">House owner</option>
+                        <option value="2">Technician</option>
+                        <option value="3">Viewer</option>
+                    </select>
+                    <div class="button_container" id="create_user_button_container">
+                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_user_button"
+                            type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div id="user_management_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+
+    <div id="add_facilities_section" class="item_list" style="display: none;">
+        <div class="container-fluid section_container">
+            <div class="card card_container">
+                <h5 class="card-title">Add facility</h5>
+                <form class="d-flex submit_form" role="submit" id="create_facility_form">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_facility_name" aria-label="Name"
+                        type="text" placeholder="Enter facility name">
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="facility_type_select">
+                        <option class="facility_options" selected>Choose facility type</option>
+                        <option value="1">House</option>
+                        <option value="2">Room</option>
+                        <option value="3">Device</option>
+                    </select>
+                    <div class="button_container" id="create_facility_button_container">
+                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_facility_button"
+                            type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="house_management_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="room_management_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="device_management_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+    <!--Rule section-->
+    <div id="create_rule_section" class="item_list" style="display: none;">
+        <div class="container-fluid section_container">
+            <div class="card card_container">
+                <h5 class="card-title">Create Rule</h5>
+                <form class="d-flex submit_form" role="submit" id="create_rule_form">
+                    <input class="form-control mx-auto mt-3 mb-0 input_data input_device_id" aria-label="Name"
+                        type="text" placeholder="Enter device ID">
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="rule_template_options_select">
+                        <option class="rule_options" selected required>Choose rule to apply</option>
+                        <option value="1">Event</option>
+                        <option value="2">Schedule</option>
+                        <option value="3">Threshold</option>
+                    </select>
+                    <div class="button_container" id="create_rule_button_container">
+                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_rule_button"
+                            type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div id="manage_rule_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+    <div id="creates_system_section" class="item_list" style="display: none;">
+
+    </div>
+    <div class="container-fluid">
+        <div id="edit_system_section" class="row g-3 item_list" style="display: none;">
+
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div id="system_setting_section" class="row g-3 item_list" style="display: none;">
+            <div class="col-6 col-lg-3 card_container">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Alert System Configuration</h5>
+
+                        <div class="input_container mt-2 mb-2">
+                        <input type="checkbox" id="alert_system_checkbox">
+                        <label for="alert_system_checkbox">Enable Alert System</label>
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <label class="col-3 col-form-label number-end">Night start:</label>
+                            <div class="col-9">
+                                <input type="time" class="form-control input_data night_time_start"
+                                    id="night_time_start">
+                            </div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <label class="col-3 col-form-label number-end">Night end:</label>
+                            <div class="col-9">
+                                <input type="time" class="form-control input_data night_time_end" id="night_time_end">
+                            </div>
+                        </div>
+                        <input type="checkbox" id="only_night_checkbox">
+                        <label for="only_night_checkbox">Enable Night Only Mode</label>
+                        <button type="button" class="btn btn-primary d-block mx-auto mt-1">Confirm</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 card_container">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"> Offline Threshold Configuration</h5>
+                        <div class="d-flex align-items-center flex-column">
+
+                            <input type="number" class="mt-2 mb-2 form-control" id="default_threshold"
+                                placeholder="Default Threshold">
+
+                            <input type="number" class="mt-2 mb-2 form-control" id="minimum_duration"
+                                placeholder="Minimum Duration">
+
+                            <input type="number" class="mt-2 mb-2 form-control" id="maximum_duration"
+                                placeholder="Maximum Duration">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 card_container">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Logging Configuration</h5>
+                        <div class="input_container mt-2 mb-2">
+                            <input type="checkbox" id="event_logging_checkbox">
+                            <label for="event_logging_checkbox">Enable Event Logging</label>
+                        </div>
+                        <input type="number" class="mt-2 mb-2 form-control" id="log_retention_days"
+                            placeholder="Log Retention (days)">
+                        <div class="input_container mt-2 mb-2">
+                            <input type="checkbox" id="auto_delete_logs_checkbox">
+                            <label for="auto_delete_logs_checkbox">Auto Delete Old Logs</label>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./JS/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
