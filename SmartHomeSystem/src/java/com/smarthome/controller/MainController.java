@@ -33,6 +33,22 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_CONTROLLER = "LoginController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
+    private static final String VIEW_HOME = "ViewHome";
+    private static final String VIEW_HOME_CONTROLLER = "ViewHomeController";
+    private static final String CREATE_HOME = "CreateHome";
+    private static final String CREATE_HOME_CONTROLLER = "CreateHomeController";
+    private static final String UPDATE_HOME = "UpdateHome";
+    private static final String UPDATE_HOME_CONTROLLER = "UpdateHomeController";
+    private static final String DELETE_HOME = "DeleteHome";
+    private static final String DELETE_HOME_CONTROLLER = "DeleteHomeController";
+    private static final String VIEW_ROOM = "ViewRoom";
+    private static final String VIEW_ROOM_CONTROLLER = "ViewRoomController";
+    private static final String CREATE_ROOM = "CreateRoom";
+    private static final String CREATE_ROOM_CONTROLLER = "CreateRoomController";
+    private static final String UPDATE_ROOM = "UpdateRoom";
+    private static final String UPDATE_ROOM_CONTROLLER = "UpdateRoomController";
+    private static final String DELETE_ROOM = "DeleteRoom";
+    private static final String DELETE_ROOM_CONTROLLER = "DeleteRoomController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,6 +62,22 @@ public class MainController extends HttpServlet {
                 url = LOGIN_CONTROLLER;
             } else if (LOGOUT.equals(action)) {
                 url = LOGOUT_CONTROLLER;
+            } else if (VIEW_HOME.equals(action)) {
+                url = VIEW_HOME_CONTROLLER;
+            } else if (CREATE_HOME.equals(action)) {
+                url = CREATE_HOME_CONTROLLER;
+            } else if (UPDATE_HOME.equals(action)) {
+                url = UPDATE_HOME_CONTROLLER;
+            } else if (DELETE_HOME.equals(action)) {
+                url = DELETE_HOME_CONTROLLER;
+            } else if (VIEW_ROOM.equals(action)) {
+                url = VIEW_ROOM_CONTROLLER;
+            } else if (CREATE_ROOM.equals(action)) {
+                url = CREATE_ROOM_CONTROLLER;
+            } else if (UPDATE_ROOM.equals(action)) {
+                url = UPDATE_ROOM_CONTROLLER;
+            } else if (DELETE_ROOM.equals(action)) {
+                url = DELETE_ROOM_CONTROLLER;
             } else {
                 request.setAttribute("ERROR", "Your action is not supported.");
             }

@@ -4,7 +4,7 @@
  */
 package com.smarthome.dao;
 
-import com.smarthome.dto.HomeDTO;
+import com.smarthome.dto.RoomDTO;
 import com.smarthome.utils.DBUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,19 +17,19 @@ import java.util.List;
  *
  * @author Alex
  */
-public class HomeDAO {
-    // get home list
-    public List<HomeDTO> getAllHomes() throws SQLException, ClassNotFoundException {
-        List<HomeDTO> list = new ArrayList<>();
+public class RoomDAO {
+    // get room list
+    public List<RoomDTO> getAllRooms() throws SQLException, ClassNotFoundException {
+        List<RoomDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
         
-        String sql = "SELECT h.home_id, h.code, h.name, h.address_text, h.status, "
-                   + "h.owner_user_id, h.created_at, u.full_name AS ownerName "
-                   + "FROM Home h "
-                   + "LEFT JOIN Users u ON h.owner_user_id = u.user_id "
-                   + "ORDER BY h.created_at DESC";
+        String sql = "SELECT r.room_id, r.home_id, r.name, r.floor, r.room_type, "
+                   + "r.status, r.created_at, h.name AS homeName "
+                   + "FROM Room r "
+                   + "LEFT JOIN Home h ON r.home_id = h.home_id "
+                   + "ORDER BY r.created_at DESC";
         
         try {
             conn = DBUtils.getConnection();
@@ -38,17 +38,17 @@ public class HomeDAO {
                 rs = ptm.executeQuery();
                 
                 while (rs.next()) {
-                    HomeDTO home = new HomeDTO(
+                    RoomDTO room = new RoomDTO(
+                        rs.getInt("room_id"),
                         rs.getInt("home_id"),
-                        rs.getString("code"),
                         rs.getString("name"),
-                        rs.getString("address_text"),
+                        rs.getInt("floor"),
+                        rs.getString("room_type"),
                         rs.getString("status"),
-                        rs.getInt("owner_user_id"),
                         rs.getTimestamp("created_at"),
-                        rs.getString("ownerName")
+                        rs.getString("homeName")
                     );
-                    list.add(home);
+                    list.add(room);
                 }
             }
         } finally {
@@ -59,37 +59,36 @@ public class HomeDAO {
         
         return list;
     }
-
-    // get home info by id
-    public HomeDTO getHomeById(int homeId) throws SQLException, ClassNotFoundException {
-        HomeDTO home = null;
+    
+    public RoomDTO getRoomById(int roomId) throws SQLException, ClassNotFoundException {
+        RoomDTO room = null;
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
 
-        String sql = "SELECT h.home_id, h.code, h.name, h.address_text, h.status, "
-                   + "h.owner_user_id, h.created_at, u.full_name AS ownerName "
-                   + "FROM Home h "
-                   + "LEFT JOIN Users u ON h.owner_user_id = u.user_id "
-                   + "WHERE h.home_id = ?";
+        String sql = "SELECT r.room_id, r.home_id, r.name, r.floor, r.room_type, "
+                   + "r.status, r.created_at, h.name AS homeName "
+                   + "FROM Room r "
+                   + "LEFT JOIN Home h ON r.home_id = h.home_id "
+                   + "WHERE r.room_id = ?";
 
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(sql);
-                ptm.setInt(1, homeId);
+                ptm.setInt(1, roomId);
                 rs = ptm.executeQuery();
 
                 if (rs.next()) {
-                    home = new HomeDTO(
+                    room = new RoomDTO(
+                        rs.getInt("room_id"),
                         rs.getInt("home_id"),
-                        rs.getString("code"),
                         rs.getString("name"),
-                        rs.getString("address_text"),
+                        rs.getInt("floor"),
+                        rs.getString("room_type"),
                         rs.getString("status"),
-                        rs.getInt("owner_user_id"),
                         rs.getTimestamp("created_at"),
-                        rs.getString("ownerName")
+                        rs.getString("homeName")
                     );
                 }
             }
@@ -99,27 +98,27 @@ public class HomeDAO {
             if (conn != null) conn.close();
         }
 
-        return home;
-    }    
+        return room;
+    }
+
     
-    // add a new home
-    public boolean insertHome(HomeDTO home) throws SQLException, ClassNotFoundException {
+    public boolean insertRoom(RoomDTO room) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ptm = null;
         boolean result = false;
 
-        String sql = "INSERT INTO Home (code, name, address_text, status, owner_user_id) "
+        String sql = "INSERT INTO Room (home_id, name, floor, room_type, status) "
                    + "VALUES (?, ?, ?, ?, ?)";
 
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(sql);
-                ptm.setString(1, home.getCode());
-                ptm.setString(2, home.getName());
-                ptm.setString(3, home.getAddressText());
-                ptm.setString(4, home.getStatus());
-                ptm.setInt(5, home.getOwnerUserId());
+                ptm.setInt(1, room.getHomeId());
+                ptm.setString(2, room.getName());
+                ptm.setInt(3, room.getFloor());
+                ptm.setString(4, room.getRoomType());
+                ptm.setString(5, room.getStatus());
 
                 int rowsAffected = ptm.executeUpdate();
                 if (rowsAffected > 0) {
@@ -134,26 +133,25 @@ public class HomeDAO {
         return result;
     }
     
-    // home update
-    public boolean updateHome(HomeDTO home) throws SQLException, ClassNotFoundException {
+    public boolean updateRoom(RoomDTO room) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ptm = null;
         boolean result = false;
 
-        String sql = "UPDATE Home SET code = ?, name = ?, address_text = ?, "
-                   + "status = ?, owner_user_id = ? "
-                   + "WHERE home_id = ?";
+        String sql = "UPDATE Room SET home_id = ?, name = ?, floor = ?, "
+                   + "room_type = ?, status = ? "
+                   + "WHERE room_id = ?";
 
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(sql);
-                ptm.setString(1, home.getCode());
-                ptm.setString(2, home.getName());
-                ptm.setString(3, home.getAddressText());
-                ptm.setString(4, home.getStatus());
-                ptm.setInt(5, home.getOwnerUserId());
-                ptm.setInt(6, home.getHomeId());
+                ptm.setInt(1, room.getHomeId());
+                ptm.setString(2, room.getName());
+                ptm.setInt(3, room.getFloor());
+                ptm.setString(4, room.getRoomType());
+                ptm.setString(5, room.getStatus());
+                ptm.setInt(6, room.getRoomId());
 
                 int rowsAffected = ptm.executeUpdate();
                 if (rowsAffected > 0) {
@@ -168,19 +166,18 @@ public class HomeDAO {
         return result;
     }
     
-    // delete home by id
-    public boolean deleteHome(int homeId) throws SQLException, ClassNotFoundException {
+    public boolean deleteRoom(int roomId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ptm = null;
         boolean result = false;
 
-        String sql = "DELETE FROM Home WHERE home_id = ?";
+        String sql = "DELETE FROM Room WHERE room_id = ?";
 
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(sql);
-                ptm.setInt(1, homeId);
+                ptm.setInt(1, roomId);
 
                 int rowsAffected = ptm.executeUpdate();
                 if (rowsAffected > 0) {
