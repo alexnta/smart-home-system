@@ -4,6 +4,7 @@
  */
 package com.smarthome.controller;
 
+import com.smarthome.dao.RoomDAO;
 import com.smarthome.dto.RoomDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
