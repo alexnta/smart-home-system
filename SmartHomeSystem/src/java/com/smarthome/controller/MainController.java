@@ -41,7 +41,7 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_HOME_CONTROLLER = "UpdateHomeController";
     private static final String DELETE_HOME = "DeleteHome";
     private static final String DELETE_HOME_CONTROLLER = "DeleteHomeController";
-    
+
     private static final String VIEW_ROOM = "ViewRoom";
     private static final String VIEW_ROOM_CONTROLLER = "ViewRoomController";
     private static final String CREATE_ROOM = "CreateRoom";
@@ -50,7 +50,7 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_ROOM_CONTROLLER = "UpdateRoomController";
     private static final String DELETE_ROOM = "DeleteRoom";
     private static final String DELETE_ROOM_CONTROLLER = "DeleteRoomController";
-    
+
     private static final String VIEW_DEVICE = "ViewDevice";
     private static final String VIEW_DEVICE_CONTROLLER = "ViewDeviceController";
     private static final String CREATE_DEVICE = "CreateDevice";
@@ -59,6 +59,13 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_DEVICE_CONTROLLER = "UpdateDeviceController";
     private static final String DELETE_DEVICE = "DeleteDevice";
     private static final String DELETE_DEVICE_CONTROLLER = "DeleteDeviceController";
+
+    private static final String VIEW_EVENT = "ViewEvent";
+    private static final String VIEW_EVENT_CONTROLLER = "ViewEventController";
+    private static final String CREATE_EVENT = "CreateEvent";
+    private static final String CREATE_EVENT_CONTROLLER = "CreateEventController";
+    private static final String SEARCH_EVENT = "SearchEvent";
+    private static final String SEARCH_EVENT_CONTROLLER = "SearchEventController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,7 +88,7 @@ public class MainController extends HttpServlet {
                 url = UPDATE_HOME_CONTROLLER;
             } else if (DELETE_HOME.equals(action)) {
                 url = DELETE_HOME_CONTROLLER;
-            // room
+                // room
             } else if (VIEW_ROOM.equals(action)) {
                 url = VIEW_ROOM_CONTROLLER;
             } else if (CREATE_ROOM.equals(action)) {
@@ -90,7 +97,7 @@ public class MainController extends HttpServlet {
                 url = UPDATE_ROOM_CONTROLLER;
             } else if (DELETE_ROOM.equals(action)) {
                 url = DELETE_ROOM_CONTROLLER;
-            // device
+                // device
             } else if (VIEW_DEVICE.equals(action)) {
                 url = VIEW_DEVICE_CONTROLLER;
             } else if (CREATE_DEVICE.equals(action)) {
@@ -99,7 +106,13 @@ public class MainController extends HttpServlet {
                 url = UPDATE_DEVICE_CONTROLLER;
             } else if (DELETE_DEVICE.equals(action)) {
                 url = DELETE_DEVICE_CONTROLLER;
-                
+                // event log
+            } else if (VIEW_EVENT.equals(action)) {
+                url = VIEW_EVENT_CONTROLLER;
+            } else if (CREATE_EVENT.equals(action)) {
+                url = CREATE_EVENT_CONTROLLER;
+            } else if (SEARCH_EVENT.equals(action)) {
+                url = SEARCH_EVENT_CONTROLLER;
             } else {
                 request.setAttribute("ERROR", "Your action is not supported.");
             }
