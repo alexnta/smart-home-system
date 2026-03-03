@@ -176,35 +176,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">User</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item nav-link tab_display active" data-target="create_user_section"
-                                    href="#">Create user</a></li>
-                            <li><a class="dropdown-item nav-link tab_display" data-target="user_management_section"
-                                    href="#">User management</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Facilities</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item nav-link tab_display" data-target="add_facilities_section"
-                                    href="#">Add facilities</a></li>
-                            <li class="dropdown-item-wrapper">
-                                <a class="dropdown-item dropdown-toggle-custom nav-link tab_display" href="#"
-                                    role="button">Adjust
-                                    facilities</a>
-                                <ul class="dropdown-menu-nested">
-                                    <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="house_management_section" href="#">Houses</a></li>
-                                    <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="room_management_section" href="#">Rooms</a></li>
-                                    <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="device_management_section" href="#">Devices</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <a class="nav-link tab_display active" href="#" role="button" data-target="alert_section" data-bs-toggle="dropdown"
+                            aria-expanded="false">Alerts</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle tab_display" href="#" role="button" data-bs-toggle="dropdown"
@@ -240,34 +213,9 @@
             </div>
         </div>
     </nav>
-    <!-- User management section -->
-    <div id="create_user_section" class="item_list">
-        <div class="container-fluid section_container">
-            <div class="card card_container">
-                <h5 class="card-title">Create User</h5>
-                <form class="d-flex submit_form" role="submit" id="create_user_form">
-                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_name" aria-label="Name"
-                        type="text" placeholder="Enter username">
-                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_password" aria-label="Password"
-                        type="text" placeholder="Enter password">
-                    <select class="form-select input_data mx-auto mt-3 mb-0 role_select" aria-label="Default select"
-                        id="role_select">
-                        <option class="role_options" selected>Choose role</option>
-                        <option value="1">House owner</option>
-                        <option value="2">Technician</option>
-                        <option value="3">Viewer</option>
-                    </select>
-                    <div class="button_container" id="create_user_button_container">
-                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_user_button"
-                            type="submit">Create</button>
-                    </div>
-                </form>
-            </div>
 
-        </div>
-    </div>
     <div class="container-fluid">
-        <div id="user_management_section" class="row g-3 item_list" style="display: none;">
+        <div id="alert_section" class="row g-3 item_list" style="display: none;">
 
         </div>
     </div>
@@ -386,7 +334,7 @@
                         <div class="d-flex align-items-center flex-column">
 
                             <input type="number" class="mt-2 mb-2 form-control" id="default_threshold"
-                                placeholder="Default Threshold">
+                                placeholder="Enter threshold">
 
                             <input type="number" class="mt-2 mb-2 form-control" id="minimum_duration"
                                 placeholder="Minimum Duration">
