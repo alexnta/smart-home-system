@@ -67,6 +67,44 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_EVENT = "SearchEvent";
     private static final String SEARCH_EVENT_CONTROLLER = "SearchEventController";
 
+    // RULE
+    private static final String VIEW_RULE = "ViewRule";
+    private static final String VIEW_RULE_CONTROLLER = "ViewRuleController";
+    private static final String CREATE_RULE = "CreateRule";
+    private static final String CREATE_RULE_CONTROLLER = "CreateRuleController";
+    private static final String UPDATE_RULE = "UpdateRule";
+    private static final String UPDATE_RULE_CONTROLLER = "UpdateRuleController";
+    private static final String DELETE_RULE = "DeleteRule";
+    private static final String DELETE_RULE_CONTROLLER = "DeleteRuleController";
+
+// HOME MODE
+    private static final String VIEW_HOME_MODE = "ViewHomeMode";
+    private static final String VIEW_HOME_MODE_CONTROLLER = "ViewHomeModeController";
+    private static final String CREATE_HOME_MODE = "CreateHomeMode";
+    private static final String CREATE_HOME_MODE_CONTROLLER = "CreateHomeModeController";
+    private static final String UPDATE_HOME_MODE = "UpdateHomeMode";
+    private static final String UPDATE_HOME_MODE_CONTROLLER = "UpdateHomeModeController";
+    private static final String DELETE_HOME_MODE = "DeleteHomeMode";
+    private static final String DELETE_HOME_MODE_CONTROLLER = "DeleteHomeModeController";
+
+// ALERT
+    private static final String VIEW_ALERT = "ViewAlert";
+    private static final String VIEW_ALERT_CONTROLLER = "ViewAlertController";
+    private static final String ACK_ALERT = "AckAlert";
+    private static final String ACK_ALERT_CONTROLLER = "AckAlertController";
+    private static final String RESOLVE_ALERT = "ResolveAlert";
+    private static final String RESOLVE_ALERT_CONTROLLER = "ResolveAlertController";
+    private static final String DELETE_ALERT = "DeleteAlert";
+    private static final String DELETE_ALERT_CONTROLLER = "DeleteAlertController";
+
+// ALERT ACTION
+    private static final String VIEW_ALERT_ACTION = "ViewAlertAction";
+    private static final String VIEW_ALERT_ACTION_CONTROLLER = "ViewAlertActionController";
+    private static final String CREATE_ALERT_ACTION = "CreateAlertAction";
+    private static final String CREATE_ALERT_ACTION_CONTROLLER = "CreateAlertActionController";
+    private static final String DELETE_ALERT_ACTION = "DeleteAlertAction";
+    private static final String DELETE_ALERT_ACTION_CONTROLLER = "DeleteAlertActionController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -113,6 +151,44 @@ public class MainController extends HttpServlet {
                 url = CREATE_EVENT_CONTROLLER;
             } else if (SEARCH_EVENT.equals(action)) {
                 url = SEARCH_EVENT_CONTROLLER;
+
+                // rule
+            } else if (VIEW_RULE.equals(action)) {
+                url = VIEW_RULE_CONTROLLER;
+            } else if (CREATE_RULE.equals(action)) {
+                url = CREATE_RULE_CONTROLLER;
+            } else if (UPDATE_RULE.equals(action)) {
+                url = UPDATE_RULE_CONTROLLER;
+            } else if (DELETE_RULE.equals(action)) {
+                url = DELETE_RULE_CONTROLLER;
+
+// home mode
+            } else if (VIEW_HOME_MODE.equals(action)) {
+                url = VIEW_HOME_MODE_CONTROLLER;
+            } else if (CREATE_HOME_MODE.equals(action)) {
+                url = CREATE_HOME_MODE_CONTROLLER;
+            } else if (UPDATE_HOME_MODE.equals(action)) {
+                url = UPDATE_HOME_MODE_CONTROLLER;
+            } else if (DELETE_HOME_MODE.equals(action)) {
+                url = DELETE_HOME_MODE_CONTROLLER;
+
+// alert
+            } else if (VIEW_ALERT.equals(action)) {
+                url = VIEW_ALERT_CONTROLLER;
+            } else if (ACK_ALERT.equals(action)) {
+                url = ACK_ALERT_CONTROLLER;
+            } else if (RESOLVE_ALERT.equals(action)) {
+                url = RESOLVE_ALERT_CONTROLLER;
+            } else if (DELETE_ALERT.equals(action)) {
+                url = DELETE_ALERT_CONTROLLER;
+
+// alert action
+            } else if (VIEW_ALERT_ACTION.equals(action)) {
+                url = VIEW_ALERT_ACTION_CONTROLLER;
+            } else if (CREATE_ALERT_ACTION.equals(action)) {
+                url = CREATE_ALERT_ACTION_CONTROLLER;
+            } else if (DELETE_ALERT_ACTION.equals(action)) {
+                url = DELETE_ALERT_ACTION_CONTROLLER;
             } else {
                 request.setAttribute("ERROR", "Your action is not supported.");
             }
