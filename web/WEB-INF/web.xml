@@ -1,15 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	 version="3.1">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>ViewHomeModeController</servlet-name>
+        <servlet-class>com.smarthome.controller.homemode.ViewHomeModeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateHomeModeController</servlet-name>
+        <servlet-class>com.smarthome.controller.homemode.CreateHomeModeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateHomeModeController</servlet-name>
+        <servlet-class>com.smarthome.controller.homemode.UpdateHomeModeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteHomeModeController</servlet-name>
+        <servlet-class>com.smarthome.controller.homemode.DeleteHomeModeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewRuleController</servlet-name>
+        <servlet-class>com.smarthome.controller.rule.ViewRuleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateRuleController</servlet-name>
+        <servlet-class>com.smarthome.controller.rule.CreateRuleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateRuleController</servlet-name>
+        <servlet-class>com.smarthome.controller.rule.UpdateRuleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteRuleController</servlet-name>
+        <servlet-class>com.smarthome.controller.rule.DeleteRuleController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAlertController</servlet-name>
+        <servlet-class>com.smarthome.controller.alert.ViewAlertController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AckAlertController</servlet-name>
+        <servlet-class>com.smarthome.controller.alert.AckAlertController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteAlertController</servlet-name>
+        <servlet-class>com.smarthome.controller.alert.DeleteAlertController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAlertActionController</servlet-name>
+        <servlet-class>ViewAlertActionController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAlertactionController</servlet-name>
+        <servlet-class>com.smarthome.controller.alertaction.ViewAlertactionController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateAlertactionController</servlet-name>
+        <servlet-class>com.smarthome.controller.alertaction.CreateAlertactionController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteAlertactionController</servlet-name>
+        <servlet-class>com.smarthome.controller.alertaction.DeleteAlertactionController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewHomeModeController</servlet-name>
+        <url-pattern>/ViewHomeModeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateHomeModeController</servlet-name>
+        <url-pattern>/CreateHomeModeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateHomeModeController</servlet-name>
+        <url-pattern>/UpdateHomeModeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteHomeModeController</servlet-name>
+        <url-pattern>/DeleteHomeModeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewRuleController</servlet-name>
+        <url-pattern>/ViewRuleController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateRuleController</servlet-name>
+        <url-pattern>/CreateRuleController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateRuleController</servlet-name>
+        <url-pattern>/UpdateRuleController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteRuleController</servlet-name>
+        <url-pattern>/DeleteRuleController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAlertController</servlet-name>
+        <url-pattern>/ViewAlertController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AckAlertController</servlet-name>
+        <url-pattern>/AckAlertController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteAlertController</servlet-name>
+        <url-pattern>/DeleteAlertController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAlertActionController</servlet-name>
+        <url-pattern>/ViewAlertActionController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAlertactionController</servlet-name>
+        <url-pattern>/ViewAlertactionController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateAlertactionController</servlet-name>
+        <url-pattern>/CreateAlertactionController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteAlertactionController</servlet-name>
+        <url-pattern>/DeleteAlertactionController</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-        <welcome-file-list>
+    <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
