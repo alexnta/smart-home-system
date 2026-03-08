@@ -30,8 +30,8 @@ public class CreateHomeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String ERROR_PAGE = "createHome.jsp";
-    private static final String SUCCESS_PAGE = "ViewHomeController";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "admin/admin.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,11 +42,16 @@ public class CreateHomeController extends HttpServlet {
         try {
             
             String code = request.getParameter("txtCode");
-            String name = request.getParameter("txtName");
+            String name = request.getParameter("txtFacilityName");
             String address = request.getParameter("txtAddress");
             String status = request.getParameter("txtStatus");
             String ownerIdStr = request.getParameter("txtOwnerId");
             
+            System.out.println("code = " + code);
+System.out.println("name = " + name);
+System.out.println("address = " + address);
+System.out.println("status = " + status);
+System.out.println("ownerId = " + ownerIdStr);
             // basic validation
             if (code == null || code.trim().isEmpty()) {
                 request.setAttribute("ERROR", "Home code is required!");
@@ -67,18 +72,20 @@ public class CreateHomeController extends HttpServlet {
 
                 HomeDAO dao = new HomeDAO();
                 boolean success = dao.insertHome(home);
-
+                System.out.println(success);
                 if (success) {
                     url = SUCCESS_PAGE;
                 } else {
-                    request.setAttribute("ERROR", "Failed to create home!");
+                            request.setAttribute("ERROR", "Failed to create home!");
+        request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
         } catch (NumberFormatException e) {
-            request.setAttribute("ERROR", "Owner ID must be a number!");
+                request.setAttribute("ERROR", "Invalid number format!");
+    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-            log("Error at CreateHomeController: " + e.toString());
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
+    request.setAttribute("ERROR", "System error: " + e.getMessage());
+    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -31,8 +31,8 @@ public class ViewDeviceController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String DEVICE_LIST_PAGE = "deviceList.jsp";
-    private static final String ERROR_PAGE = "error.jsp";
+    private static final String DEVICE_LIST_PAGE = "admin/admin.jsp";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,10 +44,14 @@ public class ViewDeviceController extends HttpServlet {
             List<DeviceDTO> deviceList = dao.getAllDevices();
 
             request.setAttribute("DEVICE_LIST", deviceList);
+            request.setAttribute("CURRENT_SECTION", "device_management_section");
+
             url = DEVICE_LIST_PAGE;
+
         } catch (Exception e) {
             log("Error at ViewDeviceController: " + e.toString());
             request.setAttribute("ERROR", "Cannot load device list!");
+            request.setAttribute("CURRENT_SECTION", "device_management_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

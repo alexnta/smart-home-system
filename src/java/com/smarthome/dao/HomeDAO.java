@@ -103,36 +103,36 @@ public class HomeDAO {
     }    
     
     // add a new home
-    public boolean insertHome(HomeDTO home) throws SQLException, ClassNotFoundException {
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        boolean result = false;
+        public boolean insertHome(HomeDTO home) throws SQLException, ClassNotFoundException {
+            Connection conn = null;
+            PreparedStatement ptm = null;
+            boolean result = false;
 
-        String sql = "INSERT INTO Home (code, name, address_text, status, owner_user_id) "
-                   + "VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Home (code, name, address_text, status, owner_user_id) "
+                       + "VALUES (?, ?, ?, ?, ?)";
 
-        try {
-            conn = DBUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(sql);
-                ptm.setString(1, home.getCode());
-                ptm.setString(2, home.getName());
-                ptm.setString(3, home.getAddressText());
-                ptm.setString(4, home.getStatus());
-                ptm.setInt(5, home.getOwnerUserId());
+            try {
+                conn = DBUtils.getConnection();
+                if (conn != null) {
+                    ptm = conn.prepareStatement(sql);
+                    ptm.setString(1, home.getCode());
+                    ptm.setString(2, home.getName());
+                    ptm.setString(3, home.getAddressText());
+                    ptm.setString(4, home.getStatus());
+                    ptm.setInt(5, home.getOwnerUserId());
 
-                int rowsAffected = ptm.executeUpdate();
-                if (rowsAffected > 0) {
-                    result = true;
+                    int rowsAffected = ptm.executeUpdate();
+                    if (rowsAffected > 0) {
+                        result = true;
+                    }
                 }
+            } finally {
+                if (ptm != null) ptm.close();
+                if (conn != null) conn.close();
             }
-        } finally {
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
-        }
 
-        return result;
-    }
+            return result;
+        }
     
     // home update
     public boolean updateHome(HomeDTO home) throws SQLException, ClassNotFoundException {

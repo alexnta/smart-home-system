@@ -1,3 +1,7 @@
+<%@page import="com.smarthome.dto.HomeDTO"%>
+<%@page import="com.smarthome.dto.RoomDTO"%>
+<%@page import="com.smarthome.dto.DeviceDTO"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -197,11 +201,11 @@
                                     facilities</a>
                                 <ul class="dropdown-menu-nested">
                                     <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="house_management_section" href="#">Houses</a></li>
+                                            data-target="house_management_section" href="MainController?action=ViewHome">Houses</a></li>
                                     <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="room_management_section" href="#">Rooms</a></li>
+                                            data-target="room_management_section" href="MainController?action=ViewRoom">Rooms</a></li>
                                     <li><a class="dropdown-item nav-link tab_display"
-                                            data-target="device_management_section" href="#">Devices</a></li>
+                                            data-target="device_management_section" href="MainController?action=ViewDevice">Devices</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -230,7 +234,7 @@
                     </form>
                 </div>
                 <form action="MainController" method="post" class="d-flex" role="search">
-                    <button class="btn btn-outline-success" type="submit" name = "action" value = "Logout">Log out</button>
+                    <button class="btn btn-outline-success" type="submit" name = "action" value = "Logout   ">Log out</button>
                 </form>
             </div>
         </div>
@@ -271,9 +275,17 @@
         <div class="container-fluid section_container">
             <div class="card card_container">
                 <h5 class="card-title">Add facility</h5>
-                <form class="d-flex submit_form" role="submit" id="create_facility_form">
+                <form action = "MainController" method = "post"; class="d-flex submit_form" role="submit" id="create_facility_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_facility_name" aria-label="Name"
-                        type="text" placeholder="Enter facility name">
+                        type="text" name ="txtFacilityName" placeholder="Enter facility name">
+                                        <input class="form-control mx-auto mt-3 mb-0 input_data input_facility_ID" aria-label="Name"
+                        type="text" name ="txtCode" placeholder="Enter facility ID">
+                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
+                        id="status_type_select" name ="txtStatus">
+                        <option class="facility_options" selected>Choose status type</option>
+                        <option value="Active">Activate</option>
+                        <option value="Inactive">Nor activate</option>
+                    </select>
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="facility_type_select">
                         <option class="facility_options" selected>Choose facility type</option>
@@ -281,32 +293,173 @@
                         <option value="2">Room</option>
                         <option value="3">Device</option>
                     </select>
+                                        <div id = "additionalInputContainer" class="d-flex justify-content-center flex-column mt-3 mb-0">
+                                            
+                                        </div>
                     <div class="button_container" id="create_facility_button_container">
                         <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_facility_button"
-                            type="submit">Create</button>
+                            type="submit" name = "action">Create</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid">
-        <div id="house_management_section" class="row g-3 item_list" style="display: none;">
+<div class="container-fluid">
+    <div id="house_management_section" class="row g-3 item_list" style="display: none;">
+        <%
+            List<HomeDTO> homeList = (List<HomeDTO>) request.getAttribute("HOME_LIST");
+            if (homeList != null && !homeList.isEmpty()) {
+                for (HomeDTO h : homeList) {
+        %>
 
+        <div class="col-6 col-lg-3 card_container">
+            <div class="card facility_card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Facility name: <%= h.getName() %></h5>
+                    <p class="card-text">Facility type: House</p>
+                    <p class="card-text">Status: <%= h.getStatus() %></p>
+                    <p class="card-text">Belong to owner: <%= h.getOwnerUserId() %></p>
+                    <p class="card-text">Facility ID: <%= h.getCode() %></p>
+                    <p class="card-text">Address: <%= h.getAddressText() %></p>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="txtHomeId" value="<%= h.getHomeId() %>">
+                        <input type="hidden" name="txtCode" value="<%= h.getCode() %>">
+                        <input type="hidden" name="txtName" value="<%= h.getName() %>">
+                        <input type="hidden" name="txtAddress" value="<%= h.getAddressText() %>">
+                        <input type="hidden" name="txtStatus" value="<%= h.getStatus() %>">
+                        <input type="hidden" name="txtOwnerId" value="<%= h.getOwnerUserId() %>">
+                        <button type="submit" name="action" value="UpdateHome" class="btn btn-primary update_facility_button">
+                            Update
+                        </button>
+                    </form>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="homeId" value="<%= h.getHomeId() %>">
+                        <button type="submit" name="action" value="DeleteHome" class="btn btn-danger delete_facility_button mx-2">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+
+        <%
+                }
+            } else {
+        %>
+        <p class="text-center">No houses found</p>
+        <%
+            }
+        %>
     </div>
+</div>
 
-    <div class="container-fluid">
-        <div id="room_management_section" class="row g-3 item_list" style="display: none;">
+<div class="container-fluid">
+    <div id="room_management_section" class="row g-3 item_list" style="display: none;">
+        <%
+            List<RoomDTO> roomList = (List<RoomDTO>) request.getAttribute("ROOM_LIST");
+            if (roomList != null && !roomList.isEmpty()) {
+                for (RoomDTO r : roomList) {
+        %>
 
+        <div class="col-6 col-lg-3 card_container">
+            <div class="card facility_card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Facility name: <%= r.getName() %></h5>
+                    <p class="card-text">Facility type: Room</p>
+                    <p class="card-text">Status: <%= r.getStatus() %></p>
+                    <p class="card-text">Belong to house: <%= r.getHomeId() %></p>
+                    <p class="card-text">Facility ID: <%= r.getRoomId() %></p>
+                    <p class="card-text">Room type: <%= r.getRoomType() %></p>
+                    <p class="card-text">Floor: <%= r.getFloor() %></p>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="txtRoomId" value="<%= r.getRoomId() %>">
+                        <input type="hidden" name="txtHomeId" value="<%= r.getHomeId() %>">
+                        <input type="hidden" name="txtName" value="<%= r.getName() %>">
+                        <input type="hidden" name="txtFloor" value="<%= r.getFloor() %>">
+                        <input type="hidden" name="txtRoomType" value="<%= r.getRoomType() %>">
+                        <input type="hidden" name="txtStatus" value="<%= r.getStatus() %>">
+                        <button type="submit" name="action" value="UpdateRoom" class="btn btn-primary update_facility_button">
+                            Update
+                        </button>
+                    </form>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="roomId" value="<%= r.getRoomId() %>">
+                        <button type="submit" name="action" value="DeleteRoom" class="btn btn-danger delete_facility_button mx-2">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+
+        <%
+                }
+            } else {
+        %>
+        <p class="text-center">No rooms found</p>
+        <%
+            }
+        %>
     </div>
+</div>
 
-    <div class="container-fluid">
-        <div id="device_management_section" class="row g-3 item_list" style="display: none;">
+<div class="container-fluid">
+    <div id="device_management_section" class="row g-3 item_list" style="display: none;">
+        <%
+            List<DeviceDTO> deviceList = (List<DeviceDTO>) request.getAttribute("DEVICE_LIST");
+            if (deviceList != null && !deviceList.isEmpty()) {
+                for (DeviceDTO d : deviceList) {
+        %>
 
+        <div class="col-6 col-lg-3 card_container">
+            <div class="card facility_card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Facility name: <%= d.getName() %></h5>
+                    <p class="card-text">Facility type: Device</p>
+                    <p class="card-text">Status: <%= d.getStatus() %></p>
+                    <p class="card-text">Belong to room: <%= d.getRoomId() %></p>
+                    <p class="card-text">Facility ID: <%= d.getSerialNo() %></p>
+                    <p class="card-text">Device type: <%= d.getDeviceType() %></p>
+                    <p class="card-text">Vendor: <%= d.getVendor() %></p>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="txtDeviceId" value="<%= d.getDeviceId() %>">
+                        <input type="hidden" name="txtRoomId" value="<%= d.getRoomId() %>">
+                        <input type="hidden" name="txtName" value="<%= d.getName() %>">
+                        <input type="hidden" name="txtDeviceType" value="<%= d.getDeviceType() %>">
+                        <input type="hidden" name="txtSerialNo" value="<%= d.getSerialNo() %>">
+                        <input type="hidden" name="txtVendor" value="<%= d.getVendor() %>">
+                        <input type="hidden" name="txtStatus" value="<%= d.getStatus() %>">
+                        <button type="submit" name="action" value="UpdateDevice" class="btn btn-primary update_facility_button">
+                            Update
+                        </button>
+                    </form>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="deviceId" value="<%= d.getDeviceId() %>">
+                        <button type="submit" name="action" value="DeleteDevice" class="btn btn-danger delete_facility_button mx-2">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+
+        <%
+                }
+            } else {
+        %>
+        <p class="text-center">No devices found</p>
+        <%
+            }
+        %>
     </div>
+</div>
     <!--Rule section-->
     <div id="create_rule_section" class="item_list" style="display: none;">
         <div class="container-fluid section_container">
@@ -429,6 +582,22 @@
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentSection = "${CURRENT_SECTION}";
+
+        if (currentSection && currentSection.trim() !== "") {
+            document.querySelectorAll(".item_list").forEach(item => {
+                item.style.display = "none";
+            });
+
+            const target = document.getElementById(currentSection);
+            if (target) {
+                target.style.display = "";
+            }
+        }
+    });
+</script>
 <script type="module" src="${pageContext.request.contextPath}/admin/JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"

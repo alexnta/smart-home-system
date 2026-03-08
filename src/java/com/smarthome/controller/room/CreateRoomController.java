@@ -30,8 +30,8 @@ public class CreateRoomController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-       private static final String ERROR_PAGE = "createRoom.jsp";
-    private static final String SUCCESS_PAGE = "ViewRoomController";
+       private static final String ERROR_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "admin/admin.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -41,10 +41,12 @@ public class CreateRoomController extends HttpServlet {
         try {
 
             String homeIdStr = request.getParameter("txtHomeId");
-            String name = request.getParameter("txtName");
+            String roomIDtxt = request.getParameter("txtCode");
+            String name = request.getParameter("txtFacilityName");
             String floorStr = request.getParameter("txtFloor");
             String roomType = request.getParameter("txtRoomType");
             String status = request.getParameter("txtStatus");
+            int roomID = Integer.parseInt(roomIDtxt);
 
             // Validate
             if (homeIdStr == null || homeIdStr.trim().isEmpty()) {
@@ -61,6 +63,7 @@ public class CreateRoomController extends HttpServlet {
                 // DTO
                 RoomDTO room = new RoomDTO();
                 room.setHomeId(homeId);
+                room.setRoomId(roomID);
                 room.setName(name.trim());
                 room.setFloor(floor);
                 room.setRoomType(roomType != null ? roomType.trim() : "");
@@ -73,15 +76,17 @@ public class CreateRoomController extends HttpServlet {
                 if (success) {
                     url = SUCCESS_PAGE;
                 } else {
-                    request.setAttribute("ERROR", "Failed to create room!");
+                            request.setAttribute("ERROR", "Failed to create room!");
+        request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
 
         } catch (NumberFormatException e) {
-            request.setAttribute("ERROR", "Invalid number format!");
+                request.setAttribute("ERROR", "Invalid number format!");
+    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-            log("Error at CreateRoomController: " + e.toString());
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
+    request.setAttribute("ERROR", "System error: " + e.getMessage());
+    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

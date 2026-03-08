@@ -31,8 +31,8 @@ public class CreateDeviceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    private static final String ERROR_PAGE = "createDevice.jsp";
-    private static final String SUCCESS_PAGE = "ViewDeviceController";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "admin/admin.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,12 +42,14 @@ public class CreateDeviceController extends HttpServlet {
         try {
             // Lấy thông tin từ form
             String roomIdStr = request.getParameter("txtRoomId");
-            String name = request.getParameter("txtName");
+            String name = request.getParameter("txtFacilityName");
             String deviceType = request.getParameter("txtDeviceType");
-            String serialNo = request.getParameter("txtSerialNo");
+            String serialNo = request.getParameter("txtCode");
             String vendor = request.getParameter("txtVendor");
             String status = request.getParameter("txtStatus");
             String isActiveStr = request.getParameter("txtIsActive");
+            
+            
 
             // Validate
             if (name == null || name.trim().isEmpty()) {
@@ -82,15 +84,18 @@ public class CreateDeviceController extends HttpServlet {
                 if (success) {
                     url = SUCCESS_PAGE;
                 } else {
-                    request.setAttribute("ERROR", "Failed to create device!");
+                            request.setAttribute("ERROR", "Failed to create device!");
+        request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
 
         } catch (NumberFormatException e) {
-            request.setAttribute("ERROR", "Invalid number format!");
+                request.setAttribute("ERROR", "Invalid number format!");
+    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-            log("Error at CreateDeviceController: " + e.toString());
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
+    log("Error at CreateDeviceController: " + e.toString());
+    request.setAttribute("ERROR", "System error: " + e.getMessage());
+    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

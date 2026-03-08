@@ -9,19 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "UpdateRoomServlet", urlPatterns = {"/UpdateRoomController"})
+@WebServlet(name = "UpdateRoomController", urlPatterns = {"/UpdateRoomController"})
 public class UpdateRoomController extends HttpServlet {
 
-    private static final String ERROR_PAGE = "updateRoom.jsp";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
     private static final String SUCCESS_PAGE = "ViewRoomController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
 
         try {
-            // Lấy thông tin từ form
             String roomIdStr = request.getParameter("txtRoomId");
             String homeIdStr = request.getParameter("txtHomeId");
             String name = request.getParameter("txtName");
@@ -29,13 +29,15 @@ public class UpdateRoomController extends HttpServlet {
             String roomType = request.getParameter("txtRoomType");
             String status = request.getParameter("txtStatus");
 
-            // Validate
             if (roomIdStr == null || roomIdStr.trim().isEmpty()) {
                 request.setAttribute("ERROR", "Room ID is required!");
+                request.setAttribute("CURRENT_SECTION", "room_management_section");
             } else if (homeIdStr == null || homeIdStr.trim().isEmpty()) {
                 request.setAttribute("ERROR", "Home ID is required!");
+                request.setAttribute("CURRENT_SECTION", "room_management_section");
             } else if (name == null || name.trim().isEmpty()) {
                 request.setAttribute("ERROR", "Room name is required!");
+                request.setAttribute("CURRENT_SECTION", "room_management_section");
             } else {
                 int roomId = Integer.parseInt(roomIdStr);
                 int homeId = Integer.parseInt(homeIdStr);
@@ -44,7 +46,6 @@ public class UpdateRoomController extends HttpServlet {
                     floor = Integer.parseInt(floorStr);
                 }
 
-                // Tạo DTO
                 RoomDTO room = new RoomDTO();
                 room.setRoomId(roomId);
                 room.setHomeId(homeId);
@@ -53,7 +54,6 @@ public class UpdateRoomController extends HttpServlet {
                 room.setRoomType(roomType != null ? roomType.trim() : "");
                 room.setStatus(status != null ? status : "Active");
 
-                // Update vào DB
                 RoomDAO dao = new RoomDAO();
                 boolean success = dao.updateRoom(room);
 
@@ -61,14 +61,17 @@ public class UpdateRoomController extends HttpServlet {
                     url = SUCCESS_PAGE;
                 } else {
                     request.setAttribute("ERROR", "Failed to update room!");
+                    request.setAttribute("CURRENT_SECTION", "room_management_section");
                 }
             }
 
         } catch (NumberFormatException e) {
             request.setAttribute("ERROR", "Invalid number format!");
+            request.setAttribute("CURRENT_SECTION", "room_management_section");
         } catch (Exception e) {
             log("Error at UpdateRoomController: " + e.toString());
             request.setAttribute("ERROR", "System error: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "room_management_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

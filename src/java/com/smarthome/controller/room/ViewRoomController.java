@@ -32,8 +32,8 @@ public class ViewRoomController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    private static final String ROOM_LIST_PAGE = "roomList.jsp";
-    private static final String ERROR_PAGE = "error.jsp";
+private static final String ROOM_LIST_PAGE = "admin/admin.jsp";
+private static final String ERROR_PAGE = "admin/admin.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,11 +45,14 @@ public class ViewRoomController extends HttpServlet {
             List<RoomDTO> roomList = dao.getAllRooms();
 
             request.setAttribute("ROOM_LIST", roomList);
+            request.setAttribute("CURRENT_SECTION", "room_management_section");
+
             url = ROOM_LIST_PAGE;
 
         } catch (Exception e) {
             log("Error at ViewRoomController: " + e.toString());
             request.setAttribute("ERROR", "Cannot load room list!");
+            request.setAttribute("CURRENT_SECTION", "room_management_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -31,8 +31,8 @@ public class ViewHomeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String HOME_LIST_PAGE = "homeList.jsp";
-    private static final String ERROR_PAGE = "error.jsp";
+private static final String HOME_LIST_PAGE = "admin/admin.jsp";
+private static final String ERROR_PAGE = "admin/admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,19 +40,21 @@ public class ViewHomeController extends HttpServlet {
 
         String url = ERROR_PAGE;
 
-        try {
-            HomeDAO dao = new HomeDAO();
-            List<HomeDTO> homeList = dao.getAllHomes();
+    try {
+        HomeDAO dao = new HomeDAO();
+        List<HomeDTO> homeList = dao.getAllHomes();
 
-            request.setAttribute("HOME_LIST", homeList);
-            url = HOME_LIST_PAGE;
+        request.setAttribute("HOME_LIST", homeList);
+        request.setAttribute("CURRENT_SECTION", "house_management_section");
+        url = HOME_LIST_PAGE;
 
-        } catch (Exception e) {
-            log("Error at ViewHomeController: " + e.toString());
-            request.setAttribute("ERROR", "Cannot load home list!");
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-        }
+    } catch (Exception e) {
+        log("Error at ViewHomeController: " + e.toString());
+        request.setAttribute("ERROR", "Cannot load home list!");
+        request.setAttribute("CURRENT_SECTION", "house_management_section");
+    } finally {
+        request.getRequestDispatcher(url).forward(request, response);
+    }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

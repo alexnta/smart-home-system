@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             document.getElementById("create_rule_form").reset();
             document.getElementById("rule_options_container").innerHTML = "";
+            document.getElementById("additionalInputContainer").replaceChildren();
         }
     }
     ));
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Handle nested dropdown toggle
 document.querySelectorAll('.dropdown-toggle-custom').forEach(toggle => {
     toggle.addEventListener('click', function (e) {
-        e.preventDefault();
+
         e.stopPropagation();
         this.classList.toggle('show');
     });
@@ -58,7 +59,6 @@ selectRole.addEventListener("change", () => {
 });
 //create user card
 document.getElementById("submit_user_button").addEventListener("click", (e) => {
-    e.preventDefault();
     createUserCard(e, selectRole);
 });
 
@@ -68,7 +68,6 @@ document.getElementById("submit_user_button").addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_user_button")) {
         const updateUserUI = createUpdateUserCard();
-
         const editingUserCard = displayUpdateUserCard(
             e,
             updateUserUI,
@@ -106,8 +105,25 @@ selectType.addEventListener("change", () => {
 });
 //create facility card
 document.getElementById("submit_facility_button").addEventListener("click", (e) => {
-    e.preventDefault();
-    createFacilityCard(e, selectType);
+    
+        let submitFacilityButton = document.getElementById("submit_facility_button");
+    let facilityTypeValue = document.getElementById("facility_type_select").value;
+    switch(facilityTypeValue){
+        case "1":
+            submitFacilityButton.value = "CreateHome";
+                    break;
+        case "2":
+            submitFacilityButton.value = "CreateRoom";
+                    break;
+        case "3":
+            submitFacilityButton.value = "CreateDevice";
+        default:
+            console.log("No facility found");
+            break;
+    }
+
+    //createFacilityCard(e, selectType);
+
 });
 
 
@@ -117,17 +133,13 @@ document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_facility_button")) {
         const updateFacilityUI = createUpdateFacilityCard();
 
-        const editingCard = displayUpdateFacilityCard(
-            e,
-            updateFacilityUI,
-            overlay
-        );
+        displayUpdateFacilityCard(e, updateFacilityUI, overlay);
 
-        showBelongToIDInputUpdate(updateFacilityUI);
-
-        updateFacilityUI.form.addEventListener("submit", (ev) => {
-            updateFacilityData(ev, editingCard, overlay, updateFacilityUI);
-        });
+        if (updateFacilityUI.cancelBtn) {
+            updateFacilityUI.cancelBtn.addEventListener("click", () => {
+                overlay.remove();
+            });
+        }
     }
 });
 
@@ -156,7 +168,7 @@ document.getElementById("rule_options_select").addEventListener("change",()=>{
 
 //create rule card
 document.getElementById("submit_rule_button").addEventListener("click",(e)=>{
-    e.preventDefault();
+
     createRuleCard();
 });
 
