@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "CreateUserController", urlPatterns = {"/CreateUserController"})
 public class CreateUserController extends HttpServlet {
-    private static final String SUCCESS = "MainController?action=ViewUser";
-    private static final String ERROR = "user_create.jsp";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "admin/admin.jsp";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8"); // Xử lý tiếng Việt
-        String url = ERROR;
+        String url = ERROR_PAGE;
         try {
             String username = request.getParameter("username");
             String fullName = request.getParameter("fullName");
@@ -31,12 +31,14 @@ public class CreateUserController extends HttpServlet {
             boolean check = dao.createUser(user, roleId);
             
             if (check) {
-                url = SUCCESS;
+                url = SUCCESS_PAGE;
             } else {
                 request.setAttribute("ERROR_MSG", "Tạo người dùng thất bại!");
+                request.setAttribute("CURRENT_SECTION", "create_user_section");
             }
         } catch (Exception e) {
             log("Error at CreateUserController: " + e.toString());
+            request.setAttribute("CURRENT_SECTION", "create_user_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

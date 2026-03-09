@@ -12,18 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "ViewUserController", urlPatterns = {"/ViewUserController"})
 public class ViewUserController extends HttpServlet {
-    private static final String SUCCESS = "user_list.jsp";
-    private static final String ERROR = "error.jsp";
+private static final String USER_LIST_PAGE = "admin/admin.jsp";
+private static final String ERROR_PAGE = "admin/admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = ERROR;
+        String url = ERROR_PAGE;
         try {
             UserDAO dao = new UserDAO();
             List<UserDTO> userList = dao.getAllUsers();
             if (userList != null) {
                 request.setAttribute("USER_LIST", userList);
-                url = SUCCESS;
+                        request.setAttribute("CURRENT_SECTION", "user_management_section");
+                                        url = USER_LIST_PAGE;
+
             }
         } catch (Exception e) {
             log("Error at ViewUserController: " + e.toString());

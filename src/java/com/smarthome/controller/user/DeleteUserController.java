@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "DeleteUserController", urlPatterns = {"/DeleteUserController"})
 public class DeleteUserController extends HttpServlet {
 
-    private static final String ERROR = "MainController?action=ViewUser"; // Trở lại trang list kèm lỗi
-    private static final String SUCCESS = "MainController?action=ViewUser";
+    private static final String ERROR_PAGE = "ViewUserController";
+    private static final String SUCCESS_PAGE = "ViewUserController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String url = ERROR_PAGE;
         
         try {
             // Lấy userId từ URL (ví dụ: MainController?action=DeleteUser&userId=2)
@@ -33,7 +33,7 @@ public class DeleteUserController extends HttpServlet {
                 
                 boolean check = dao.deleteUser(userId);
                 if (check) {
-                    url = SUCCESS;
+                    url = SUCCESS_PAGE;
                 } else {
                     request.setAttribute("ERROR_MSG", "Không tìm thấy người dùng hoặc xóa thất bại!");
                 }

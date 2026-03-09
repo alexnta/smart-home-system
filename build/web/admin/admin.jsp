@@ -1,3 +1,5 @@
+<%@page import="com.smarthome.dto.UserDTO"%>
+<%@page import="com.smarthome.dto.UserDTO"%>
 <%@page import="com.smarthome.dto.HomeDTO"%>
 <%@page import="com.smarthome.dto.RoomDTO"%>
 <%@page import="com.smarthome.dto.DeviceDTO"%>
@@ -186,7 +188,7 @@
                             <li><a class="dropdown-item nav-link tab_display active" data-target="create_user_section"
                                     href="#">Create user</a></li>
                             <li><a class="dropdown-item nav-link tab_display" data-target="user_management_section"
-                                    href="#">User management</a></li>
+                                    href="MainController?action=ViewUser">User management</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -240,36 +242,126 @@
         </div>
     </nav>
     <!-- User management section -->
-    <div id="create_user_section" class="item_list">
-        <div class="container-fluid section_container">
-            <div class="card card_container">
-                <h5 class="card-title">Create User</h5>
-                <form class="d-flex submit_form" role="submit" id="create_user_form">
-                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_name" aria-label="Name"
-                        type="text" placeholder="Enter username">
-                    <input class="form-control mx-auto mt-3 mb-0 input_data input_user_password" aria-label="Password"
-                        type="text" placeholder="Enter password">
-                    <select class="form-select input_data mx-auto mt-3 mb-0 role_select" aria-label="Default select"
-                        id="role_select">
-                        <option class="role_options" selected>Choose role</option>
-                        <option value="1">House owner</option>
-                        <option value="2">Technician</option>
-                        <option value="3">Viewer</option>
-                    </select>
-                    <div class="button_container" id="create_user_button_container">
-                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_user_button"
-                            type="submit">Create</button>
-                    </div>
-                </form>
+<div id="create_user_section" class="item_list">
+    <div class="container-fluid section_container">
+        <div class="card card_container">
+            <h5 class="card-title">Create User</h5>
+
+            <form action="MainController" method="post" class="d-flex submit_form" id="create_user_form">
+                <input
+                    class="form-control mx-auto mt-3 mb-0 input_data input_user_username"
+                    type="text"
+                    name="username"
+                    placeholder="Enter username"
+                    required
+                >
+
+                <input
+                    class="form-control mx-auto mt-3 mb-0 input_data input_user_fullname"
+                    type="text"
+                    name="fullName"
+                    placeholder="Enter full name"
+                    required
+                >
+
+                <input
+                    class="form-control mx-auto mt-3 mb-0 input_data input_user_email"
+                    type="email"
+                    name="email"
+                    placeholder="Enter email"
+                    required
+                >
+
+                <input
+                    class="form-control mx-auto mt-3 mb-0 input_data input_user_password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    required
+                >
+
+                <select
+                    class="form-select input_data mx-auto mt-3 mb-0 role_select"
+                    id="role_select"
+                    name="roleId"
+                    required
+                >
+                    <option value="" selected disabled>Choose role</option>
+                    <option value="1">House owner</option>
+                    <option value="2">Technician</option>
+                    <option value="3">Viewer</option>
+                </select>
+
+<select name="status" class="form-select input_data mx-auto mt-3 mb-0">
+    <option value="1">Active</option>
+    <option value="0">Inactive</option>
+</select>
+
+
+                <div class="button_container" id="create_user_button_container">
+                    <button
+                        class="btn btn-outline-success mx-1 mt-3 mb-0"
+                        id="submit_user_button"
+                        type="submit"
+                        name="action"
+                        value="CreateUser"
+                    >
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="user_management_section" class="row g-3 item_list" style="display: none;">
+        <%
+            List<UserDTO> userList = (List<UserDTO>) request.getAttribute("USER_LIST");
+            if (userList != null && !userList.isEmpty()) {
+                for (UserDTO u : userList) {
+        %>
+
+        <div class="col-6 col-lg-3 card_container">
+            <div class="card user_card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><%= u.getFullName() %></h5>
+                    <p class="card-text">Role: <%= u.getRoleName() %></p>
+                    <p class="card-text">User ID: <%= u.getUserId() %></p>
+                    <p class="card-text">Username: <%= u.getUsername() %></p>
+                    <p class="card-text">Email: <%= u.getEmail() %></p>
+                    <p class="card-text">Status: <%= u.isStatus() ? "Active" : "Inactive" %></p>
+
+<form action="MainController" method="post" style="display:inline;">
+    <input type="hidden" name="txtUserId" value="<%= u.getUserId() %>">
+    <input type="hidden" name="txtFullName" value="<%= u.getFullName() %>">
+    <input type="hidden" name="txtEmail" value="<%= u.getEmail() %>">
+    <input type="hidden" name="txtRoleName" value="<%= u.getRoleName() %>">
+    <input type="hidden" name="txtStatus" value="<%= u.isStatus() ? "1" : "0" %>">
+    <button type="submit" name="action" value="UpdateUser" class="btn btn-primary update_user_button">
+        Update
+    </button>
+</form>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="userId" value="<%= u.getUserId() %>">
+                        <button type="submit" name="action" value="DeleteUser" class="btn btn-danger delete_user_button mx-2">
+                            Delete
+                        </button>
+                    </form>
+                </div>
             </div>
-
         </div>
-    </div>
-    <div class="container-fluid">
-        <div id="user_management_section" class="row g-3 item_list" style="display: none;">
 
-        </div>
+        <%
+                }
+            } else {
+        %>
+        <p class="text-center">No users found</p>
+        <%
+            }
+        %>
     </div>
+</div>
 
     <div id="add_facilities_section" class="item_list" style="display: none;">
         <div class="container-fluid section_container">

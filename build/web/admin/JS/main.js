@@ -1,10 +1,10 @@
 import { switchTab } from "./utilities.js";
-import {createUserCard,
+import {
     displayHouseInput,
     createUpdateUserCard,
     displayUpdateUserCard,
-    updateUserData,
-showHouseIDInputUpdate } from "./user.js";
+    showHouseIDInputUpdate
+} from "./user.js";
 import { createFacilityCard, displayBelongToInput, createUpdateFacilityCard, displayUpdateFacilityCard, updateFacilityData,showBelongToIDInputUpdate } from "./facility.js";
 import { changeRuleType, createRuleCard, createUpdateRuleCard, displayUpdateRuleCard, updateRuleData, changeRuleTypeUpdate} from "./rule.js";   
 const navLinks = document.querySelectorAll('.nav-link');
@@ -58,27 +58,19 @@ selectRole.addEventListener("change", () => {
     displayHouseInput(selectRole);
 });
 //create user card
-document.getElementById("submit_user_button").addEventListener("click", (e) => {
-    createUserCard(e, selectRole);
-});
-
-
-
-//Update user card
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_user_button")) {
-        const updateUserUI = createUpdateUserCard();
-        const editingUserCard = displayUpdateUserCard(
-            e,
-            updateUserUI,
-            overlay
-        );
+        e.preventDefault();
 
+        const updateUserUI = createUpdateUserCard();
+        displayUpdateUserCard(e, updateUserUI, overlay);
         showHouseIDInputUpdate(updateUserUI);
 
-        updateUserUI.form.addEventListener("submit", (ev) => {
-            updateUserData(ev, editingUserCard, overlay, updateUserUI);
-        });
+        if (updateUserUI.cancelBtn) {
+            updateUserUI.cancelBtn.addEventListener("click", () => {
+                overlay.remove();
+            });
+        }
     }
 });
 
@@ -89,7 +81,7 @@ document.addEventListener("click", (e) => {
     }
 });
 
-document.addEventListener("click", (e) => {
+/*document.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete_user_button")) {
         const userCard = e.target.closest(".user_card");
         if(userCard){
@@ -97,7 +89,7 @@ document.addEventListener("click", (e) => {
 
         }
     }
-});
+});*/
 
 //Facility
 selectType.addEventListener("change", () => {
@@ -121,7 +113,6 @@ document.getElementById("submit_facility_button").addEventListener("click", (e) 
             console.log("No facility found");
             break;
     }
-
     //createFacilityCard(e, selectType);
 
 });
@@ -151,15 +142,14 @@ document.addEventListener("click", (e) => {
     }
 });
 
-document.addEventListener("click", (e) => {
+/*document.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete_facility_button")) {
-        const facilityCard = e.target.closest(".facility_card");
         if(facilityCard){
             facilityCard.parentElement.remove();
         }
         
     }
-});
+});*/
 
 //RULE
 document.getElementById("rule_options_select").addEventListener("change",()=>{

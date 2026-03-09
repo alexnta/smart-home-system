@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UpdateHomeController extends HttpServlet {
 
     private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "ViewHomeController";
+    private static final String SUCCESS_PAGE = "admin/admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
