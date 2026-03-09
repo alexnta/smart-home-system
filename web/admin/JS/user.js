@@ -43,39 +43,39 @@ function createUpdateUserCard() {
     hiddenAction.name = "action";
     hiddenAction.value = "UpdateUser";
 
-    const hiddenUserId = document.createElement("input");
-    hiddenUserId.type = "hidden";
-    hiddenUserId.name = "userId";
+const hiddenUserId = document.createElement("input");
+hiddenUserId.type = "hidden";
+hiddenUserId.name = "txtUserId";
 
-    const inputFullName = document.createElement("input");
-    inputFullName.className = "form-control mx-auto mt-3 input_data";
-    inputFullName.name = "fullName";
-    inputFullName.placeholder = "Enter full name";
+const inputFullName = document.createElement("input");
+inputFullName.className = "form-control mx-auto mt-3 input_data";
+inputFullName.name = "txtFullName";
+inputFullName.placeholder = "Enter full name";
 
-    const inputEmail = document.createElement("input");
-    inputEmail.className = "form-control mx-auto mt-3 input_data";
-    inputEmail.name = "email";
-    inputEmail.placeholder = "Enter email";
+const inputEmail = document.createElement("input");
+inputEmail.className = "form-control mx-auto mt-3 input_data";
+inputEmail.name = "txtEmail";
+inputEmail.placeholder = "Enter email";
 
-    const selectRole = document.createElement("select");
-    selectRole.className = "form-select mx-auto mt-3 input_data";
-    selectRole.name = "roleName";
-    selectRole.innerHTML = `
-        <option value="">Choose role</option>
-        <option value="House owner">House owner</option>
-        <option value="Technician">Technician</option>
-        <option value="Viewer">Viewer</option>
-        <option value="Admin">Admin</option>
-    `;
+const selectRole = document.createElement("select");
+selectRole.className = "form-select mx-auto mt-3 input_data";
+selectRole.name = "txtRoleName";
+selectRole.innerHTML = `
+    <option value="">Choose role</option>
+    <option value="Home Owner">Home Owner</option>
+    <option value="Technician">Technician</option>
+    <option value="Viewer">Viewer</option>
+    <option value="Admin">Admin</option>
+`;
 
-    const selectStatus = document.createElement("select");
-    selectStatus.className = "form-select mx-auto mt-3 input_data";
-    selectStatus.name = "status";
-    selectStatus.innerHTML = `
-        <option value="">Choose status</option>
-        <option value="1">Active</option>
-        <option value="0">Inactive</option>
-    `;
+const selectStatus = document.createElement("select");
+selectStatus.className = "form-select mx-auto mt-3 input_data";
+selectStatus.name = "txtStatus";
+selectStatus.innerHTML = `
+    <option value="">Choose status</option>
+    <option value="1">Active</option>
+    <option value="0">Inactive</option>
+`;
 
     const buttonContainer = document.createElement("div");
     buttonContainer.className = "button_container mt-3 d-flex justify-content-center gap-5";
