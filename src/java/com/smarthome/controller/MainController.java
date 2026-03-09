@@ -33,6 +33,16 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_CONTROLLER = "LoginController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
+    
+    private static final String VIEW_USER = "ViewUser";
+    private static final String VIEW_USER_CONTROLLER = "ViewUserController";
+    private static final String CREATE_USER = "CreateUser";
+    private static final String CREATE_USER_CONTROLLER = "CreateUserController";
+    private static final String UPDATE_USER = "UpdateUser";
+    private static final String UPDATE_USER_CONTROLLER = "UpdateUserController";
+    private static final String DELETE_USER = "DeleteUser";
+    private static final String DELETE_USER_CONTROLLER = "DeleteUserController";
+    
     private static final String VIEW_HOME = "ViewHome";
     private static final String VIEW_HOME_CONTROLLER = "ViewHomeController";
     private static final String CREATE_HOME = "CreateHome";
@@ -113,11 +123,22 @@ public class MainController extends HttpServlet {
         try {
             String action = request.getParameter("action");
 
-            // home
+            
             if (LOGIN.equals(action)) {
                 url = LOGIN_CONTROLLER;
             } else if (LOGOUT.equals(action)) {
                 url = LOGOUT_CONTROLLER;
+                
+            // user
+            } else if (VIEW_USER.equals(action)) {
+                url = VIEW_USER_CONTROLLER;
+            } else if (CREATE_USER.equals(action)) {
+                url = CREATE_USER_CONTROLLER;
+            } else if (UPDATE_USER.equals(action)) {
+                url = UPDATE_USER_CONTROLLER;
+            } else if (DELETE_USER.equals(action)) {
+                url = DELETE_USER_CONTROLLER;
+            // home
             } else if (VIEW_HOME.equals(action)) {
                 url = VIEW_HOME_CONTROLLER;
             } else if (CREATE_HOME.equals(action)) {

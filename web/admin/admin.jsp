@@ -234,7 +234,7 @@
                     </form>
                 </div>
                 <form action="MainController" method="post" class="d-flex" role="search">
-                    <button class="btn btn-outline-success" type="submit" name = "action" value = "Logout   ">Log out</button>
+                    <button class="btn btn-outline-success" type="submit" name = "action" value = "Logout">Log out</button>
                 </form>
             </div>
         </div>
