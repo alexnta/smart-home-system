@@ -31,8 +31,8 @@ public class CreateDeviceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
-    private static final String SUCCESS_PAGE = "dashboard/dashboard.jsp";
+    private static final String ERROR_PAGE = "/dashboard/dashboard.jsp";
+    private static final String SUCCESS_PAGE = "/dashboard/dashboard.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

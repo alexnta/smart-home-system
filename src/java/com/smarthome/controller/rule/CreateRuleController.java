@@ -8,7 +8,10 @@ import com.smarthome.dao.RuleDAO;
 import com.smarthome.dto.RuleDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,89 +20,73 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Lenovo
  */
+
+@WebServlet(name = "CreateRuleController", urlPatterns = {"/CreateRuleController"})
 public class CreateRuleController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-        private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
-    private static final String SUCCESS_PAGE = "dashboard/dashboard.jsp";
+    private static final String ERROR_PAGE = "/dashboard/dashboard.jsp";
+    private static final String SUCCESS_PAGE = "/dashboard/dashboard.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String url = ERROR_PAGE;
+
+        System.out.println(">>> CreateRuleController called");
+        String url = ERROR_PAGE;
         response.setContentType("text/html;charset=UTF-8");
+
         try {
+            System.out.println("homeId = " + request.getParameter("homeId"));
+            System.out.println("ruleName = " + request.getParameter("ruleName"));
+            System.out.println("triggerType = " + request.getParameter("triggerType"));
+            System.out.println("conditionjson = " + request.getParameter("conditionjson"));
+            System.out.println("severity = " + request.getParameter("severity"));
 
             RuleDTO rule = new RuleDTO();
 
             rule.setHomeId(Integer.parseInt(request.getParameter("homeId")));
             rule.setRuleName(request.getParameter("ruleName"));
             rule.setTriggerType(request.getParameter("triggerType"));
-            rule.setOperator(request.getParameter("operator"));
-            rule.setThrehold(Double.parseDouble(request.getParameter("threshold")));
+            rule.setConditionJson(request.getParameter("conditionjson"));
             rule.setSeverity(request.getParameter("severity"));
 
             RuleDAO dao = new RuleDAO();
-           boolean success =  dao.insert(rule); 
-                           if (success) {
-                    url = SUCCESS_PAGE;
-                } else {
-                            request.setAttribute("ERROR", "Failed to create home!");
-        request.setAttribute("CURRENT_SECTION", "create_rule_section");
-                }
+            System.out.println("Before insert");
+            boolean success = dao.insert(rule);
+            System.out.println("After insert");
+            System.out.println("success = " + success);
+
+            if (success) {
+                url = SUCCESS_PAGE;
+                request.setAttribute("SUCCESS", "Create rule successfully!");
+                request.setAttribute("CURRENT_SECTION", "create_rule_section");
+            } else {
+                url = ERROR_PAGE;
+                request.setAttribute("ERROR", "Failed to create rule!");
+                request.setAttribute("CURRENT_SECTION", "create_rule_section");
+            }
+
         } catch (NumberFormatException e) {
-                request.setAttribute("ERROR", "Invalid number format!");
-    request.setAttribute("CURRENT_SECTION", "create_rule_section");
+            e.printStackTrace();
+            request.setAttribute("ERROR", "Invalid number format!");
+            request.setAttribute("CURRENT_SECTION", "create_rule_section");
         } catch (Exception e) {
-    request.setAttribute("ERROR", "System error: " + e.getMessage());
-    request.setAttribute("CURRENT_SECTION", "create_rule_section");
+            e.printStackTrace();
+            request.setAttribute("ERROR", "System error: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "create_rule_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

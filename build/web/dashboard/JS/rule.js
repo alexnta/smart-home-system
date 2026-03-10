@@ -18,6 +18,10 @@ function createUpdateRuleCard() {
     hiddenAction.type = "hidden";
     hiddenAction.name = "action";
     hiddenAction.value = "UpdateRule";
+    
+    const hiddenRuleId = document.createElement("input");
+hiddenRuleId.type = "hidden";
+hiddenRuleId.name = "ruleId";
 
 const inputRuleName = document.createElement("input");
 inputRuleName.className = "form-control mx-auto mt-3 input_data";
@@ -29,17 +33,10 @@ inputHomeId.className = "form-control mx-auto mt-3 input_data";
 inputHomeId.name = "homeId";
 inputHomeId.placeholder = "Enter home id";
 
-const selectOperator = document.createElement("select");
-selectOperator.className = "form-select mx-auto mt-3 input_data";
-selectOperator.name = "operator";
-selectOperator.innerHTML = `
-    <option value="">Choose role</option>
-    <option value="1">></option>
-    <option value="2"><</option>
-    <option value="3">>=</option>
-    <option value="4"><=</option>
-    <option value="5">==</option>
-`;
+const inputCondition = document.createElement("input");
+inputCondition.className = "form-control mx-auto mt-3 input_data";
+inputCondition.name = "conditionjson";
+inputCondition.placeHolder = "Enter condition";
     
     const selectTriggerType = document.createElement("select");
 selectTriggerType.className = "form-select mx-auto mt-3 input_data";
@@ -54,9 +51,9 @@ selectTriggerType.innerHTML = `
 
     const selectSeverityType = document.createElement("select");
 selectSeverityType.className = "form-select mx-auto mt-3 input_data";
-selectSeverityType.name = "triggerType";
+selectSeverityType.name = "severity";
 selectSeverityType.innerHTML = `
-    <option value="">Choose trigger type</option>
+    <option value="">Choose severity</option>
     <option value="1">Info</option>
     <option value="2">Warning</option>
     <option value="3">Critical</option>
@@ -68,12 +65,12 @@ selectSeverityType.innerHTML = `
 
     const updateBtn = document.createElement("button");
     updateBtn.type = "submit";
-    updateBtn.className = "btn btn-outline-success submit_update_user_button";
+    updateBtn.className = "btn btn-outline-success submit_update_rule_button";
     updateBtn.textContent = "Update";
 
     const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
-    cancelBtn.className = "btn btn-outline-danger cancel_update_user_button";
+    cancelBtn.className = "btn btn-outline-danger cancel_update_rule_button";
     cancelBtn.textContent = "Cancel";
 
     buttonContainer.appendChild(updateBtn);
@@ -81,10 +78,11 @@ selectSeverityType.innerHTML = `
 
     form.append(
         hiddenAction,
+hiddenRuleId,
         formTitle,
         inputRuleName,
         inputHomeId,
-        selectOperator,
+        inputCondition,
         selectTriggerType,
         selectSeverityType,
         buttonContainer
@@ -96,11 +94,12 @@ selectSeverityType.innerHTML = `
     return {
         container,
         form,
-        hiddenUserId,
-        inputFullName,
-        inputEmail,
-        selectRole,
-        selectStatus,
+        inputRuleName,
+        hiddenRuleId,
+        inputHomeId,
+        inputCondition,
+        selectTriggerType,
+        selectSeverityType,
         buttonContainer,
         cancelBtn
     };
@@ -112,28 +111,26 @@ function getHiddenValue(formSource, name) {
 }
 
 function displayUpdateRuleCard(e, updateUI, overlay) {
-    e.preventDefault();
+
 
     const formSource = e.target.closest("form");
     if (!formSource) return null;
 
     // lấy dữ liệu từ form hidden trong card JSP
+    updateUI.hiddenRuleId.value = getHiddenValue(formSource, "ruleId");
     updateUI.inputRuleName.value = getHiddenValue(formSource, "ruleName");
     updateUI.inputHomeId.value = getHiddenValue(formSource, "homeId");
 
-    const triggerTypeValue = getHiddenValue(formSource, "triggerType");
+    const selectTriggerType = getHiddenValue(formSource, "triggerType");
     [...updateUI.selectTriggerType.options].forEach(opt => {
-        opt.selected = opt.value === triggerTypeValue;
+        opt.selected = opt.value === selectTriggerType;
     });
 
-    const operatorValue = getHiddenValue(formSource, "operator");
-    [...updateUI.selectOperator.options].forEach(opt => {
-        opt.selected = opt.value === operatorValue;
-    });
+    updateUI.inputCondition.value = getHiddenValue(formSource, "conditionjson");
 
-    const severityValue = getHiddenValue(formSource, "severity");
+    const selectSeverityType = getHiddenValue(formSource, "severity");
     [...updateUI.selectSeverityType.options].forEach(opt => {
-        opt.selected = opt.value === severityValue;
+        opt.selected = opt.value === selectSeverityType;
     });
 
     overlay.innerHTML = "";

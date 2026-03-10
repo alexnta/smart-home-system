@@ -558,10 +558,10 @@
         <div class="container-fluid section_container">
             <div class="card card_container">
                 <h5 class="card-title">Create Rule</h5>
-                <form class="d-flex submit_form" role="submit" id="create_rule_form">
+                <form action="MainController" method="POST" class="d-flex submit_form" role="submit" id="create_rule_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_rule_name" aria-label="Name"
                         type="text" placeholder="Enter rule name" name = "ruleName">
-                                        <input class="form-control mx-auto mt-3 mb-0 input_data input_home_id" aria-label="Name"
+                     <input class="form-control mx-auto mt-3 mb-0 input_data input_home_id" aria-label="Name"
                         type="text" placeholder="Enter home ID" name = "homeId">
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="rule_options_select" name = "triggerType">
@@ -570,18 +570,8 @@
                         <option value="2">Schedule</option>
                         <option value="3">Threshold</option>
                     </select>
-                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
-                        id="operator_options_select" name = "operator">
-                        <option class="rule_options" selected>Choose operator</option>
-                        <option value="1">></option>
-                        <option value="2"><</option>
-                                                <option value="3">>=</option>
-                                                <option value="4"><=</option>
-                        <option value="5">==</option>
-                    </select>
-                    <div id="rule_options_container" class="d-flex justify-content-center flex-column mt-3 mb-0">
-
-                    </div>
+                   <input class="form-control mx-auto mt-3 mb-0 input_data input_home_id" aria-label="Name"
+                        type="text" placeholder="Enter condition" name = "conditionjson">
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
                         id="severity_options_select" name = "severity">
                         <option class="rule_options" selected>Choose severity type</option>
@@ -602,6 +592,13 @@
         
         <div class="container-fluid">
     <div id="edit_rule_section" class="row g-3 item_list" style="display: none;">
+                            <form action="MainController" method="post" style="display: flex;">
+                      <input class="form-control mt-3 mb-0 input_data input_home_id" aria-label="Name"
+                        type="text" placeholder="Enter home ID" name = "homeId">
+                        <button type="submit" name="action" value="ViewRule" class="btn btn-danger mt-3 mb-0">
+                            View rule
+                        </button>
+                    </form>
         <%
             List<RuleDTO> ruleList = (List<RuleDTO>) request.getAttribute("RULE_LIST");
             if (ruleList != null && !ruleList.isEmpty()) {
@@ -614,24 +611,39 @@
                     <h5 class="card-title">Rule name: <%= r.getRuleName() %></h5>
                     <h5 class="card-title">Rule id <%= r.getRuleId() %></h5>
                     <p class="card-text">Belong to home: <%= r.getHomeId() %></p>
-                    <p class="card-text">Trigger type: <%= r.getTriggerType() %></p>
-                    <p class="card-text">Operator: <%= r.getOperator() %></p>
-                    <p class="card-text">Severity:  <%= r.getSeverity() %></p>
+<p class="card-text">
+    Trigger type:
+    <%= "1".equals(r.getTriggerType()) ? "Event"
+        : "2".equals(r.getTriggerType()) ? "Schedule"
+        : "3".equals(r.getTriggerType()) ? "Threshold"
+        : r.getTriggerType() %>
+</p>
+
+<p class="card-text">
+    Severity:
+    <%= "1".equals(r.getSeverity()) ? "Info"
+        : "2".equals(r.getSeverity()) ? "Warning"
+        : "3".equals(r.getSeverity()) ? "Critical"
+        : r.getSeverity() %>
+</p>
+                    <p class="card-text">Condition:  <%= r.getConditionJson() %></p>
 
                     <form action="MainController" method="post" style="display:inline;">
-                        <input type="hidden" name="txtDeviceId" value="<%= r.getRuleName() %>">
-                        <input type="hidden" name="txtRoomId" value="<%= r.getHomeId() %>">
+                        <input type="hidden" name="ruleName" value="<%= r.getRuleName() %>">
+                        <input type="hidden" name="homeId" value="<%= r.getHomeId() %>">
                         <input type="hidden" name="triggerType" value="<%= r.getTriggerType() %>">
-                        <input type="hidden" name="operator" value="<%= r.getOperator() %>">
+                        <input type="hidden" name="conditionjson" value="<%= r.getConditionJson() %>">
                         <input type="hidden" name="severity" value="<%= r.getSeverity() %>">
-                        <button type="submit" name="action" value="UpdateRule" class="btn btn-primary update_facility_button">
+                        <input type="hidden" name="ruleId" value="<%= r.getRuleId() %>">
+                        <button type="submit" name="action" value="UpdateRule" class="btn btn-primary update_rule_button">
                             Update
                         </button>
                     </form>
 
                     <form action="MainController" method="post" style="display:inline;">
-                        <input type="hidden" name="deviceId" value="<%= r.getRuleId() %>">
-                        <button type="submit" name="action" value="DeleteRule" class="btn btn-danger delete_facility_button mx-2">
+                        <input type="hidden" name="ruleId" value="<%= r.getRuleId() %>">
+                        <input type="hidden" name="homeId" value="<%= r.getHomeId() %>">
+                        <button type="submit" name="action" value="DeleteRule" class="btn btn-danger delete_rule_button mx-2">
                             Delete
                         </button>
                     </form>
@@ -733,7 +745,7 @@
 
             const target = document.getElementById(currentSection);
             if (target) {
-                target.style.display = "";
+                target.style.display = "block";
             }
         }
     });

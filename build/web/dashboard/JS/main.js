@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 input.remove();
             }
             document.getElementById("create_rule_form").reset();
-            document.getElementById("rule_options_container").innerHTML = "";
+
             document.getElementById("additionalInputContainer").replaceChildren();
         }
     }
@@ -153,22 +153,18 @@ document.addEventListener("click", (e) => {
         
     }
 });*/
-
-
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_rule_button")) {
+        e.preventDefault();
 
         const updateRuleUI = createUpdateRuleCard();
+        displayUpdateRuleCard(e, updateRuleUI, overlay);
 
-        const editingCard = displayUpdateRuleCard(
-            e,
-            updateRuleUI,
-            overlay
-        );
-
-        updateRuleUI.form.addEventListener("submit", (ev) => {
-            updateRuleData(ev, editingCard, overlay, updateRuleUI);
-        });
+        if (updateRuleUI.cancelBtn) {
+            updateRuleUI.cancelBtn.addEventListener("click", () => {
+                overlay.remove();
+            });
+        }
     }
 });
 
@@ -184,11 +180,5 @@ document.addEventListener("click", (e) => {
         if(ruleCard){
                     ruleCard.parentElement.remove();
         }
-    }
-});
-
-document.addEventListener("change", (e) => {
-    if (e.target.id === "update_rule_type_select") {
-            changeRuleTypeUpdate();
     }
 });

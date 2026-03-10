@@ -38,7 +38,7 @@ public class DeviceDataController extends HttpServlet {
             double value = Double.parseDouble(request.getParameter("value"));
 
             AlertEngine engine = new AlertEngine();
-            engine.processDeviceData(homeId, deviceId, value);
+            /*engine.processDeviceData(homeId, deviceId, value);*/
 
           
 

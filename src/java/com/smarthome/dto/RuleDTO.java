@@ -16,12 +16,29 @@ public class RuleDTO {
     private int homeId;
     private String ruleName;
     private String triggerType;
-    private String operator;
-    private double threhold;
+    private String conditionJson;
     private String severity;
     private boolean isActive;
     private Timestamp createdAt;
 
+    public RuleDTO() {
+    }
+
+    
+    
+    public RuleDTO(int ruleId, int homeId, String ruleName, String triggerType, String conditionJson, String severity, boolean isActive, Timestamp createdAt) {
+        this.ruleId = ruleId;
+        this.homeId = homeId;
+        this.ruleName = ruleName;
+        this.triggerType = triggerType;
+        this.conditionJson = conditionJson;
+        this.severity = severity;
+        this.isActive = isActive;
+        this.createdAt = createdAt;
+    }
+
+    
+    
     public int getRuleId() {
         return ruleId;
     }
@@ -54,22 +71,6 @@ public class RuleDTO {
         this.triggerType = triggerType;
     }
 
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
-    public double getThrehold() {
-        return threhold;
-    }
-
-    public void setThrehold(double threhold) {
-        this.threhold = threhold;
-    }
-
     public String getSeverity() {
         return severity;
     }
@@ -92,6 +93,18 @@ public class RuleDTO {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getConditionJson() {
+        return conditionJson;
+    }
+
+    public void setConditionJson(String conditionJson) {
+        this.conditionJson = conditionJson;
+    }
+
+    public void setOperator(String parameter) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

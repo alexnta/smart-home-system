@@ -5,7 +5,6 @@ import com.smarthome.dao.RuleDAO;
 import com.smarthome.dto.AlertDTO;
 import com.smarthome.dto.RuleDTO;
 
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class AlertEngine {
     private RuleDAO ruleDAO = new RuleDAO();
     private AlertDAO alertDAO = new AlertDAO();
 
-    public void processDeviceData(int homeId, int deviceId, double deviceValue) throws Exception {
+   /* public void processDeviceData(int homeId, int deviceId, double deviceValue) throws Exception {
 
         List<RuleDTO> rules = ruleDAO.getByHomeId(homeId);
 
@@ -42,34 +41,8 @@ public class AlertEngine {
                 alertDAO.insertAlert(alert);
             }
         }
-    }
+    }*/
 
-    private boolean isViolated(RuleDTO rule, double value) {
-
-     
-
-        String operator = rule.getOperator();
-        double threshold = rule.getThrehold();
-
-        switch (operator) {
-
-            case ">":
-                return value > threshold;
-
-            case "<":
-                return value < threshold;
-
-            case "=":
-                return value == threshold;
-
-            case ">=":
-                return value >= threshold;
-
-            case "<=":
-                return value <= threshold;
-
-            default:
-                return false;
-        }
-    }
+    /*private boolean isViolated(RuleDTO rule, double value) {
+    }*/
 }

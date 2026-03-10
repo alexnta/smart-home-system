@@ -15,6 +15,19 @@ public class HomeModeDTO {
     private String description;
     private boolean isActive;
 
+    public HomeModeDTO() {
+    }
+
+    public HomeModeDTO(int modeId, int homeId, String modeName, String description, boolean isActive) {
+        this.modeId = modeId;
+        this.homeId = homeId;
+        this.modeName = modeName;
+        this.description = description;
+        this.isActive = isActive;
+    }
+
+    
+    
     public int getModeId() {
         return modeId;
     }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Lenovo
  */
+@WebServlet(name = "ViewRuleController", urlPatterns = {"/ViewRuleController"})
 public class ViewRuleController extends HttpServlet {
 
     /**
@@ -40,7 +42,7 @@ public class ViewRuleController extends HttpServlet {
             List<RuleDTO> list = dao.getByHomeId(homeId);
 
             request.setAttribute("RULE_LIST", list);
-
+            request.setAttribute("CURRENT_SECTION","edit_rule_section");
             request.getRequestDispatcher("dashboard/dashboard.jsp").forward(request, response);
 
         } catch (Exception e) {

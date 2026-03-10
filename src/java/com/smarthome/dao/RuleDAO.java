@@ -32,8 +32,7 @@ public class RuleDAO {
                 rule.setHomeId(rs.getInt("home_id"));
                 rule.setRuleName(rs.getString("rule_name"));
                 rule.setTriggerType(rs.getString("trigger_type"));
-                rule.setOperator(rs.getString("operator"));
-                rule.setThrehold(rs.getDouble("threhold"));
+                rule.setConditionJson(rs.getString("condition_json"));
                 rule.setSeverity(rs.getString("severity"));
                 rule.setIsActive(rs.getBoolean("is_active"));
                 rule.setCreatedAt(rs.getTimestamp("created_at"));
@@ -48,16 +47,15 @@ public class RuleDAO {
     // CREATE
     public boolean insert(RuleDTO rule) throws Exception {
 
-        String sql = "INSERT INTO [Rule](home_id, rule_name, trigger_type, operator, threhold, severity) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [Rule](home_id, rule_name, trigger_type, condition_json, severity) VALUES (?, ?, ?, ?, ?)";
 
         try ( Connection conn = DBUtils.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, rule.getHomeId());
             ps.setString(2, rule.getRuleName());
             ps.setString(3, rule.getTriggerType());
-            ps.setString(4, rule.getOperator());
-            ps.setDouble(5, rule.getThrehold());
-            ps.setString(6, rule.getSeverity());
+            ps.setString(4, rule.getConditionJson());
+            ps.setString(5, rule.getSeverity());
 
             return ps.executeUpdate() > 0;
         }
@@ -66,16 +64,15 @@ public class RuleDAO {
     // UPDATE
     public boolean update(RuleDTO rule) throws Exception {
 
-        String sql = "UPDATE [Rule] SET rule_name=?, trigger_type=?, operator=?, threhold=?, severity=? WHERE rule_id=?";
+        String sql = "UPDATE [Rule] SET rule_name=?, trigger_type=?, condition_json=?, severity=? WHERE rule_id=?";
 
         try ( Connection conn = DBUtils.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, rule.getRuleName());
             ps.setString(2, rule.getTriggerType());
-            ps.setString(3, rule.getOperator());
-            ps.setDouble(4, rule.getThrehold());
-            ps.setString(5, rule.getSeverity());
-            ps.setInt(6, rule.getRuleId());
+            ps.setString(3, rule.getConditionJson());
+            ps.setString(4, rule.getSeverity());
+            ps.setInt(5, rule.getRuleId());
 
             return ps.executeUpdate() > 0;
         }
