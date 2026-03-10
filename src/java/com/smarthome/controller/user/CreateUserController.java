@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "CreateUserController", urlPatterns = {"/CreateUserController"})
 public class CreateUserController extends HttpServlet {
-    private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "admin/admin.jsp";
+    private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
+    private static final String SUCCESS_PAGE = "dashboard/dashboard.jsp";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "DeleteHomeController", urlPatterns = {"/DeleteHomeController"})
 public class DeleteHomeController extends HttpServlet {
 
-    private static final String ERROR_PAGE = "ViewHomeController";
-    private static final String SUCCESS_PAGE = "ViewHomeController";
+    private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
+    private static final String SUCCESS_PAGE = "dashboard/dashboard.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

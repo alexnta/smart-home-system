@@ -1,3 +1,4 @@
+<%@page import="com.smarthome.dto.RuleDTO"%>
 <%@page import="com.smarthome.dto.UserDTO"%>
 <%@page import="com.smarthome.dto.UserDTO"%>
 <%@page import="com.smarthome.dto.HomeDTO"%>
@@ -559,49 +560,96 @@
                 <h5 class="card-title">Create Rule</h5>
                 <form class="d-flex submit_form" role="submit" id="create_rule_form">
                     <input class="form-control mx-auto mt-3 mb-0 input_data input_rule_name" aria-label="Name"
-                        type="text" placeholder="Enter rule name">
+                        type="text" placeholder="Enter rule name" name = "ruleName">
+                                        <input class="form-control mx-auto mt-3 mb-0 input_data input_home_id" aria-label="Name"
+                        type="text" placeholder="Enter home ID" name = "homeId">
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
-                        id="rule_options_select">
-                        <option class="rule_options" selected>Choose rule type</option>
+                        id="rule_options_select" name = "triggerType">
+                        <option class="rule_options" selected>Choose trigger type</option>
                         <option value="1">Event</option>
                         <option value="2">Schedule</option>
                         <option value="3">Threshold</option>
                     </select>
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
-                        id="device_options_select">
-                        <option class="rule_options" selected>Choose device type</option>
-                        <option value="1">Light</option>
-                        <option value="2">Door</option>
+                        id="operator_options_select" name = "operator">
+                        <option class="rule_options" selected>Choose operator</option>
+                        <option value="1">></option>
+                        <option value="2"><</option>
+                                                <option value="3">>=</option>
+                                                <option value="4"><=</option>
+                        <option value="5">==</option>
                     </select>
                     <div id="rule_options_container" class="d-flex justify-content-center flex-column mt-3 mb-0">
 
                     </div>
                     <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
-                        id="severity_options_select">
+                        id="severity_options_select" name = "severity">
                         <option class="rule_options" selected>Choose severity type</option>
                         <option value="1">Info</option>
                         <option value="2">Warning</option>
                         <option value="3">Critical</option>
-                    </select>
-                    <select class="form-select input_data mx-auto mt-3 mb-0 type_select" aria-label="Default select"
-                        id="condition_options_select">
-                        <option class="rule_options" selected>Choose status type</option>
-                        <option value="1">On</option>
-                        <option value="2">Off</option>
-                    </select>
+                    </select> 
+
                     <div class="button_container" id="create_rule_button_container">
-                        <button class="btn btn-outline-success mx-1 mt-3 mb-0" id="submit_rule_button"
-                            type="submit">Create</button>
+                        <button class="btn btn-outline-success mx-1 m   t-3 mb-0" id="submit_rule_button"
+                            type="submit" name = "action" value = "CreateRule">Create</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div id="edit_rule_section" class="row g-3 item_list" style="display: none;">
 
+        
+        <div class="container-fluid">
+    <div id="edit_rule_section" class="row g-3 item_list" style="display: none;">
+        <%
+            List<RuleDTO> ruleList = (List<RuleDTO>) request.getAttribute("RULE_LIST");
+            if (ruleList != null && !ruleList.isEmpty()) {
+                for (RuleDTO r : ruleList) {
+        %>
+
+        <div class="col-6 col-lg-3 card_container">
+            <div class="card facility_card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Rule name: <%= r.getRuleName() %></h5>
+                    <h5 class="card-title">Rule id <%= r.getRuleId() %></h5>
+                    <p class="card-text">Belong to home: <%= r.getHomeId() %></p>
+                    <p class="card-text">Trigger type: <%= r.getTriggerType() %></p>
+                    <p class="card-text">Operator: <%= r.getOperator() %></p>
+                    <p class="card-text">Severity:  <%= r.getSeverity() %></p>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="txtDeviceId" value="<%= r.getRuleName() %>">
+                        <input type="hidden" name="txtRoomId" value="<%= r.getHomeId() %>">
+                        <input type="hidden" name="triggerType" value="<%= r.getTriggerType() %>">
+                        <input type="hidden" name="operator" value="<%= r.getOperator() %>">
+                        <input type="hidden" name="severity" value="<%= r.getSeverity() %>">
+                        <button type="submit" name="action" value="UpdateRule" class="btn btn-primary update_facility_button">
+                            Update
+                        </button>
+                    </form>
+
+                    <form action="MainController" method="post" style="display:inline;">
+                        <input type="hidden" name="deviceId" value="<%= r.getRuleId() %>">
+                        <button type="submit" name="action" value="DeleteRule" class="btn btn-danger delete_facility_button mx-2">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+
+        <%
+                }
+            } else {
+        %>
+        <p class="text-center">No devices found</p>
+        <%
+            }
+        %>
     </div>
+</div>
+
     <div id="creates_system_section" class="item_list" style="display: none;">
 
     </div>
@@ -690,7 +738,7 @@
         }
     });
 </script>
-<script type="module" src="${pageContext.request.contextPath}/admin/JS/main.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/dashboard/JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>

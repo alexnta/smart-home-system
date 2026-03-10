@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UpdateRoomController", urlPatterns = {"/UpdateRoomController"})
 public class UpdateRoomController extends HttpServlet {
 
-    private static final String ERROR_PAGE = "admin/admin.jsp";
+    private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
     private static final String SUCCESS_PAGE = "ViewRoomController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

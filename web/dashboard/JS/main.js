@@ -6,7 +6,9 @@ import {
     showHouseIDInputUpdate
 } from "./user.js";
 import { createFacilityCard, displayBelongToInput, createUpdateFacilityCard, displayUpdateFacilityCard, updateFacilityData,showBelongToIDInputUpdate } from "./facility.js";
-import { changeRuleType, createRuleCard, createUpdateRuleCard, displayUpdateRuleCard, updateRuleData, changeRuleTypeUpdate} from "./rule.js";   
+import { getHiddenValue,
+    createUpdateRuleCard,
+    displayUpdateRuleCard} from "./rule.js";   
 const navLinks = document.querySelectorAll('.nav-link');
 const itemList = document.querySelectorAll('.item_list');
 const selectRole = document.getElementById("role_select");
@@ -57,7 +59,7 @@ document.addEventListener('click', function (e) {
 selectRole.addEventListener("change", () => {
     displayHouseInput(selectRole);
 });
-//create user card
+
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_user_button")) {
         e.preventDefault();
@@ -132,6 +134,7 @@ document.addEventListener("click", (e) => {
             });
         }
     }
+    
 });
 
 
@@ -151,16 +154,6 @@ document.addEventListener("click", (e) => {
     }
 });*/
 
-//RULE
-document.getElementById("rule_options_select").addEventListener("change",()=>{
-    changeRuleType();
-});
-
-//create rule card
-document.getElementById("submit_rule_button").addEventListener("click",(e)=>{
-
-    createRuleCard();
-});
 
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("update_rule_button")) {

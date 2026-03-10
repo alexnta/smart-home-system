@@ -28,8 +28,11 @@ public class CreateRuleController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+        private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
+    private static final String SUCCESS_PAGE = "dashboard/dashboard.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                String url = ERROR_PAGE;
         response.setContentType("text/html;charset=UTF-8");
         try {
 
@@ -39,16 +42,25 @@ public class CreateRuleController extends HttpServlet {
             rule.setRuleName(request.getParameter("ruleName"));
             rule.setTriggerType(request.getParameter("triggerType"));
             rule.setOperator(request.getParameter("operator"));
-            rule.setThrehold(Double.parseDouble(request.getParameter("threhold")));
+            rule.setThrehold(Double.parseDouble(request.getParameter("threshold")));
             rule.setSeverity(request.getParameter("severity"));
 
             RuleDAO dao = new RuleDAO();
-            dao.insert(rule);
-
-            response.sendRedirect("MainController?action=viewRule");
-
+           boolean success =  dao.insert(rule); 
+                           if (success) {
+                    url = SUCCESS_PAGE;
+                } else {
+                            request.setAttribute("ERROR", "Failed to create home!");
+        request.setAttribute("CURRENT_SECTION", "create_rule_section");
+                }
+        } catch (NumberFormatException e) {
+                request.setAttribute("ERROR", "Invalid number format!");
+    request.setAttribute("CURRENT_SECTION", "create_rule_section");
         } catch (Exception e) {
-            e.printStackTrace();
+    request.setAttribute("ERROR", "System error: " + e.getMessage());
+    request.setAttribute("CURRENT_SECTION", "create_rule_section");
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

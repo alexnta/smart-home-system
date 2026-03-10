@@ -41,7 +41,7 @@ public class ViewRuleController extends HttpServlet {
 
             request.setAttribute("RULE_LIST", list);
 
-            request.getRequestDispatcher("ruleList.jsp").forward(request, response);
+            request.getRequestDispatcher("dashboard/dashboard.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
