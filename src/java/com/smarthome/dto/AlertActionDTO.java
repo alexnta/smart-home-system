@@ -19,6 +19,19 @@ public class AlertActionDTO {
     private String note;
     private Timestamp actionTs;
 
+    public AlertActionDTO() {
+    }
+
+    public AlertActionDTO(int actionId, int alertId, int actorUserId, String actionType, String note, Timestamp actionTs) {
+        this.actionId = actionId;
+        this.alertId = alertId;
+        this.actorUserId = actorUserId;
+        this.actionType = actionType;
+        this.note = note;
+        this.actionTs = actionTs;
+    }
+
+    
     public int getActionId() {
         return actionId;
     }

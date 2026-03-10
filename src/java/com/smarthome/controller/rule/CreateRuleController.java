@@ -8,6 +8,8 @@ import com.smarthome.dao.RuleDAO;
 import com.smarthome.dto.RuleDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,8 +40,7 @@ public class CreateRuleController extends HttpServlet {
             rule.setHomeId(Integer.parseInt(request.getParameter("homeId")));
             rule.setRuleName(request.getParameter("ruleName"));
             rule.setTriggerType(request.getParameter("triggerType"));
-            rule.setOperator(request.getParameter("operator"));
-            rule.setThrehold(Double.parseDouble(request.getParameter("threhold")));
+            rule.setConditionJson(request.getParameter("conditionjson"));
             rule.setSeverity(request.getParameter("severity"));
 
             RuleDAO dao = new RuleDAO();
@@ -51,6 +52,7 @@ public class CreateRuleController extends HttpServlet {
             e.printStackTrace();
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

@@ -38,8 +38,7 @@ public class UpdateRuleController extends HttpServlet {
             rule.setRuleId(Integer.parseInt(request.getParameter("ruleId")));
             rule.setRuleName(request.getParameter("ruleName"));
             rule.setTriggerType(request.getParameter("triggerType"));
-            rule.setOperator(request.getParameter("operator"));
-            rule.setThrehold(Double.parseDouble(request.getParameter("threhold")));
+            rule.setConditionJson(request.getParameter("conditionjson"));
             rule.setSeverity(request.getParameter("severity"));
 
             RuleDAO dao = new RuleDAO();

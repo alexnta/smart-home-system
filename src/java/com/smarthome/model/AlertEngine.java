@@ -5,7 +5,6 @@ import com.smarthome.dao.RuleDAO;
 import com.smarthome.dto.AlertDTO;
 import com.smarthome.dto.RuleDTO;
 
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -45,31 +44,5 @@ public class AlertEngine {
     }
 
     private boolean isViolated(RuleDTO rule, double value) {
-
-     
-
-        String operator = rule.getOperator();
-        double threshold = rule.getThrehold();
-
-        switch (operator) {
-
-            case ">":
-                return value > threshold;
-
-            case "<":
-                return value < threshold;
-
-            case "=":
-                return value == threshold;
-
-            case ">=":
-                return value >= threshold;
-
-            case "<=":
-                return value <= threshold;
-
-            default:
-                return false;
-        }
     }
 }

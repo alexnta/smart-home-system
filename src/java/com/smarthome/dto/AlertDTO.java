@@ -24,6 +24,24 @@ public class AlertDTO {
     private Timestamp endTs;
     private Timestamp createdAt;
 
+    public AlertDTO() {
+    }
+
+    public AlertDTO(int alertId, int homeId, int deviceId, Integer ruleId, String alertType, String severity, String status, String message, Timestamp startTs, Timestamp endTs, Timestamp createdAt) {
+        this.alertId = alertId;
+        this.homeId = homeId;
+        this.deviceId = deviceId;
+        this.ruleId = ruleId;
+        this.alertType = alertType;
+        this.severity = severity;
+        this.status = status;
+        this.message = message;
+        this.startTs = startTs;
+        this.endTs = endTs;
+        this.createdAt = createdAt;
+    }
+
+    
     public int getAlertId() {
         return alertId;
     }
