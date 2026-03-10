@@ -48,7 +48,7 @@ public class RuleDAO {
     // CREATE
     public boolean insert(RuleDTO rule) throws Exception {
 
-        String sql = "INSERT INTO [Rule](home_id, rule_name, trigger_type, condition_json, severity) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [Rule](home_id, rule_name, trigger_type, operator, threhold, severity) VALUES (?, ?, ?, ?, ?)";
 
         try ( Connection conn = DBUtils.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -66,7 +66,7 @@ public class RuleDAO {
     // UPDATE
     public boolean update(RuleDTO rule) throws Exception {
 
-        String sql = "UPDATE [Rule] SET rule_name=?, trigger_type=?, condition_json=?, severity=? WHERE rule_id=?";
+        String sql = "UPDATE [Rule] SET rule_name=?, trigger_type=?, operator=?, threhold=?, severity=? WHERE rule_id=?";
 
         try ( Connection conn = DBUtils.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 

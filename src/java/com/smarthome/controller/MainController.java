@@ -33,7 +33,7 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_CONTROLLER = "LoginController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
-    
+
     private static final String VIEW_USER = "ViewUser";
     private static final String VIEW_USER_CONTROLLER = "ViewUserController";
     private static final String CREATE_USER = "CreateUser";
@@ -42,7 +42,7 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_USER_CONTROLLER = "UpdateUserController";
     private static final String DELETE_USER = "DeleteUser";
     private static final String DELETE_USER_CONTROLLER = "DeleteUserController";
-    
+
     private static final String VIEW_HOME = "ViewHome";
     private static final String VIEW_HOME_CONTROLLER = "ViewHomeController";
     private static final String CREATE_HOME = "CreateHome";
@@ -69,6 +69,9 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_DEVICE_CONTROLLER = "UpdateDeviceController";
     private static final String DELETE_DEVICE = "DeleteDevice";
     private static final String DELETE_DEVICE_CONTROLLER = "DeleteDeviceController";
+
+    private static final String DEVICE_DATA = "DeviceData";
+    private static final String DEVICE_DATA_CONTROLLER = "DeviceDataController";
 
     private static final String VIEW_EVENT = "ViewEvent";
     private static final String VIEW_EVENT_CONTROLLER = "ViewEventController";
@@ -123,13 +126,12 @@ public class MainController extends HttpServlet {
         try {
             String action = request.getParameter("action");
 
-            
             if (LOGIN.equals(action)) {
                 url = LOGIN_CONTROLLER;
             } else if (LOGOUT.equals(action)) {
                 url = LOGOUT_CONTROLLER;
-                
-            // user
+
+                // user
             } else if (VIEW_USER.equals(action)) {
                 url = VIEW_USER_CONTROLLER;
             } else if (CREATE_USER.equals(action)) {
@@ -138,7 +140,7 @@ public class MainController extends HttpServlet {
                 url = UPDATE_USER_CONTROLLER;
             } else if (DELETE_USER.equals(action)) {
                 url = DELETE_USER_CONTROLLER;
-            // home
+                // home
             } else if (VIEW_HOME.equals(action)) {
                 url = VIEW_HOME_CONTROLLER;
             } else if (CREATE_HOME.equals(action)) {
@@ -165,6 +167,8 @@ public class MainController extends HttpServlet {
                 url = UPDATE_DEVICE_CONTROLLER;
             } else if (DELETE_DEVICE.equals(action)) {
                 url = DELETE_DEVICE_CONTROLLER;
+            } else if (DEVICE_DATA.equals(action)) {
+                url = DEVICE_DATA_CONTROLLER;
                 // event log
             } else if (VIEW_EVENT.equals(action)) {
                 url = VIEW_EVENT_CONTROLLER;

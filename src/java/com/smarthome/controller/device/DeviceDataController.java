@@ -4,6 +4,7 @@
  */
 package com.smarthome.controller.device;
 
+import com.smarthome.model.AlertEngine;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -29,20 +30,22 @@ public class DeviceDataController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DeviceDataController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DeviceDataController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+     
+        try {
+
+            int homeId = Integer.parseInt(request.getParameter("homeId"));
+            int deviceId = Integer.parseInt(request.getParameter("deviceId"));
+            double value = Double.parseDouble(request.getParameter("value"));
+
+            AlertEngine engine = new AlertEngine();
+            engine.processDeviceData(homeId, deviceId, value);
+
+          
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
