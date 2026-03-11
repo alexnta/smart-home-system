@@ -241,9 +241,10 @@
 
             <form action="SearchEventController" method="get">
 
-                <div class="row g-2 mb-3">
+                <div class="row g-3 align-items-end">
 
                     <div class="col">
+                        <label class="form-label text-white">Device ID</label>
                         <input 
                             type="text"
                             name="txtDeviceId"
@@ -252,7 +253,8 @@
                     </div>
 
                     <div class="col">
-                        <input 
+                        <label class="form-label text-white">Event Type</label>
+                         <input 
                             type="text"
                             name="txtEventType"
                             class="form-control"
@@ -269,6 +271,7 @@
                     </div>
 
                     <div class="col">
+                        <label class="form-label text-white">Start Date</label>
                         <input 
                             type="date"
                             name="txtStartTime"
@@ -276,14 +279,15 @@
                     </div>
 
                     <div class="col">
+                        <label class="form-label text-white">End Date</label>
                         <input 
                             type="date"
                             name="txtEndTime"
                             class="form-control">
                     </div>
 
-                    <div class="col">
-                        <button class="btn btn-primary search-btn">
+                    <div class="col-auto">
+                        <button class="btn btn-primary px-4">
                             Search
                         </button>
                     </div>
@@ -333,7 +337,7 @@
 
 
 
-        <!-- MY DEVICES -->
+
 
         <!-- MY DEVICES -->
 
@@ -382,9 +386,10 @@
 
 
 
-        <!-- ALERTS -->
 
 
+
+        <!-- MY ALERTS -->
 
         <div id="alert_section" class="section">
 
@@ -402,14 +407,14 @@
                     <h4><%= a.getMessage()%></h4>
 
                     <p>
-                        Severity: 
+                        Severity:
                         <span class="text-warning">
                             <%= a.getSeverity()%>
                         </span>
                     </p>
 
                     <p>
-                        Status: 
+                        Status:
                         <span class="text-danger">
                             <%= a.getStatus()%>
                         </span>
@@ -418,6 +423,22 @@
                     <p style="font-size:13px;color:#9ca3af">
                         Time: <%= a.getCreatedAt()%>
                     </p>
+
+                    <!-- ACKNOWLEDGE BUTTON -->
+
+                    <form action="MainController" method="post">
+
+                        <input type="hidden" name="action" value="AckAlert">
+
+                        <input type="hidden" 
+                               name="alertId" 
+                               value="<%= a.getAlertId()%>">
+
+                        <button class="btn btn-warning mt-2">
+                            Acknowledge
+                        </button>
+
+                    </form>
 
                 </div>
 
@@ -428,7 +449,9 @@
 
                 <p>No alerts found.</p>
 
-                <% }%>
+                <%
+                    }
+                %>
 
             </div>
 

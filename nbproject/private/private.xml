@@ -2,6 +2,27 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/home_owner/JS/facility.js</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/home_owner/home_owner.jsp</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/MainController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/authentication/LogoutController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/eventlog/ViewEventController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/device/ViewDeviceController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/home_owner/JS/utilities.js</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/user/CreateUserController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/login.jsp</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/user/ViewUserController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/alert/AckAlertController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/dashboard/dashboard.jsp</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/engine/AlertEngine.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/user-list.jsp</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/authentication/LoginController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/eventlog/CreateEventController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/home_owner/JS/user.js</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/device/UpdateDeviceController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/eventlog/SearchEventController.java</file>
+        </group>
     </open-files>
 </project-private>
