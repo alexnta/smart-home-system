@@ -33,7 +33,7 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_CONTROLLER = "LoginController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
-
+    
     private static final String VIEW_USER = "ViewUser";
     private static final String VIEW_USER_CONTROLLER = "ViewUserController";
     private static final String CREATE_USER = "CreateUser";
