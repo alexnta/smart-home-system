@@ -215,9 +215,9 @@ CREATE TABLE [Rule] (
     -- Loại trigger: 'Schedule' (Theo giờ), 'Event' (Theo sự kiện), 'Threshold' (Ngưỡng)
     trigger_type VARCHAR(50), 
     
-    -- Điều kiện (Lưu text đơn giản, không lưu JSON)
-    -- VD: 'duration_minutes=15' hoặc 'home_mode=Away' hoặc mô tả ngắn
-    condition_text NVARCHAR(500), 
+    -- Điều kiện (Lưu JSON để linh hoạt hoặc text đơn giản)
+    -- VD: {"duration": 10, "unit": "minute"}
+    condition_json NVARCHAR(MAX), 
     
     severity NVARCHAR(20) DEFAULT 'Warning', -- Info, Warning, Critical
     is_active BIT DEFAULT 1,
@@ -289,9 +289,9 @@ GO
 -- =============================================
 
 -- A. Tạo 2 luật mẫu cho nhà HOME-01
-INSERT INTO [Rule] (home_id, rule_name, trigger_type, severity, condition_text) VALUES
-(1, N'Cửa mở quá 15 phút', 'Threshold', 'Warning', 'duration_minutes=15'),
-(1, N'Đột nhập khi vắng nhà', 'Event', 'Critical', 'home_mode=Away');
+INSERT INTO [Rule] (home_id, rule_name, trigger_type, severity, condition_json) VALUES
+(1, N'Cửa mở quá 15 phút', 'Threshold', 'Warning', '{"duration_minutes": 15}'),
+(1, N'Đột nhập khi vắng nhà', 'Event', 'Critical', '{"home_mode": "Away"}');
 
 -- B. Giả lập lịch sử sự kiện (EventLog) trong ngày hôm qua
 -- Kịch bản: Người dùng về nhà, mở cửa, bật đèn, sau đó quên đóng cửa sổ.

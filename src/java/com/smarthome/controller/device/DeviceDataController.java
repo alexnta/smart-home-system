@@ -4,9 +4,12 @@
  */
 package com.smarthome.controller.device;
 
-import com.smarthome.model.AlertEngine;
+import com.smarthome.dao.EventLogDAO;
+import com.smarthome.dto.EventLogDTO;
+import com.smarthome.engine.AlertEngine;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,19 +34,65 @@ public class DeviceDataController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
      
-        try {
+//        try {
+//
+//            int homeId = Integer.parseInt(request.getParameter("homeId"));
+//            int deviceId = Integer.parseInt(request.getParameter("deviceId"));
+//            double value = Double.parseDouble(request.getParameter("value"));
+//
+//            AlertEngine engine = new AlertEngine();
+//            /*engine.processDeviceData(homeId, deviceId, value);*/
+//
+//          
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-            int homeId = Integer.parseInt(request.getParameter("homeId"));
-            int deviceId = Integer.parseInt(request.getParameter("deviceId"));
-            double value = Double.parseDouble(request.getParameter("value"));
+        try (PrintWriter out = response.getWriter()) {
+            // 1. Lấy thông số gửi lên từ thiết bị (hoặc giả lập từ Postman/Browser)
+            String homeIdStr = request.getParameter("homeId");
+            String deviceIdStr = request.getParameter("deviceId");
+            String eventType = request.getParameter("eventType");   // VD: DoorOpen, LightOn, Heartbeat...
+            String eventValue = request.getParameter("eventValue"); // VD: Open, Closed, On, Off...
 
+            // Validate dữ liệu cơ bản
+            if (homeIdStr == null || deviceIdStr == null || eventType == null) {
+                out.print("{\"status\":\"error\", \"message\":\"Missing parameters!\"}");
+                return;
+            }
+
+            int homeId = Integer.parseInt(homeIdStr);
+            int deviceId = Integer.parseInt(deviceIdStr);
+
+            // 2. TẠO VÀ LƯU EVENT LOG VÀO DATABASE (QUAN TRỌNG)
+            // Phải lưu trước để các luật loại 'Threshold' có dữ liệu lịch sử để tính toán
+            EventLogDTO eventLog = new EventLogDTO();
+            eventLog.setDeviceId(deviceId);
+            eventLog.setEventType(eventType.trim());
+            eventLog.setEventValue(eventValue != null ? eventValue.trim() : "");
+            eventLog.setTs(new Timestamp(System.currentTimeMillis()));
+
+            EventLogDAO eventLogDAO = new EventLogDAO();
+            boolean isEventSaved = eventLogDAO.insertEvent(eventLog);
+
+            if (!isEventSaved) {
+                out.print("{\"status\":\"error\", \"message\":\"Failed to save Event Log.\"}");
+                return;
+            }
+
+            // 3. KÍCH HOẠT ALERT ENGINE
+            // Ngay sau khi có sự kiện mới, động cơ kiểm tra luật sẽ chạy ngay lập tức
             AlertEngine engine = new AlertEngine();
-            /*engine.processDeviceData(homeId, deviceId, value);*/
+            engine.processDeviceData(homeId, deviceId, eventType, eventValue);
 
-          
+            // 4. Phản hồi về cho thiết bị (hoặc client gọi API)
+            out.print("{\"status\":\"success\", \"message\":\"Device data processed and rules evaluated.\"}");
 
         } catch (Exception e) {
             e.printStackTrace();
+            // Nếu có lỗi, in ra log hệ thống
+            log("Error in DeviceDataController: " + e.getMessage());
         }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
