@@ -65,7 +65,7 @@ selectRole.innerHTML = `
     <option value="Home Owner">Home Owner</option>
     <option value="Technician">Technician</option>
     <option value="Viewer">Viewer</option>
-    <option value="Admin">Admin</option>
+
 `;
 
 const selectStatus = document.createElement("select");

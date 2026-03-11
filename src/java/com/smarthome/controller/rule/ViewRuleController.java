@@ -43,7 +43,7 @@ public class ViewRuleController extends HttpServlet {
 
             request.setAttribute("RULE_LIST", list);
             request.setAttribute("CURRENT_SECTION","edit_rule_section");
-            request.getRequestDispatcher("dashboard/dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/admin.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

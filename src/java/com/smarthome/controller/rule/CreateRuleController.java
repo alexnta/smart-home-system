@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "CreateRuleController", urlPatterns = {"/CreateRuleController"})
 public class CreateRuleController extends HttpServlet {
 
-    private static final String ERROR_PAGE = "/dashboard/dashboard.jsp";
-    private static final String SUCCESS_PAGE = "/dashboard/dashboard.jsp";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "admin/admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -30,7 +30,7 @@ public class DeleteDeviceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
+    private static final String ERROR_PAGE = "admin/admin.jsp";
     private static final String SUCCESS_PAGE = "ViewDeviceController";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

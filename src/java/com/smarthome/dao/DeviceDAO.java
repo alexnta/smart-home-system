@@ -210,4 +210,32 @@ public class DeviceDAO {
 
         return result;
     }
+    
+    public boolean updateDeviceRoomAndStatus(int deviceId, int roomId, String status) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement ptm = null;
+    boolean result = false;
+
+    String sql = "UPDATE Device SET room_id = ?, status = ? WHERE device_id = ?";
+
+    try {
+        conn = DBUtils.getConnection();
+        if (conn != null) {
+            ptm = conn.prepareStatement(sql);
+            ptm.setInt(1, roomId);
+            ptm.setString(2, status);
+            ptm.setInt(3, deviceId);
+
+            int rowsAffected = ptm.executeUpdate();
+            if (rowsAffected > 0) {
+                result = true;
+            }
+        }
+    } finally {
+        if (ptm != null) ptm.close();
+        if (conn != null) conn.close();
+    }
+
+    return result;
+}
 }

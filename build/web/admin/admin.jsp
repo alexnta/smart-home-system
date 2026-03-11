@@ -225,11 +225,7 @@
                                     rule template</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link tab_display" href="#" data-target="system_setting_section" role="button">
-                            System setting
-                        </a>
-                    </li>
+
                 </ul>
                 <div class="d-flex justify-content-center flex-grow-1">
                     <form class="d-flex" style="max-width: 300px; width: 100%;">
@@ -288,9 +284,9 @@
                     required
                 >
                     <option value="" selected disabled>Choose role</option>
-                    <option value="1">House owner</option>
-                    <option value="2">Technician</option>
-                    <option value="3">Viewer</option>
+                    <option value="Home Owner">House owner</option>
+                    <option value="Technician">Technician</option>
+                    <option value="Viewer">Viewer</option>
                 </select>
 
 <select name="status" class="form-select input_data mx-auto mt-3 mb-0">
@@ -670,70 +666,7 @@
 
         </div>
     </div>
-    <div class="container-fluid">
-        <div id="system_setting_section" class="row g-3 item_list" style="display: none;">
-            <div class="col-6 col-lg-3 card_container">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Alert System Configuration</h5>
 
-                        <div class="input_container mt-2 mb-2">
-                        <input type="checkbox" id="alert_system_checkbox">
-                        <label for="alert_system_checkbox">Enable Alert System</label>
-                        </div>
-
-                        <div class="row mb-3 align-items-center">
-                            <label class="col-3 col-form-label number-end">Night start:</label>
-                            <div class="col-9">
-                                <input type="time" class="form-control input_data night_time_start"
-                                    id="night_time_start">
-                            </div>
-                        </div>
-                        <div class="row mb-3 align-items-center">
-                            <label class="col-3 col-form-label number-end">Night end:</label>
-                            <div class="col-9">
-                                <input type="time" class="form-control input_data night_time_end" id="night_time_end">
-                            </div>
-                        </div>
-                        <input type="checkbox" id="only_night_checkbox">
-                        <label for="only_night_checkbox">Enable Night Only Mode</label>
-                        <button type="button" class="btn btn-primary d-block mx-auto mt-1">Confirm</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3 card_container">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title"> Offline Threshold Configuration</h5>
-                        <div class="d-flex align-items-center justify-content-center col-9" style="height: 15vh; width: 27rem">
-                            <input type="number" class="mt-2 mb-2 form-control text-center" id="default_threshold" style="width: 200px"
-                                placeholder="Enter threshold">
-                        </div>
-                        <button type="button" class="btn btn-primary d-block mx-auto mt-1">Confirm</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3 card_container">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Event Logging Configuration</h5>
-                        <div class="input_container mt-2 mb-2">
-                            <input type="checkbox" id="event_logging_checkbox">
-                            <label for="event_logging_checkbox">Enable Event Logging</label>
-                        </div>
-                        <input type="number" class="mt-2 mb-2 form-control" id="log_retention_days"
-                            placeholder="Log Retention (days)" style="width: 200px;">
-                        <div class="input_container mt-2 mb-2">
-                            <input type="checkbox" id="auto_delete_logs_checkbox">
-                            <label for="auto_delete_logs_checkbox">Auto Delete Old Logs</label>
-                        </div>
-
-                        <button type="button" class="btn btn-primary d-block mx-auto mt-1">Confirm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const currentSection = "${CURRENT_SECTION}";
@@ -750,7 +683,7 @@
         }
     });
 </script>
-<script type="module" src="${pageContext.request.contextPath}/dashboard/JS/main.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/admin/JS/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>

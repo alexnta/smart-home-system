@@ -27,14 +27,14 @@ public class DeleteRuleController extends HttpServlet {
             } else {
                 request.setAttribute("ERROR", "Failed to delete rule!");
                 request.setAttribute("CURRENT_SECTION", "edit_rule_section");
-                request.getRequestDispatcher("/dashboard/dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("admin/admin.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("ERROR", "System error: " + e.getMessage());
             request.setAttribute("CURRENT_SECTION", "edit_rule_section");
-            request.getRequestDispatcher("/dashboard/dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/admin.jsp").forward(request, response);
         }
     }
 

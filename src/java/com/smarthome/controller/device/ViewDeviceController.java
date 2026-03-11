@@ -6,14 +6,15 @@ package com.smarthome.controller.device;
 
 import com.smarthome.dao.DeviceDAO;
 import com.smarthome.dto.DeviceDTO;
+import com.smarthome.dto.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -31,31 +32,65 @@ public class ViewDeviceController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String DEVICE_LIST_PAGE = "dashboard/dashboard.jsp";
-    private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
+    private static final String ADMIN_PAGE = "admin/admin.jsp";
+       private static final String TECHNICIAN_PAGE = "technician/technician.jsp";
+    private static final String ERROR_PAGE = "error.jsp";
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR_PAGE;
+protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    String url = ERROR_PAGE;
 
-        try {
-            DeviceDAO dao = new DeviceDAO();
-            List<DeviceDTO> deviceList = dao.getAllDevices();
+    try {
+        HttpSession session = request.getSession(false);
 
-            request.setAttribute("DEVICE_LIST", deviceList);
-            request.setAttribute("CURRENT_SECTION", "device_management_section");
+        System.out.println("=== ViewDeviceController called ===");
 
-            url = DEVICE_LIST_PAGE;
-
-        } catch (Exception e) {
-            log("Error at ViewDeviceController: " + e.toString());
-            request.setAttribute("ERROR", "Cannot load device list!");
-            request.setAttribute("CURRENT_SECTION", "device_management_section");
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+        if (session == null) {
+            System.out.println("Session is null");
+            response.sendRedirect("login.jsp");
+            return;
         }
+
+        System.out.println("USER attr = " + session.getAttribute("USER"));
+        System.out.println("LOGIN_USER attr = " + session.getAttribute("LOGIN_USER"));
+
+        if (session.getAttribute("LOGIN_USER") == null) {
+            System.out.println("LOGIN_USER is null");
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        System.out.println("Role = " + user.getRoleName());
+
+        DeviceDAO dao = new DeviceDAO();
+        List<DeviceDTO> deviceList = dao.getAllDevices();
+
+        System.out.println("deviceList = " + deviceList);
+        System.out.println("deviceList size = " + (deviceList == null ? "null" : deviceList.size()));
+
+        request.setAttribute("DEVICE_LIST", deviceList);
+        request.setAttribute("CURRENT_SECTION", "device_management_section");
+
+        String role = user.getRoleName();
+        if ("Admin".equals(role)) {
+            url = ADMIN_PAGE;
+        } else if ("Technician".equals(role)) {
+            url = TECHNICIAN_PAGE;
+        }
+
+        System.out.println("Forward to = " + url);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        log("Error at ViewDeviceController: " + e.toString());
+        request.setAttribute("ERROR", "Cannot load device list!");
+        request.setAttribute("CURRENT_SECTION", "device_management_section");
+    } finally {
+        request.getRequestDispatcher(url).forward(request, response);
     }
+}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

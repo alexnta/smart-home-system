@@ -32,8 +32,8 @@ public class ViewRoomController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-private static final String ROOM_LIST_PAGE = "dashboard/dashboard.jsp";
-private static final String ERROR_PAGE = "dashboard/dashboard.jsp";
+private static final String ROOM_LIST_PAGE = "admin/admin.jsp";
+private static final String ERROR_PAGE = "admin/admin.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
