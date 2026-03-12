@@ -34,7 +34,7 @@ public class LoginController extends HttpServlet {
 
     private static final String ERROR = "login.jsp";
     private static final String ADMIN_PAGE = "admin/admin.jsp";   // Tạm thời trỏ về file jsp
-    private static final String OWNER_PAGE = "owner.jsp";
+    private static final String OWNER_PAGE = "home_owner/home_owner.jsp";
     private static final String TECH_PAGE = "technician/technician.jsp";
     private static final String VIEWER_PAGE = "viewer.jsp";
 

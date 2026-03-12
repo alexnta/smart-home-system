@@ -34,6 +34,7 @@ public class ViewDeviceController extends HttpServlet {
      */
     private static final String ADMIN_PAGE = "admin/admin.jsp";
        private static final String TECHNICIAN_PAGE = "technician/technician.jsp";
+       private static final String OWNER_PAGE = "home_owner/home_owner.jsp";
     private static final String ERROR_PAGE = "error.jsp";
 
 protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -71,6 +72,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         System.out.println("deviceList size = " + (deviceList == null ? "null" : deviceList.size()));
 
         request.setAttribute("DEVICE_LIST", deviceList);
+        System.out.println(deviceList);
         request.setAttribute("CURRENT_SECTION", "device_management_section");
 
         String role = user.getRoleName();
@@ -78,6 +80,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             url = ADMIN_PAGE;
         } else if ("Technician".equals(role)) {
             url = TECHNICIAN_PAGE;
+        } else if("Home Owner".equals(role)){
+            url = OWNER_PAGE;
         }
 
         System.out.println("Forward to = " + url);

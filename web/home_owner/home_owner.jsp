@@ -117,7 +117,7 @@
                 <ul class="navbar-nav me-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link tab-btn active" data-target="event_section">
+                        <a class="nav-link tab-btn" data-target="event_section">
                             Event Simulator
                         </a>
                     </li>
@@ -128,11 +128,13 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link tab-btn" data-target="device_section">
-                            My Devices
-                        </a>
-                    </li>
+<li class="nav-item">
+        <a class="nav-link tab-btn <%= devices != null ? "active" : "" %>"
+           data-target="device_section"
+           href="MainController?action=ViewDevice">
+            My Devices
+        </a>
+    </li>
 
                     <li class="nav-item">
                         <a class="nav-link tab-btn" data-target="alert_section">
@@ -155,7 +157,7 @@
 
         <!-- EVENT SIMULATOR -->
 
-        <div id="event_section" class="section active">
+       <div id="event_section" class="section <%= devices == null ? "active" : "" %>">
 
             <h2>Event Simulator</h2>
 
@@ -341,7 +343,7 @@
 
         <!-- MY DEVICES -->
 
-        <div id="device_section" class="section">
+        <div id="device_section" class="section <%= devices != null ? "active" : "" %>">
 
             <h2>My Devices</h2>
 
@@ -392,7 +394,13 @@
         <!-- MY ALERTS -->
 
         <div id="alert_section" class="section">
-
+                            <form action="MainController" method="post" style="display: flex;">
+                      <input class="form-control mt-3 mb-0 input_data input_home_id" aria-label="Name"
+                        type="text" placeholder="Enter home ID" name = "homeId">
+                        <button type="submit" name="action" value="ViewAlert" class="btn btn-danger mt-3 mb-0">
+                            View alert
+                        </button>
+                    </form>
             <h2>My Alerts</h2>
 
             <div class="row-center">
@@ -484,7 +492,7 @@
                 });
 
             });
-
+            
         </script>
 
 

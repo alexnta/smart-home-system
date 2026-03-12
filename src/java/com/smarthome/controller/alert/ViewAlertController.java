@@ -40,7 +40,7 @@ public class ViewAlertController extends HttpServlet {
 
             request.setAttribute("ALERT_LIST", list);
 
-            request.getRequestDispatcher("alertList.jsp").forward(request, response);
+            request.getRequestDispatcher("home_owner/home_owner.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
