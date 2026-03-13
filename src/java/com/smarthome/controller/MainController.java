@@ -33,7 +33,7 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_CONTROLLER = "LoginController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
-    
+
     private static final String VIEW_USER = "ViewUser";
     private static final String VIEW_USER_CONTROLLER = "ViewUserController";
     private static final String CREATE_USER = "CreateUser";
@@ -117,6 +117,9 @@ public class MainController extends HttpServlet {
     private static final String CREATE_ALERT_ACTION_CONTROLLER = "CreateAlertActionController";
     private static final String DELETE_ALERT_ACTION = "DeleteAlertAction";
     private static final String DELETE_ALERT_ACTION_CONTROLLER = "DeleteAlertActionController";
+
+    private static final String VIEW_STATISTIC = "ViewStatistic";
+    private static final String VIEW_STATISTIC_CONTROLLER = "StatisticController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -214,6 +217,10 @@ public class MainController extends HttpServlet {
                 url = CREATE_ALERT_ACTION_CONTROLLER;
             } else if (DELETE_ALERT_ACTION.equals(action)) {
                 url = DELETE_ALERT_ACTION_CONTROLLER;
+                
+            } else if (VIEW_STATISTIC.equals(action)) {
+                url = VIEW_STATISTIC_CONTROLLER;
+                
             } else {
                 request.setAttribute("ERROR", "Your action is not supported.");
             }

@@ -32,7 +32,7 @@ public class CreateHomeController extends HttpServlet {
      */
     private static final String ERROR_PAGE = "admin/admin.jsp";
     private static final String SUCCESS_PAGE = "admin/admin.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -40,18 +40,18 @@ public class CreateHomeController extends HttpServlet {
         String url = ERROR_PAGE;
 
         try {
-            
+
             String code = request.getParameter("txtCode");
             String name = request.getParameter("txtFacilityName");
             String address = request.getParameter("txtAddress");
             String status = request.getParameter("txtStatus");
             String ownerIdStr = request.getParameter("txtOwnerId");
-            
+
             System.out.println("code = " + code);
-System.out.println("name = " + name);
-System.out.println("address = " + address);
-System.out.println("status = " + status);
-System.out.println("ownerId = " + ownerIdStr);
+            System.out.println("name = " + name);
+            System.out.println("address = " + address);
+            System.out.println("status = " + status);
+            System.out.println("ownerId = " + ownerIdStr);
             // basic validation
             if (code == null || code.trim().isEmpty()) {
                 request.setAttribute("ERROR", "Home code is required!");
@@ -62,7 +62,7 @@ System.out.println("ownerId = " + ownerIdStr);
                 if (ownerIdStr != null && !ownerIdStr.trim().isEmpty()) {
                     ownerId = Integer.parseInt(ownerIdStr);
                 }
-                
+
                 HomeDTO home = new HomeDTO();
                 home.setCode(code.trim());
                 home.setName(name.trim());
@@ -76,16 +76,16 @@ System.out.println("ownerId = " + ownerIdStr);
                 if (success) {
                     url = SUCCESS_PAGE;
                 } else {
-                            request.setAttribute("ERROR", "Failed to create home!");
-        request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+                    request.setAttribute("ERROR", "Failed to create home!");
+                    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
         } catch (NumberFormatException e) {
-                request.setAttribute("ERROR", "Invalid number format!");
-    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+            request.setAttribute("ERROR", "Invalid number format!");
+            request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-    request.setAttribute("ERROR", "System error: " + e.getMessage());
-    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+            request.setAttribute("ERROR", "System error: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

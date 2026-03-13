@@ -64,6 +64,10 @@
         <servlet-name>DeviceDataController</servlet-name>
         <servlet-class>com.smarthome.controller.device.DeviceDataController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StatisticController</servlet-name>
+        <servlet-class>com.smarthome.controller.statistic.StatisticController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ViewHomeModeController</servlet-name>
         <url-pattern>/ViewHomeModeController</url-pattern>
@@ -127,6 +131,10 @@
     <servlet-mapping>
         <servlet-name>DeviceDataController</servlet-name>
         <url-pattern>/DeviceDataController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatisticController</servlet-name>
+        <url-pattern>/StatisticController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
