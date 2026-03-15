@@ -59,7 +59,6 @@ public class UserDAO {
         return user; 
     }
     
-    // 1. Lấy danh sách tất cả người dùng
     public List<UserDTO> getAllUsers() throws SQLException, ClassNotFoundException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -96,12 +95,11 @@ public class UserDAO {
         return list;
     }
 
-    // 2. Thêm mới User (Cần Insert vào Users và UserRole)
-    public boolean createUser(UserDTO user, int roleId) throws SQLException, ClassNotFoundException {
+    public int  createUser(UserDTO user, int roleId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        boolean check = false;
+        int newUserId = -1;
         
         String sqlUser = "INSERT INTO Users(username, password, full_name, email, status) VALUES(?, ?, ?, ?, ?)";
         String sqlRole = "INSERT INTO UserRole(user_id, role_id) VALUES(?, ?)";
@@ -110,8 +108,7 @@ public class UserDAO {
             conn = DBUtils.getConnection();
             if (conn != null) {
                 conn.setAutoCommit(false); // Bắt đầu Transaction
-                
-                // Insert User và lấy user_id vừa tạo
+
                 ptm = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS);
                 ptm.setString(1, user.getUsername());
                 ptm.setString(2, user.getPassword());
@@ -123,29 +120,27 @@ public class UserDAO {
                 if (rowEffected > 0) {
                     rs = ptm.getGeneratedKeys();
                     if (rs.next()) {
-                        int newUserId = rs.getInt(1);
+                        newUserId = rs.getInt(1);
                         
-                        // Insert Role
-                        PreparedStatement ptmRole = conn.prepareStatement(sqlRole);
-                        ptmRole.setInt(1, newUserId);
-                        ptmRole.setInt(2, roleId);
-                        ptmRole.executeUpdate();
-                        ptmRole.close();
-                        
-                        check = true;
+                        try ( // Insert Role
+                            PreparedStatement ptmRole = conn.prepareStatement(sqlRole)) {
+                            ptmRole.setInt(1, newUserId);
+                            ptmRole.setInt(2, roleId);
+                            ptmRole.executeUpdate();
+                        }
                     }
                 }
                 conn.commit(); // Hoàn tất Transaction
             }
         } catch (SQLException e) {
-            if (conn != null) conn.rollback(); // Rollback nếu có lỗi
+            if (conn != null) conn.rollback();
             throw e;
         } finally {
             if (rs != null) rs.close();
             if (ptm != null) ptm.close();
             if (conn != null) conn.close();
         }
-        return check;
+        return newUserId;
     }
 
     // 3. Cập nhật User
@@ -190,22 +185,39 @@ public class UserDAO {
         return check;
     }
 
-    // 4. Xóa User (Hard Delete - Sẽ cascade tự xóa UserRole theo script DB của bạn)
+    // 4. Xóa User (Giải quyết Conflict Foreign Key với bảng Home)
     public boolean deleteUser(int userId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
-        PreparedStatement ptm = null;
+        PreparedStatement ptmUpdateHome = null;
+        PreparedStatement ptmDeleteUser = null;
         boolean check = false;
-        String sql = "DELETE FROM Users WHERE user_id = ?";
+        
+        String sqlUpdateHome = "UPDATE Home SET owner_user_id = NULL WHERE owner_user_id = ?";
+        String sqlDeleteUser = "DELETE FROM Users WHERE user_id = ?";
         
         try {
             conn = DBUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(sql);
-                ptm.setInt(1, userId);
-                check = ptm.executeUpdate() > 0;
+                conn.setAutoCommit(false); // Bắt đầu Transaction an toàn
+                
+                // Home
+                ptmUpdateHome = conn.prepareStatement(sqlUpdateHome);
+                ptmUpdateHome.setInt(1, userId);
+                ptmUpdateHome.executeUpdate(); 
+                
+                // Users
+                ptmDeleteUser = conn.prepareStatement(sqlDeleteUser);
+                ptmDeleteUser.setInt(1, userId);
+                check = ptmDeleteUser.executeUpdate() > 0;
+                
+                conn.commit(); 
             }
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback(); // Lỗi thì quay xe
+            throw e;
         } finally {
-            if (ptm != null) ptm.close();
+            if (ptmUpdateHome != null) ptmUpdateHome.close();
+            if (ptmDeleteUser != null) ptmDeleteUser.close();
             if (conn != null) conn.close();
         }
         return check;

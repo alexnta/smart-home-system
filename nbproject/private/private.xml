@@ -3,17 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/admin/admin.jsp</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/home/UpdateHomeController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/home/DeleteHomeController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/dto/StatisticDTO.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/home_owner/home_owner.jsp</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/MainController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/statistic/StatisticController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/statistic/JS/Chart.js</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/dao/StatisticDAO.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/src/java/com/smarthome/controller/home/CreateHomeController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/prj/smart-home-system/web/statistic/statistic.jsp</file>
+            <file>file:/C:/Users/Alex/Documents/FPTU/4/PRJ301/FinalProject/smart-home-system/src/java/com/smarthome/controller/homeowner/HODeleteRuleController.java</file>
+            <file>file:/C:/Users/Alex/Documents/FPTU/4/PRJ301/FinalProject/smart-home-system/src/java/com/smarthome/controller/MainController.java</file>
+            <file>file:/C:/Users/Alex/Documents/FPTU/4/PRJ301/FinalProject/smart-home-system/src/java/com/smarthome/dao/RuleDAO.java</file>
+            <file>file:/C:/Users/Alex/Documents/FPTU/4/PRJ301/FinalProject/smart-home-system/src/java/com/smarthome/controller/homeowner/HOViewRuleController.java</file>
+            <file>file:/C:/Users/Alex/Documents/FPTU/4/PRJ301/FinalProject/smart-home-system/web/home_owner/home_owner.jsp</file>
         </group>
     </open-files>
 </project-private>

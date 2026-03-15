@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.smarthome.controller.eventlog;
 
 import com.smarthome.dao.EventLogDAO;
 import com.smarthome.dto.EventLogDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -15,112 +10,91 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Alex
- */
 @WebServlet(name = "SearchEventController", urlPatterns = {"/SearchEventController"})
 public class SearchEventController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    
-    private static final String RESULT_PAGE = "eventList.jsp";
-    private static final String ERROR_PAGE = "error.jsp";
-    
+    private static final String ADMIN_PAGE = "admin/admin.jsp";
+    private static final String LOGIN_PAGE = "login.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR_PAGE;
 
         try {
-            // Lấy tham số tìm kiếm
-            String deviceIdStr = request.getParameter("txtDeviceId");
-            String eventType = request.getParameter("txtEventType");
-            String startTimeStr = request.getParameter("txtStartTime");
-            String endTimeStr = request.getParameter("txtEndTime");
+            // 1. Kiểm tra đăng nhập
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("LOGIN_USER") == null) {
+                response.sendRedirect(LOGIN_PAGE);
+                return;
+            }
 
-            // Parse parameters
+            // 2. Lấy dữ liệu từ Form (Khớp với name trong admin.jsp)
+            String keyword = request.getParameter("filterDevice");
+            String filterDate = request.getParameter("filterDate");
+
+            // 3. SMART SEARCH LOGIC (Đoán xem người dùng nhập số hay chữ)
             Integer deviceId = null;
-            if (deviceIdStr != null && !deviceIdStr.trim().isEmpty()) {
-                deviceId = Integer.parseInt(deviceIdStr);
+            String eventType = null;
+
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                keyword = keyword.trim();
+                try {
+                    deviceId = Integer.parseInt(keyword); // Thử ép kiểu thành số (Device ID)
+                } catch (NumberFormatException e) {
+                    eventType = keyword; // Nếu lỗi (không phải số) -> Đó là chữ (Event Type)
+                }
             }
 
+            // 4. XỬ LÝ NGÀY THÁNG (Lấy từ 00:00:00 đến 23:59:59 của ngày được chọn)
             Timestamp startTime = null;
-            if (startTimeStr != null && !startTimeStr.trim().isEmpty()) {
-                startTime = Timestamp.valueOf(startTimeStr + " 00:00:00");
-            }
-
             Timestamp endTime = null;
-            if (endTimeStr != null && !endTimeStr.trim().isEmpty()) {
-                endTime = Timestamp.valueOf(endTimeStr + " 23:59:59");
+
+            if (filterDate != null && !filterDate.trim().isEmpty()) {
+                startTime = Timestamp.valueOf(filterDate + " 00:00:00");
+                endTime = Timestamp.valueOf(filterDate + " 23:59:59");
             }
 
-            // Gọi DAO search
+            // 5. Gọi DAO tìm kiếm
             EventLogDAO dao = new EventLogDAO();
-            List<EventLogDTO> eventList = dao.searchEvents(deviceId, eventType, startTime, endTime);
+            List<EventLogDTO> eventList;
+            
+            // Nếu không nhập gì, lấy tất cả (Hàm getAllEvents mình đã fix ở DAO trước đó)
+            if (deviceId == null && eventType == null && startTime == null) {
+                eventList = dao.getAllEvents();
+            } else {
+                eventList = dao.searchEvents(deviceId, eventType, startTime, endTime);
+            }
 
+            // 6. Gửi dữ liệu về JSP
             request.setAttribute("EVENT_LIST", eventList);
-            request.setAttribute("SEARCH_RESULT", "Found " + eventList.size() + " events");
-            url = RESULT_PAGE;
+            request.setAttribute("CURRENT_SECTION", "log_management_section");
+            request.getRequestDispatcher(ADMIN_PAGE).forward(request, response);
 
-        } catch (NumberFormatException e) {
-            request.setAttribute("ERROR", "Invalid number format!");
         } catch (IllegalArgumentException e) {
-            request.setAttribute("ERROR", "Invalid date format! Use: yyyy-MM-dd");
+            request.setAttribute("ERROR_MSG", "Invalid date format!");
+            request.setAttribute("CURRENT_SECTION", "log_management_section");
+            request.getRequestDispatcher(ADMIN_PAGE).forward(request, response);
         } catch (Exception e) {
-            log("Error at SearchEventController: " + e.toString());
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            e.printStackTrace();
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "log_management_section");
+            request.getRequestDispatcher(ADMIN_PAGE).forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

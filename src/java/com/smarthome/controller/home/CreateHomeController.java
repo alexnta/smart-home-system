@@ -31,13 +31,14 @@ public class CreateHomeController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "MainController?action=ViewHome";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); 
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
+        boolean success = false;
 
         try {
 
@@ -54,9 +55,9 @@ public class CreateHomeController extends HttpServlet {
             System.out.println("ownerId = " + ownerIdStr);
             // basic validation
             if (code == null || code.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Home code is required!");
+                request.setAttribute("ERROR_MSG", "Home code is required!");
             } else if (name == null || name.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Home name is required!");
+                request.setAttribute("ERROR_MSG", "Home name is required!");
             } else {
                 int ownerId = 0;
                 if (ownerIdStr != null && !ownerIdStr.trim().isEmpty()) {
@@ -71,23 +72,27 @@ public class CreateHomeController extends HttpServlet {
                 home.setOwnerUserId(ownerId);
 
                 HomeDAO dao = new HomeDAO();
-                boolean success = dao.insertHome(home);
+                success = dao.insertHome(home);
                 System.out.println(success);
                 if (success) {
                     url = SUCCESS_PAGE;
                 } else {
-                    request.setAttribute("ERROR", "Failed to create home!");
+                    request.setAttribute("ERROR_MSG", "Failed to create home!");
                     request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
         } catch (NumberFormatException e) {
-            request.setAttribute("ERROR", "Invalid number format!");
+            request.setAttribute("ERROR_MSG", "Invalid number format!");
             request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
             request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            if (success) {
+                response.sendRedirect(url); // Thành công thì Redirect
+            } else {
+                request.getRequestDispatcher(url).forward(request, response); // Lỗi thì Forward để hiện ERROR_MSG
+            }
         }
     }
 

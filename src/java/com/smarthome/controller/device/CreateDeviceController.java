@@ -7,7 +7,6 @@ package com.smarthome.controller.device;
 import com.smarthome.dao.DeviceDAO;
 import com.smarthome.dto.DeviceDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,16 +31,19 @@ public class CreateDeviceController extends HttpServlet {
      */
     
     private static final String ERROR_PAGE = "admin/admin.jsp"; 
-    private static final String SUCCESS_PAGE = "admin/admin.jsp"; 
+    private static final String SUCCESS_PAGE = "MainController?action=ViewDevice"; 
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8"); 
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
+        boolean isSuccess = false;
 
         try {
             // Lấy thông tin từ form
             String roomIdStr = request.getParameter("txtRoomId");
+            String homeIdStr = request.getParameter("txtHomeId");
             String name = request.getParameter("txtFacilityName");
             String deviceType = request.getParameter("txtDeviceType");
             String serialNo = request.getParameter("txtCode");
@@ -53,13 +55,18 @@ public class CreateDeviceController extends HttpServlet {
 
             // Validate
             if (name == null || name.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Device name is required!");
+                request.setAttribute("ERROR_MSG", "Device name is required!");
             } else if (deviceType == null || deviceType.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Device type is required!");
+                request.setAttribute("ERROR_MSG", "Device type is required!");
             } else {
                 int roomId = 0;
                 if (roomIdStr != null && !roomIdStr.trim().isEmpty()) {
                     roomId = Integer.parseInt(roomIdStr);
+                }
+                
+                int homeId = 0;
+                if (homeIdStr != null && !homeIdStr.trim().isEmpty()) {
+                    homeId = Integer.parseInt(homeIdStr);
                 }
                 
                 boolean isActive = true; // Mặc định là active
@@ -70,6 +77,7 @@ public class CreateDeviceController extends HttpServlet {
                 // Tạo DTO
                 DeviceDTO device = new DeviceDTO();
                 device.setRoomId(roomId);
+                device.setHomeId(homeId);
                 device.setName(name.trim());
                 device.setDeviceType(deviceType.trim());
                 device.setSerialNo(serialNo != null ? serialNo.trim() : "");
@@ -79,27 +87,32 @@ public class CreateDeviceController extends HttpServlet {
 
                 // Insert vào DB
                 DeviceDAO dao = new DeviceDAO();
-                boolean success = dao.insertDevice(device);
+                isSuccess = dao.insertDevice(device);
 
-                if (success) {
+                if (isSuccess) {
                     url = SUCCESS_PAGE;
                 } else {
-                            request.setAttribute("ERROR", "Failed to create device!");
-        request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+                    request.setAttribute("ERROR_MSG", "Failed to create device!");
+                    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
 
         } catch (NumberFormatException e) {
-                request.setAttribute("ERROR", "Invalid number format!");
-    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+            request.setAttribute("ERROR_MSG", "Invalid number format!");
+            request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-    log("Error at CreateDeviceController: " + e.toString());
-    request.setAttribute("ERROR", "System error: " + e.getMessage());
-    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+            log("Error at CreateDeviceController: " + e.toString());
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            if (isSuccess) {
+                response.sendRedirect(url); 
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
+            }
         }
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

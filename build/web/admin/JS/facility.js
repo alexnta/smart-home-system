@@ -122,218 +122,100 @@ if (belongInput) {
     // createUserCardContainer.remove();
     // overlay.remove();
 }
-function displayBelongToInput(selectFacilityType){
+
+function displayBelongToInput(selectFacilityType) {
     const type = selectFacilityType.value;
-    let belongToInput = document.getElementById("belongToInput");
-    let deviceTypeInput = document.getElementById("deviceTypeInput");
-    let houseOwnerID = document.getElementById("houseOwnerIDInput");
-    let roomTypeInput = document.getElementById("roomTypeInput");
-    let vendorInput = document.getElementById("vendorInput");
-    let floorInput = document.getElementById("floorInput");
-    let conditionInputForDevice = document.getElementById("conditionInputForDevice");
+    const container = document.getElementById("additionalInputContainer");
+    const submitBtn = document.getElementById("submit_facility_button");
 
-    if (type === "2") {
-        if(deviceTypeInput){
-            deviceTypeInput.remove();
-        }
-                if(conditionInputForDevice){
-            conditionInputForDevice.remove();
-        }
-        if(houseOwnerID){
-            houseOwnerID.remove();
-        }
-        if(vendorInput){
-            vendorInput.remove();
-        }
-        if (!roomTypeInput) {
-    roomTypeInput = document.createElement("input");
-    roomTypeInput.setAttribute("id", "roomTypeInput");
-    roomTypeInput.className = "form-control mx-auto mt-3 input_data";
-    roomTypeInput.placeholder = "Enter room type";
-    roomTypeInput.name = "txtRoomType";
-    document.getElementById("additionalInputContainer").appendChild(roomTypeInput);
-}
+    container.innerHTML = ""; // Dọn dẹp form
 
-if (!floorInput) {
-    floorInput = document.createElement("input");
-    floorInput.type = "number";
-    floorInput.setAttribute("id", "floorInput");
-    floorInput.className = "form-control mx-auto mt-3 input_data";
-    floorInput.placeholder = "Enter floor number";
-    floorInput.name = "txtFloor";
-    document.getElementById("additionalInputContainer").appendChild(floorInput);
-}
+    if (type === "1") {
+        // --- 1. HOUSE: Cần Code, Address, Owner, Status ---
+        submitBtn.value = "CreateHome";
+        container.innerHTML = `
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="text" name="txtCode" placeholder="Enter House Code (e.g. H01)" required>
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="text" name="txtAddress" placeholder="Enter House Address">
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="number" name="txtOwnerId" placeholder="Enter Owner User ID (Optional)">
+            <select class="form-select mx-auto mt-3 mb-0 input_data" name="txtStatus">
+                <option value="Active" selected>Status: Active</option>
+                <option value="Inactive">Status: Inactive</option>
+                <option value="Maintenance">Status: Maintenance</option>
+            </select>
+        `;
 
-if (!belongToInput) {
-    belongToInput = document.createElement("input");
-    belongToInput.setAttribute("id", "belongToInput");
-    belongToInput.className = "form-control mx-auto mt-3 input_data";
-    belongToInput.placeholder = "Enter house ID";
-    belongToInput.name = "txtHomeId";
-    document.getElementById("create_facility_form").insertBefore(
-        belongToInput,
-        document.getElementById("create_facility_button_container")
-    );
-} else {
-    belongToInput.placeholder = "Enter house ID";
-    belongToInput.name = "txtHomeId";
-}
+    } else if (type === "2") {
+        // --- 2. ROOM: Cần Home_ID, Floor, RoomType, Status (KHÔNG CÓ CODE) ---
+        submitBtn.value = "CreateRoom";
+        container.innerHTML = `
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="number" name="txtHomeId" placeholder="Enter belonging House ID" required>
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="number" name="txtFloor" placeholder="Enter floor number (Default: 1)" value="1">
+            <select class="form-select mx-auto mt-3 mb-0 input_data" name="txtRoomType">
+                <option value="" selected disabled>Choose Room Type</option>
+                <option value="LivingRoom">Living Room</option>
+                <option value="BedRoom">Bed Room</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="BathRoom">Bath Room</option>
+            </select>
+            <select class="form-select mx-auto mt-3 mb-0 input_data" name="txtStatus">
+                <option value="Active" selected>Status: Active</option>
+                <option value="Inactive">Status: Inactive</option>
+            </select>
+        `;
+
     } else if (type === "3") {
-    if (houseOwnerID) {
-        houseOwnerID.remove();
-    }
-
-    if (floorInput) {
-        floorInput.remove();
-    }
-
-    if (roomTypeInput) {
-        roomTypeInput.remove();
-    }
-
-    if (!deviceTypeInput) {
-        deviceTypeInput = document.createElement("select");
-        deviceTypeInput.className = "form-select mx-auto mt-3 input_data";
-        deviceTypeInput.id = "deviceTypeInput";
-        deviceTypeInput.name = "txtDeviceType";
-        deviceTypeInput.innerHTML = `
-            <option selected>Choose device type</option>
-            <option value="Door">Door</option>
-            <option value="Light">Light</option>
-        `;
-        document.getElementById("additionalInputContainer").appendChild(deviceTypeInput);
-    }
-
-    if (!conditionInputForDevice) {
-        conditionInputForDevice = document.createElement("select");
-        conditionInputForDevice.className = "form-select mx-auto mt-3 input_data";
-        conditionInputForDevice.id = "conditionInputForDevice";
-        conditionInputForDevice.name = "txtStatus";
-        conditionInputForDevice.innerHTML = `
-            <option selected>Choose condition</option>
-        `;
-        document.getElementById("additionalInputContainer").appendChild(conditionInputForDevice);
-
-        deviceTypeInput.addEventListener("change", () => {
-            switch (deviceTypeInput.value) {
-                case "Door":
-                    conditionInputForDevice.innerHTML = `
-                        <option selected>Choose condition</option>
-                        <option value="Opened">Opened</option>
-                        <option value="Closed">Closed</option>
-                    `;
-                    break;
-                case "Light":
-                    conditionInputForDevice.innerHTML = `
-                        <option selected>Choose condition</option>
-                        <option value="On">On</option>
-                        <option value="Off">Off</option>
-                    `;
-                    break;
-            }
-        });
-    }
-
-    if (!vendorInput) {
-        vendorInput = document.createElement("input");
-        vendorInput.id = "vendorInput";
-        vendorInput.className = "form-control mx-auto mt-3 input_data";
-        vendorInput.placeholder = "Enter vendor";
-        vendorInput.name = "txtVendor";
-
-        document.getElementById("create_facility_form").insertBefore(
-            vendorInput,
-            document.getElementById("create_facility_button_container")
-        );
-    }
-
-    if (!belongToInput) {
-        belongToInput = document.createElement("input");
-        belongToInput.id = "belongToInput";
-        belongToInput.className = "form-control mx-auto mt-3 input_data";
-        belongToInput.placeholder = "Enter room ID";
-        belongToInput.name = "txtRoomId";
-
-        document.getElementById("create_facility_form").insertBefore(
-            belongToInput,
-            document.getElementById("create_facility_button_container")
-        );
-    } else {
-        belongToInput.placeholder = "Enter room ID";
-        belongToInput.name = "txtRoomId";
-    }
-} else if(type === "1"){
-        console.log( document.getElementById("additionalInputContainer"));
-                if(roomTypeInput){
-            roomTypeInput.remove();
-        }
-                        if(conditionInputForDevice){
-            conditionInputForDevice.remove();
-        }
-                if(vendorInput){
-            vendorInput.remove();
-        }
-        if(deviceTypeInput){
-            deviceTypeInput.remove();
-        }
-        
-                
-                       if(floorInput){
-            floorInput.remove();
-        }
-            if(!houseOwnerID){
-            houseOwnerID = document.createElement("input");
-            houseOwnerID.setAttribute("id", "houseOwnerIDInput");
-            houseOwnerID.className = "form-control mx-auto mt-3 input_data";
-            houseOwnerID.placeholder = "Enter house owner ID";
-            houseOwnerID.name = "txtOwnerId";
+        // --- 3. DEVICE: Cần Room_ID, Serial, DeviceType, Vendor (Status mặc định Backend lo) ---
+        submitBtn.value = "CreateDevice";
+        container.innerHTML = `
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="text" name="txtCode" placeholder="Enter Serial Number" required>
             
-                        document.getElementById("create_facility_form").insertBefore(
-                houseOwnerID,
-                document.getElementById("create_facility_button_container")
-            );
-          /*  document.getElementById("additionalInputContainer").appendChild(
-                houseOwnerID
-            );*/
-        }
-        
-        if (!belongToInput) {
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="number" id="ajax_home_id" name="txtHomeId" placeholder="Step 1: Enter House ID" required>
+            
+            <select class="form-select mx-auto mt-3 mb-0 input_data" id="ajax_room_select" name="txtRoomId">
+                <option value="0">Step 2: Enter House ID first...</option>
+            </select>
 
-            belongToInput = document.createElement("input");
-            belongToInput.setAttribute("id", "belongToInput");
-            belongToInput.className = "form-control mx-auto mt-3 input_data";
-            belongToInput.placeholder = "Enter address";
-            belongToInput.name = "txtAddress"
+            <select class="form-select mx-auto mt-3 mb-0 input_data" name="txtDeviceType" required>
+                <option value="" selected disabled>Choose Device Type</option>
+                <option value="DoorSensor">Door Sensor</option>
+                <option value="SmartLock">Smart Lock</option>
+                <option value="LightSwitch">Light Switch</option>
+                <option value="SmartLight">Smart Light</option>
+            </select>
+            <input class="form-control mx-auto mt-3 mb-0 input_data" type="text" name="txtVendor" placeholder="Enter Vendor">
+        `;
 
-            document.getElementById("create_facility_form").insertBefore(
-                belongToInput,
-                document.getElementById("create_facility_button_container")
-            );
-        } else if(belongToInput){
-            belongToInput.placeholder = "Enter address";
-        }
-    } else {
-                               if(conditionInputForDevice){
-            conditionInputForDevice.remove();
-        }
-                
-                       if(floorInput){
-            floorInput.remove();
-        }
-        if(belongToInput){
-             belongToInput.remove();
-        }
-        if(deviceTypeInput){
-            deviceTypeInput.remove();
-        }
-                        if(roomTypeInput){
-            roomTypeInput.remove();
-        }
-        
-                       if(houseOwnerID){
-            houseOwnerID.remove();
-        }
-        
+        // BẮT ĐẦU XỬ LÝ AJAX
+        const homeInput = document.getElementById("ajax_home_id");
+        const roomSelect = document.getElementById("ajax_room_select");
+
+        // Khi gõ xong ID nhà và bấm ra ngoài (hoặc gõ xong)
+        homeInput.addEventListener("change", function() {
+            const hId = this.value;
+            if (!hId) return;
+
+            roomSelect.innerHTML = '<option>Loading rooms...</option>';
+
+            // Gọi Servlet lấy dữ liệu
+            fetch(`../GetRoomsController?homeId=${hId}`)
+                .then(res => res.json())
+                .then(data => {
+                    roomSelect.innerHTML = '<option value="0">-- Select Room (Optional) --</option>';
+                    if (data.length === 0) {
+                        roomSelect.innerHTML = '<option value="0">No rooms found in this house!</option>';
+                    } else {
+                        data.forEach(room => {
+                            let opt = document.createElement("option");
+                            opt.value = room.id;
+                            opt.textContent = `${room.name} (ID: ${room.id})`;
+                            roomSelect.appendChild(opt);
+                        });
+                    }
+                })
+                .catch(err => {
+                    roomSelect.innerHTML = '<option value="0">Error loading rooms</option>';
+                });
+        });
     }
 }
 
@@ -343,15 +225,15 @@ function createUpdateFacilityCard() {
     container.className = "container-fluid section_container";
 
     const card = document.createElement("div");
-    card.className = "card card_container";
+    card.className = "card card_container shadow-lg border-primary";
 
     const form = document.createElement("form");
     form.className = "d-flex submit_form";
-    form.action = "MainController";
+    form.action = "../MainController"; // Đảm bảo đúng đường dẫn tới Controller
     form.method = "post";
 
     const formTitle = document.createElement("h5");
-    formTitle.className = "text-center mt-3";
+    formTitle.className = "text-center mt-3 text-primary fw-bold";
     formTitle.textContent = "Update Facility";
 
     const hiddenAction = document.createElement("input");
@@ -359,19 +241,19 @@ function createUpdateFacilityCard() {
     hiddenAction.name = "action";
 
     const dynamicContainer = document.createElement("div");
-    dynamicContainer.className = "dynamic_update_fields";
+    dynamicContainer.className = "dynamic_update_fields d-flex flex-column gap-3 mt-3";
 
     const buttonContainer = document.createElement("div");
-    buttonContainer.className = "button_container mt-3 d-flex justify-content-center gap-5";
+    buttonContainer.className = "button_container mt-4 d-flex justify-content-center gap-4";
 
     const updateBtn = document.createElement("button");
     updateBtn.type = "submit";
-    updateBtn.className = "btn btn-outline-success submit_update_facility_button";
-    updateBtn.textContent = "Update";
+    updateBtn.className = "btn btn-primary submit_update_facility_button px-4";
+    updateBtn.textContent = "Save Changes";
 
     const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
-    cancelBtn.className = "btn btn-outline-danger cancel_update_facility_button";
+    cancelBtn.className = "btn btn-outline-secondary cancel_update_facility_button px-4";
     cancelBtn.textContent = "Cancel";
 
     buttonContainer.appendChild(updateBtn);
@@ -381,15 +263,7 @@ function createUpdateFacilityCard() {
     card.appendChild(form);
     container.appendChild(card);
 
-    return {
-        container,
-        form,
-        dynamicContainer,
-        buttonContainer,
-        hiddenAction,
-        updateBtn,
-        cancelBtn
-    };
+    return { container, form, dynamicContainer, hiddenAction, cancelBtn };
 }
 
 function createInput(name, value = "", placeholder = "", type = "text", hidden = false) {
@@ -428,97 +302,104 @@ function getHiddenValue(card, name) {
 }
 
 function renderUpdateFields(updateUI, card) {
-    const body = card.querySelector(".card-body");
-    const typeText = body.querySelectorAll(".card-text")[0].textContent
-        .replace("Facility type: ", "")
-        .trim();
+    // Xác định xem mình đang bấm Update ở mục nào (Dựa vào Action button)
+    const actionBtn = card.querySelector('button[name="action"]');
+    const actionType = actionBtn ? actionBtn.value : "";
 
-    updateUI.dynamicContainer.innerHTML = "";
+    updateUI.dynamicContainer.innerHTML = ""; // Clear form cũ
 
-    if (typeText === "House") {
+    if (actionType === "UpdateHome") {
         updateUI.hiddenAction.value = "UpdateHome";
+        updateUI.dynamicContainer.innerHTML = `
+            <input type="hidden" name="txtHomeId" value="${getHiddenValue(card, 'txtHomeId')}">
+            <label class="fw-bold text-muted small mb-0">House Code</label>
+            <input class="form-control" type="text" name="txtCode" value="${getHiddenValue(card, 'txtCode')}" required>
+            <label class="fw-bold text-muted small mb-0 mt-2">House Name</label>
+            <input class="form-control" type="text" name="txtFacilityName" value="${getHiddenValue(card, 'txtName')}" required>
+            <label class="fw-bold text-muted small mb-0 mt-2">Address</label>
+            <input class="form-control" type="text" name="txtAddress" value="${getHiddenValue(card, 'txtAddress')}">
+            <label class="fw-bold text-muted small mb-0 mt-2">Owner User ID</label>
+            <input class="form-control" type="number" name="txtOwnerId" value="${getHiddenValue(card, 'txtOwnerId') || ''}">
+            <label class="fw-bold text-muted small mb-0 mt-2">Status</label>
+            <select class="form-select" name="txtStatus">
+                <option value="Active" ${getHiddenValue(card, 'txtStatus') === 'Active' ? 'selected' : ''}>Active</option>
+                <option value="Inactive" ${getHiddenValue(card, 'txtStatus') === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                <option value="Maintenance" ${getHiddenValue(card, 'txtStatus') === 'Maintenance' ? 'selected' : ''}>Maintenance</option>
+            </select>
+        `;
 
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtHomeId", getHiddenValue(card, "txtHomeId"), "", "text", true)
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtCode", getHiddenValue(card, "txtCode"), "Enter code")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtName", getHiddenValue(card, "txtName"), "Enter home name")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtAddress", getHiddenValue(card, "txtAddress"), "Enter address")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtOwnerId", getHiddenValue(card, "txtOwnerId"), "Enter owner ID", "number")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createSelect("txtStatus", getHiddenValue(card, "txtStatus"), [
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" }
-            ])
-        );
-
-    } else if (typeText === "Room") {
+    } else if (actionType === "UpdateRoom") {
         updateUI.hiddenAction.value = "UpdateRoom";
+        updateUI.dynamicContainer.innerHTML = `
+            <input type="hidden" name="txtRoomId" value="${getHiddenValue(card, 'txtRoomId')}">
+            <label class="fw-bold text-muted small mb-0">Belonging House ID</label>
+            <input class="form-control" type="number" name="txtHomeId" value="${getHiddenValue(card, 'txtHomeId')}" required>
+            <label class="fw-bold text-muted small mb-0 mt-2">Room Name</label>
+            <input class="form-control" type="text" name="txtFacilityName" value="${getHiddenValue(card, 'txtName')}" required>
+            <label class="fw-bold text-muted small mb-0 mt-2">Floor</label>
+            <input class="form-control" type="number" name="txtFloor" value="${getHiddenValue(card, 'txtFloor')}">
+            <label class="fw-bold text-muted small mb-0 mt-2">Room Type</label>
+            <select class="form-select" name="txtRoomType">
+                <option value="LivingRoom" ${getHiddenValue(card, 'txtRoomType') === 'LivingRoom' ? 'selected' : ''}>Living Room</option>
+                <option value="BedRoom" ${getHiddenValue(card, 'txtRoomType') === 'BedRoom' ? 'selected' : ''}>Bed Room</option>
+                <option value="Kitchen" ${getHiddenValue(card, 'txtRoomType') === 'Kitchen' ? 'selected' : ''}>Kitchen</option>
+                <option value="BathRoom" ${getHiddenValue(card, 'txtRoomType') === 'BathRoom' ? 'selected' : ''}>Bath Room</option>
+            </select>
+            <label class="fw-bold text-muted small mb-0 mt-2">Status</label>
+            <select class="form-select" name="txtStatus">
+                <option value="Active" ${getHiddenValue(card, 'txtStatus') === 'Active' ? 'selected' : ''}>Active</option>
+                <option value="Inactive" ${getHiddenValue(card, 'txtStatus') === 'Inactive' ? 'selected' : ''}>Inactive</option>
+            </select>
+        `;
 
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtRoomId", getHiddenValue(card, "txtRoomId"), "", "text", true)
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtHomeId", getHiddenValue(card, "txtHomeId"), "Enter home ID", "number")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtName", getHiddenValue(card, "txtName"), "Enter room name")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtRoomType", getHiddenValue(card, "txtRoomType"), "Enter room type")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtFloor", getHiddenValue(card, "txtFloor"), "Enter floor", "number")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createSelect("txtStatus", getHiddenValue(card, "txtStatus"), [
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" }
-            ])
-        );
-
-    } else if (typeText === "Device") {
+    } else if (actionType === "UpdateDevice") {
         updateUI.hiddenAction.value = "UpdateDevice";
+        updateUI.dynamicContainer.innerHTML = `
+            <input type="hidden" name="txtDeviceId" value="${getHiddenValue(card, 'txtDeviceId')}">
+            
+            <label class="fw-bold text-muted small mb-0">Device Name</label>
+            <input class="form-control" type="text" name="txtFacilityName" value="${getHiddenValue(card, 'txtName')}" required>
+            
+            <div class="row mt-2">
+                <div class="col-6">
+                    <label class="fw-bold text-muted small mb-0">House ID</label>
+                    <input class="form-control" type="number" name="txtHomeId" value="${getHiddenValue(card, 'txtHomeId') || ''}" required>
+                </div>
+                <div class="col-6">
+                    <label class="fw-bold text-muted small mb-0">Room ID</label>
+                    <input class="form-control" type="number" name="txtRoomId" value="${getHiddenValue(card, 'txtRoomId') || ''}">
+                </div>
+            </div>
 
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtDeviceId", getHiddenValue(card, "txtDeviceId"), "", "text", true)
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtRoomId", getHiddenValue(card, "txtRoomId"), "Enter room ID", "number")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtName", getHiddenValue(card, "txtName"), "Enter device name")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtDeviceType", getHiddenValue(card, "txtDeviceType"), "Enter device type")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtSerialNo", getHiddenValue(card, "txtSerialNo"), "Enter serial no")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtVendor", getHiddenValue(card, "txtVendor"), "Enter vendor")
-        );
-        updateUI.dynamicContainer.appendChild(
-            createInput("txtIsActive", getHiddenValue(card, "txtIsActive") || "true", "", "text", true)
-        );
-        updateUI.dynamicContainer.appendChild(
-            createSelect("txtStatus", getHiddenValue(card, "txtStatus"), [
-                { value: "On", label: "On" },
-                { value: "Off", label: "Off" },
-                { value: "Opened", label: "Opened" },
-                { value: "Closed", label: "Closed" },
-                { value: "Locked", label: "Locked" },
-                { value: "Unlocked", label: "Unlocked" }
-            ])
-        );
+            <div class="row mt-2">
+                <div class="col-6">
+                    <label class="fw-bold text-muted small mb-0">Serial No</label>
+                    <input class="form-control" type="text" name="txtCode" value="${getHiddenValue(card, 'txtSerialNo')}" required>
+                </div>
+                <div class="col-6">
+                    <label class="fw-bold text-muted small mb-0">Device Type</label>
+                    <select class="form-select" name="txtDeviceType">
+                        <option value="DoorSensor" ${getHiddenValue(card, 'txtDeviceType') === 'DoorSensor' ? 'selected' : ''}>Door Sensor</option>
+                        <option value="SmartLock" ${getHiddenValue(card, 'txtDeviceType') === 'SmartLock' ? 'selected' : ''}>Smart Lock</option>
+                        <option value="LightSwitch" ${getHiddenValue(card, 'txtDeviceType') === 'LightSwitch' ? 'selected' : ''}>Light Switch</option>
+                        <option value="SmartLight" ${getHiddenValue(card, 'txtDeviceType') === 'SmartLight' ? 'selected' : ''}>Smart Light</option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="fw-bold text-muted small mb-0 mt-2">Vendor</label>
+            <input class="form-control" type="text" name="txtVendor" value="${getHiddenValue(card, 'txtVendor')}">
+            
+            <label class="fw-bold text-muted small mb-0 mt-2">Current State</label>
+            <select class="form-select" name="txtStatus">
+                <option value="On" ${getHiddenValue(card, 'txtStatus') === 'On' ? 'selected' : ''}>On</option>
+                <option value="Off" ${getHiddenValue(card, 'txtStatus') === 'Off' ? 'selected' : ''}>Off</option>
+                <option value="Opened" ${getHiddenValue(card, 'txtStatus') === 'Opened' ? 'selected' : ''}>Opened</option>
+                <option value="Closed" ${getHiddenValue(card, 'txtStatus') === 'Closed' ? 'selected' : ''}>Closed</option>
+                <option value="Locked" ${getHiddenValue(card, 'txtStatus') === 'Locked' ? 'selected' : ''}>Locked</option>
+                <option value="Unlocked" ${getHiddenValue(card, 'txtStatus') === 'Unlocked' ? 'selected' : ''}>Unlocked</option>
+            </select>
+        `;
     }
 }
 

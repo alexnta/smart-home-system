@@ -16,7 +16,8 @@ public class DBUtils {
     public static final Connection getConnection() throws SQLException, ClassNotFoundException {
         Connection conn = null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=SmartHomeDB";
+        // Trong file DBUtils.java
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=SmartHomeDB;sendStringParametersAsUnicode=true";
         conn = DriverManager.getConnection(url, "sa", "12345");
         return conn;
     }

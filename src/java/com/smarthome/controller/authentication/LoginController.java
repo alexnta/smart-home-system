@@ -33,15 +33,17 @@ public class LoginController extends HttpServlet {
      */
 
     private static final String ERROR = "login.jsp";
-    private static final String ADMIN_PAGE = "admin/admin.jsp";   // Tạm thời trỏ về file jsp
-    private static final String OWNER_PAGE = "home_owner/home_owner.jsp";
+    //private static final String ADMIN_PAGE = "admin/admin.jsp"; 
+    private static final String ADMIN_PAGE = "MainController?action=ViewStatistic"; 
+    private static final String OWNER_PAGE = "MainController?action=HODashboard";
     private static final String TECH_PAGE = "technician/technician.jsp";
-    private static final String VIEWER_PAGE = "viewer.jsp";
+    private static final String VIEWER_PAGE = "viewer/viewer.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        boolean isSuccess = false; // redirect or not
 
         try {
             String user = request.getParameter("txtUsername");
@@ -57,20 +59,34 @@ public class LoginController extends HttpServlet {
                 String role = loginUser.getRoleName();
                 if ("Admin".equals(role)) {
                     url = ADMIN_PAGE;
+                    isSuccess = true;
                 } else if ("Home Owner".equals(role)) {
                     url = OWNER_PAGE;
+                    isSuccess = true;
                 } else if ("Technician".equals(role)) {
                     url = TECH_PAGE;
-                } else {
+                    isSuccess = true;
+                } else if ("Viewer".equals(role)) {
                     url = VIEWER_PAGE;
+                    isSuccess = true; 
+                } else {
+                    session.invalidate();
+                    request.setAttribute("ERROR", "Invalid role! You do not have permission to access the system.");
+                    url = ERROR;
                 }
             } else {
                 request.setAttribute("ERROR", "Incorrect account, password, or your account is locked!");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            // THÊM DÒNG NÀY ĐỂ BẮT LỖI DATABASE HIỆN LÊN UI
+            request.setAttribute("ERROR", "System/Database Error: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            if (isSuccess) {
+                response.sendRedirect(url);
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
+            }
         }
     }
 

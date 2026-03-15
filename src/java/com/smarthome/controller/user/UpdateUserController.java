@@ -12,13 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UpdateUserController", urlPatterns = {"/UpdateUserController"})
 public class UpdateUserController extends HttpServlet {
     private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "ViewUserController";
+    private static final String SUCCESS_PAGE = "MainController?action=ViewUser";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8"); 
+        response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
+        boolean isSuccess = false;
 
         try {
             String userIdStr = request.getParameter("txtUserId");
@@ -26,7 +28,8 @@ public class UpdateUserController extends HttpServlet {
             String email = request.getParameter("txtEmail");
             String roleName = request.getParameter("txtRoleName");
             String statusStr = request.getParameter("txtStatus");
-
+            String houseCode = request.getParameter("txtHouseId");
+            
             System.out.println("txtUserId = " + userIdStr);
             System.out.println("txtFullName = " + fullName);
             System.out.println("txtEmail = " + email);
@@ -72,6 +75,7 @@ public class UpdateUserController extends HttpServlet {
                 boolean check = dao.updateUser(user, roleId);
 
                 if (check) {
+                    isSuccess = true;
                     url = SUCCESS_PAGE;
                 } else {
                     request.setAttribute("ERROR_MSG", "Cập nhật thất bại!");
@@ -83,7 +87,12 @@ public class UpdateUserController extends HttpServlet {
             request.setAttribute("ERROR_MSG", "Lỗi: " + e.getMessage());
             request.setAttribute("CURRENT_SECTION", "user_management_section");
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            if (isSuccess) {
+                // Tránh lỗi F5 resubmit form
+                response.sendRedirect(url); 
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
+            }
         }
     }
 }

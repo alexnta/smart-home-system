@@ -13,49 +13,56 @@ import javax.servlet.http.HttpServletResponse;
 public class UpdateRuleController extends HttpServlet {
 
     private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "admin/admin.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8"); 
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR_PAGE;
 
         try {
-             
-            System.out.println("ruleName = " + request.getParameter("ruleName"));
-            System.out.println("triggerType = " + request.getParameter("triggerType"));
-            System.out.println("conditionjson = " + request.getParameter("conditionjson"));
-            System.out.println("severity = " + request.getParameter("severity"));
-
+            // Lấy dữ liệu từ form
             RuleDTO rule = new RuleDTO();
-rule.setRuleId(Integer.parseInt(request.getParameter("ruleId")));
+            rule.setRuleId(Integer.parseInt(request.getParameter("ruleId")));
             rule.setRuleName(request.getParameter("ruleName"));
             rule.setTriggerType(request.getParameter("triggerType"));
             rule.setConditionJson(request.getParameter("conditionjson"));
             rule.setSeverity(request.getParameter("severity"));
+            rule.setIsActive(true); // Mặc định kích hoạt
 
             RuleDAO dao = new RuleDAO();
             boolean success = dao.update(rule);
 
             if (success) {
-                url = SUCCESS_PAGE;
-                request.setAttribute("SUCCESS", "Update rule successfully!");
-                request.setAttribute("CURRENT_SECTION", "edit_rule_section");
-
+                // THÀNH CÔNG: Redirect (chuyển hướng) và KHÔNG chạy tiếp
                 String homeId = request.getParameter("homeId");
-                request.setAttribute("HOME_ID", homeId);
+                
+                // Nếu update Luật chung thì không gắn homeId vào URL
+                if(homeId != null && !homeId.trim().isEmpty() && !homeId.equals("0")){
+                     response.sendRedirect("MainController?action=ViewRule&homeId=" + homeId);
+                } else {
+                     response.sendRedirect("MainController?action=ViewRule");
+                }
+                return; // Thoát hàm ngay lập tức
+
             } else {
-                request.setAttribute("ERROR", "Failed to update rule!");
+                // THẤT BẠI: Thiết lập lỗi và Forward
+                request.setAttribute("ERROR_MSG", "Failed to update rule in database!");
                 request.setAttribute("CURRENT_SECTION", "edit_rule_section");
+                request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
             }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            request.setAttribute("ERROR_MSG", "Invalid Rule ID format!");
+            request.setAttribute("CURRENT_SECTION", "edit_rule_section");
+            request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
             request.setAttribute("CURRENT_SECTION", "edit_rule_section");
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
         }
     }
 

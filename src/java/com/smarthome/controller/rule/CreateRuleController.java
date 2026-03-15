@@ -1,80 +1,79 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.smarthome.controller.rule;
 
 import com.smarthome.dao.RuleDAO;
 import com.smarthome.dto.RuleDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-/**
- *
- * @author Lenovo
- */
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "CreateRuleController", urlPatterns = {"/CreateRuleController"})
 public class CreateRuleController extends HttpServlet {
 
     private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "admin/admin.jsp";
+    private static final String LOGIN_PAGE = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         System.out.println(">>> CreateRuleController called");
-        String url = ERROR_PAGE;
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); 
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-            System.out.println("homeId = " + request.getParameter("homeId"));
-            System.out.println("ruleName = " + request.getParameter("ruleName"));
-            System.out.println("triggerType = " + request.getParameter("triggerType"));
-            System.out.println("conditionjson = " + request.getParameter("conditionjson"));
-            System.out.println("severity = " + request.getParameter("severity"));
+            // 1. Check Session (Bảo mật)
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("LOGIN_USER") == null) {
+                response.sendRedirect(LOGIN_PAGE);
+                return;
+            }
+
+            // 2. Lấy dữ liệu và xử lý HomeID an toàn
+            String homeIdStr = request.getParameter("homeId");
+            int homeId = 0; // Mặc định là 0 (Rule Template chung)
+            if (homeIdStr != null && !homeIdStr.trim().isEmpty()) {
+                homeId = Integer.parseInt(homeIdStr.trim());
+            }
 
             RuleDTO rule = new RuleDTO();
-
-            rule.setHomeId(Integer.parseInt(request.getParameter("homeId")));
+            rule.setHomeId(homeId);
             rule.setRuleName(request.getParameter("ruleName"));
             rule.setTriggerType(request.getParameter("triggerType"));
             rule.setConditionJson(request.getParameter("conditionjson"));
             rule.setSeverity(request.getParameter("severity"));
+            rule.setIsActive(true); // Luật mới mặc định là Active
 
+            // 3. Insert vào Database
             RuleDAO dao = new RuleDAO();
-            System.out.println("Before insert");
             boolean success = dao.insert(rule);
-            System.out.println("After insert");
-            System.out.println("success = " + success);
 
+            // 4. Điều hướng an toàn (KHÔNG DÙNG FINALLY)
             if (success) {
-                url = SUCCESS_PAGE;
-                request.setAttribute("SUCCESS", "Create rule successfully!");
-                request.setAttribute("CURRENT_SECTION", "create_rule_section");
+                // Thành công: Redirect đi và thoát ngay!
+                response.sendRedirect("MainController?action=ViewRule");
+                return; 
             } else {
-                url = ERROR_PAGE;
-                request.setAttribute("ERROR", "Failed to create rule!");
+                // Thất bại do DB: Forward kèm báo lỗi
+                request.setAttribute("ERROR_MSG", "Failed to create rule!");
                 request.setAttribute("CURRENT_SECTION", "create_rule_section");
+                request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
             }
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            request.setAttribute("ERROR", "Invalid number format!");
+            request.setAttribute("ERROR_MSG", "Invalid number format for Home ID!");
             request.setAttribute("CURRENT_SECTION", "create_rule_section");
+            request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
+            
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
             request.setAttribute("CURRENT_SECTION", "create_rule_section");
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
         }
     }
 

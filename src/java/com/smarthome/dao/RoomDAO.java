@@ -191,4 +191,28 @@ public class RoomDAO {
 
         return result;
     }
+    
+    public List<RoomDTO> getRoomsByHomeId(int homeId) throws SQLException, ClassNotFoundException {
+        List<RoomDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = com.smarthome.utils.DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT room_id, name FROM Room WHERE home_id = ? AND status = 'Active'";
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, homeId);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    list.add(new RoomDTO(rs.getInt("room_id"), homeId, rs.getString("name"), 0, "", "", null, ""));
+                }
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return list;
+    }
 }

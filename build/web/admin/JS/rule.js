@@ -1,18 +1,20 @@
+// 1. TẠO GIAO DIỆN UPDATE RULE 
 function createUpdateRuleCard() {
     const container = document.createElement("div");
     container.className = "container-fluid section_container";
 
     const card = document.createElement("div");
-    card.className = "card card_container";
+    card.className = "card card_container shadow-lg border-warning";
+    card.style.width = "600px";
 
     const form = document.createElement("form");
     form.className = "d-flex submit_form";
-    form.action = "MainController";
+    form.action = "../MainController";
     form.method = "post";
 
     const formTitle = document.createElement("h5");
-    formTitle.className = "text-center mt-3";
-    formTitle.textContent = "Update Rule";
+    formTitle.className = "text-center mt-3 text-warning fw-bold";
+    formTitle.textContent = "Update Rule Template";
 
     const hiddenAction = document.createElement("input");
     hiddenAction.type = "hidden";
@@ -20,87 +22,75 @@ function createUpdateRuleCard() {
     hiddenAction.value = "UpdateRule";
     
     const hiddenRuleId = document.createElement("input");
-hiddenRuleId.type = "hidden";
-hiddenRuleId.name = "ruleId";
+    hiddenRuleId.type = "hidden";
+    hiddenRuleId.name = "ruleId";
 
-const inputRuleName = document.createElement("input");
-inputRuleName.className = "form-control mx-auto mt-3 input_data";
-inputRuleName.name = "ruleName";
-inputRuleName.placeholder = "Enter full name";
+    const inputHomeId = document.createElement("input");
+    inputHomeId.type = "hidden";
+    inputHomeId.name = "homeId";
 
-const inputHomeId = document.createElement("input");
-inputHomeId.className = "form-control mx-auto mt-3 input_data";
-inputHomeId.name = "homeId";
-inputHomeId.placeholder = "Enter home id";
+    // Vùng chứa nội dung động
+    const dynamicContainer = document.createElement("div");
+    dynamicContainer.className = "d-flex flex-column gap-2 mt-3";
 
-const inputCondition = document.createElement("input");
-inputCondition.className = "form-control mx-auto mt-3 input_data";
-inputCondition.name = "conditionjson";
-inputCondition.placeHolder = "Enter condition";
-    
-    const selectTriggerType = document.createElement("select");
-selectTriggerType.className = "form-select mx-auto mt-3 input_data";
-selectTriggerType.name = "triggerType";
-selectTriggerType.innerHTML = `
-    <option value="">Choose trigger type</option>
-    <option value="1">Event</option>
-    <option value="2">Schedule</option>
-    <option value="3">Threshold</option>
+    dynamicContainer.innerHTML = `
+        <label class="fw-bold text-muted small mb-0">Rule Name</label>
+        <input class="form-control input_data w-100" name="ruleName" required>
 
-`;
+        <div class="row">
+            <div class="col-6">
+                <label class="fw-bold text-muted small mb-0">Trigger Type</label>
+                <select class="form-select input_data w-100" name="triggerType" required>
+                    <option value="Event">Event</option>
+                    <option value="Schedule">Schedule</option>
+                    <option value="Threshold">Threshold</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="fw-bold text-muted small mb-0">Severity</label>
+                <select class="form-select input_data w-100" name="severity" required>
+                    <option value="Info">Info</option>
+                    <option value="Warning">Warning</option>
+                    <option value="Critical">Critical</option>
+                </select>
+            </div>
+        </div>
 
-    const selectSeverityType = document.createElement("select");
-selectSeverityType.className = "form-select mx-auto mt-3 input_data";
-selectSeverityType.name = "severity";
-selectSeverityType.innerHTML = `
-    <option value="">Choose severity</option>
-    <option value="1">Info</option>
-    <option value="2">Warning</option>
-    <option value="3">Critical</option>
-
-`;
+        <label class="fw-bold text-muted small mb-0 mt-2">Condition (JSON Format)</label>
+        <textarea class="form-control input_data w-100 font-monospace" rows="4" name="conditionjson" id="json_update_input" required></textarea>
+        <small id="json_update_error" class="text-danger fw-bold d-none">Invalid JSON format!</small>
+    `;
 
     const buttonContainer = document.createElement("div");
-    buttonContainer.className = "button_container mt-3 d-flex justify-content-center gap-5";
+    buttonContainer.className = "button_container mt-4 d-flex justify-content-center gap-4";
 
     const updateBtn = document.createElement("button");
     updateBtn.type = "submit";
-    updateBtn.className = "btn btn-outline-success submit_update_rule_button";
-    updateBtn.textContent = "Update";
+    updateBtn.className = "btn btn-primary submit_update_rule_button px-4";
+    updateBtn.textContent = "Save Changes";
 
     const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
-    cancelBtn.className = "btn btn-outline-danger cancel_update_rule_button";
+    cancelBtn.className = "btn btn-outline-secondary cancel_update_rule_button px-4";
     cancelBtn.textContent = "Cancel";
 
     buttonContainer.appendChild(updateBtn);
     buttonContainer.appendChild(cancelBtn);
 
-    form.append(
-        hiddenAction,
-hiddenRuleId,
-        formTitle,
-        inputRuleName,
-        inputHomeId,
-        inputCondition,
-        selectTriggerType,
-        selectSeverityType,
-        buttonContainer
-    );
-
+    form.append(hiddenAction, hiddenRuleId, inputHomeId, formTitle, dynamicContainer, buttonContainer);
     card.appendChild(form);
     container.appendChild(card);
 
     return {
         container,
         form,
-        inputRuleName,
         hiddenRuleId,
         inputHomeId,
-        inputCondition,
-        selectTriggerType,
-        selectSeverityType,
-        buttonContainer,
+        inputRuleName: dynamicContainer.querySelector('input[name="ruleName"]'),
+        selectTriggerType: dynamicContainer.querySelector('select[name="triggerType"]'),
+        selectSeverityType: dynamicContainer.querySelector('select[name="severity"]'),
+        inputCondition: dynamicContainer.querySelector('textarea[name="conditionjson"]'),
+        jsonErrorText: dynamicContainer.querySelector('#json_update_error'),
         cancelBtn
     };
 }
@@ -110,37 +100,66 @@ function getHiddenValue(formSource, name) {
     return input ? input.value : "";
 }
 
+// 2. ĐỔ DỮ LIỆU CŨ VÀO FORM UPDATE
 function displayUpdateRuleCard(e, updateUI, overlay) {
-
-
     const formSource = e.target.closest("form");
     if (!formSource) return null;
 
-    // lấy dữ liệu từ form hidden trong card JSP
+    // Gắn ID
     updateUI.hiddenRuleId.value = getHiddenValue(formSource, "ruleId");
-    updateUI.inputRuleName.value = getHiddenValue(formSource, "ruleName");
     updateUI.inputHomeId.value = getHiddenValue(formSource, "homeId");
-
-    const selectTriggerType = getHiddenValue(formSource, "triggerType");
-    [...updateUI.selectTriggerType.options].forEach(opt => {
-        opt.selected = opt.value === selectTriggerType;
-    });
-
+    
+    // Gắn Text
+    updateUI.inputRuleName.value = getHiddenValue(formSource, "ruleName");
     updateUI.inputCondition.value = getHiddenValue(formSource, "conditionjson");
 
-    const selectSeverityType = getHiddenValue(formSource, "severity");
-    [...updateUI.selectSeverityType.options].forEach(opt => {
-        opt.selected = opt.value === selectSeverityType;
-    });
+    // Gắn Select Dropdown
+    updateUI.selectTriggerType.value = getHiddenValue(formSource, "triggerType");
+    updateUI.selectSeverityType.value = getHiddenValue(formSource, "severity");
+
+    // Ẩn lỗi JSON nếu có từ lần bấm trước
+    updateUI.jsonErrorText.classList.add("d-none");
 
     overlay.innerHTML = "";
     overlay.appendChild(updateUI.container);
     document.body.appendChild(overlay);
 
+    // KÍCH HOẠT VALIDATE JSON KHI SUBMIT FORM UPDATE
+    updateUI.form.addEventListener('submit', function(event) {
+        try {
+            JSON.parse(updateUI.inputCondition.value); // Thử parse JSON
+            updateUI.jsonErrorText.classList.add("d-none"); // Nếu đúng -> ẩn lỗi đi tiếp
+        } catch (err) {
+            event.preventDefault(); // Nếu sai -> Chặn form submit
+            updateUI.jsonErrorText.classList.remove("d-none"); // Hiện chữ đỏ báo lỗi
+        }
+    });
+
     return formSource;
 }
+
+// 3. KÍCH HOẠT VALIDATE JSON CHO FORM CREATE (Hàm này nên được gọi trong main.js)
+function initJsonValidatorForCreate() {
+    const createForm = document.getElementById("create_rule_form");
+    const jsonInput = document.getElementById("json_create_input");
+    const jsonError = document.getElementById("json_create_error");
+
+    if(createForm && jsonInput) {
+        createForm.addEventListener('submit', function(event) {
+            try {
+                JSON.parse(jsonInput.value); // Thử parse
+                jsonError.classList.add("d-none");
+            } catch (err) {
+                event.preventDefault(); // Chặn
+                jsonError.classList.remove("d-none");
+            }
+        });
+    }
+}
+
 export {
 getHiddenValue,
     createUpdateRuleCard,
-    displayUpdateRuleCard
+    displayUpdateRuleCard,
+    initJsonValidatorForCreate
 }

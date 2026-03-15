@@ -1,92 +1,92 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.smarthome.controller.rule;
 
 import com.smarthome.dao.RuleDAO;
 import com.smarthome.dto.RuleDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Lenovo
- */
 @WebServlet(name = "ViewRuleController", urlPatterns = {"/ViewRuleController"})
 public class ViewRuleController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private static final String ADMIN_PAGE = "admin/admin.jsp";
+    private static final String LOGIN_PAGE = "login.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try {
+            // 1. Kiểm tra an toàn bảo mật (Bắt buộc)
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("LOGIN_USER") == null) {
+                response.sendRedirect(LOGIN_PAGE);
+                return;
+            }
 
-            int homeId = Integer.parseInt(request.getParameter("homeId"));
+            // 2. Lấy homeId một cách AN TOÀN
+            String homeIdStr = request.getParameter("homeId");
+            int homeId = 0; // 0 Mặc định là tìm các Template dùng chung
 
+            if (homeIdStr != null && !homeIdStr.trim().isEmpty()) {
+                homeId = Integer.parseInt(homeIdStr.trim());
+            }
+
+            // 3. Gọi DAO để lấy danh sách
             RuleDAO dao = new RuleDAO();
-            List<RuleDTO> list = dao.getByHomeId(homeId);
+            List<RuleDTO> list;
 
+            if (homeId > 0) {
+                // Đang tìm kiếm luật của 1 nhà cụ thể
+                list = dao.getRulesByHomeId(homeId); 
+                request.setAttribute("SEARCH_MODE", "HOME");
+                request.setAttribute("SEARCH_HOME_ID", homeId);
+            } else {
+                // Đang xem các Mẫu luật chung (Template)
+                list = dao.getAllRuleTemplates(); 
+                request.setAttribute("SEARCH_MODE", "TEMPLATE");
+            }
+
+            // 4. Gắn dữ liệu và ném về giao diện
             request.setAttribute("RULE_LIST", list);
-            request.setAttribute("CURRENT_SECTION","edit_rule_section");
-            request.getRequestDispatcher("admin/admin.jsp").forward(request, response);
+            request.setAttribute("CURRENT_SECTION", "edit_rule_section");
+            request.getRequestDispatcher(ADMIN_PAGE).forward(request, response);
 
+        } catch (NumberFormatException e) {
+            // Xử lý khi Admin nhập chữ cái vào ô Home ID
+            request.setAttribute("ERROR_MSG", "Home ID must be a number!");
+            request.setAttribute("CURRENT_SECTION", "edit_rule_section");
+            request.getRequestDispatcher(ADMIN_PAGE).forward(request, response);
+            
         } catch (Exception e) {
+            // Bắt lỗi Database và trả về giao diện hộp thoại đỏ
             e.printStackTrace();
+            log("Error at ViewRuleController: " + e.toString());
+            request.setAttribute("ERROR_MSG", "Cannot load rules: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "edit_rule_section");
+            request.getRequestDispatcher(ADMIN_PAGE).forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

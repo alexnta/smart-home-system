@@ -16,16 +16,28 @@ public class DeleteRuleController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
+            // Kiểm tra session
+            if (request.getSession(false) == null || request.getSession(false).getAttribute("LOGIN_USER") == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+
             int ruleId = Integer.parseInt(request.getParameter("ruleId"));
-            String homeId = request.getParameter("homeId");
+            String homeIdStr = request.getParameter("homeId");
 
             RuleDAO dao = new RuleDAO();
             boolean success = dao.delete(ruleId);
 
             if (success) {
-                response.sendRedirect("MainController?action=ViewRule&homeId=" + homeId);
+                // Kiểm tra xem là xóa Luật riêng hay Mẫu luật chung
+                if (homeIdStr != null && !homeIdStr.trim().isEmpty() && !homeIdStr.equals("0")) {
+                    response.sendRedirect("MainController?action=ViewRule&homeId=" + homeIdStr);
+                } else {
+                    // Nếu là Mẫu luật chung thì không truyền homeId
+                    response.sendRedirect("MainController?action=ViewRule");
+                }
             } else {
-                request.setAttribute("ERROR", "Failed to delete rule!");
+                request.setAttribute("ERROR_MSG", "Failed to delete rule!");
                 request.setAttribute("CURRENT_SECTION", "edit_rule_section");
                 request.getRequestDispatcher("admin/admin.jsp").forward(request, response);
             }

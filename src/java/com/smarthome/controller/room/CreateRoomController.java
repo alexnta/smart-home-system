@@ -31,64 +31,64 @@ public class CreateRoomController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
        private static final String ERROR_PAGE ="admin/admin.jsp";
-    private static final String SUCCESS_PAGE ="admin/admin.jsp";
+    private static final String SUCCESS_PAGE ="MainController?action=ViewRoom";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8"); 
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
+        boolean success = false;
 
         try {
-
             String homeIdStr = request.getParameter("txtHomeId");
-            String roomIDtxt = request.getParameter("txtCode");
             String name = request.getParameter("txtFacilityName");
             String floorStr = request.getParameter("txtFloor");
             String roomType = request.getParameter("txtRoomType");
             String status = request.getParameter("txtStatus");
-            int roomID = Integer.parseInt(roomIDtxt);
-
-            // Validate
+            
             if (homeIdStr == null || homeIdStr.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Home ID is required!");
+                request.setAttribute("ERROR_MSG", "Home ID is required!");
             } else if (name == null || name.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Room name is required!");
+                request.setAttribute("ERROR_MSG", "Room name is required!");
             } else {
                 int homeId = Integer.parseInt(homeIdStr);
-                int floor = 1; // default
+                int floor = 1;
                 if (floorStr != null && !floorStr.trim().isEmpty()) {
                     floor = Integer.parseInt(floorStr);
                 }
 
-                // DTO
                 RoomDTO room = new RoomDTO();
                 room.setHomeId(homeId);
-                room.setRoomId(roomID);
                 room.setName(name.trim());
                 room.setFloor(floor);
                 room.setRoomType(roomType != null ? roomType.trim() : "");
                 room.setStatus(status != null ? status : "Active");
 
-                // Insert vào DB
                 RoomDAO dao = new RoomDAO();
-                boolean success = dao.insertRoom(room);
+                success = dao.insertRoom(room);
 
                 if (success) {
                     url = SUCCESS_PAGE;
                 } else {
-                            request.setAttribute("ERROR", "Failed to create room!");
-        request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+                    request.setAttribute("ERROR_MSG", "Failed to create room!");
+                    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
                 }
             }
-
         } catch (NumberFormatException e) {
-                request.setAttribute("ERROR", "Invalid number format!");
-    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+            request.setAttribute("ERROR_MSG", "Invalid number format for Home ID or Floor!");
+            request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } catch (Exception e) {
-    request.setAttribute("ERROR", "System error: " + e.getMessage());
-    request.setAttribute("CURRENT_SECTION", "add_facilities_section");
+            log("Error at CreateRoomController: " + e.toString());
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
+            request.setAttribute("CURRENT_SECTION", "add_facilities_section");
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            // ÁP DỤNG PRG Ở ĐÂY
+            if (success) {
+                response.sendRedirect(url);
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
+            }
         }
     }
 

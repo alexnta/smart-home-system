@@ -127,6 +127,7 @@ GO
 CREATE TABLE Device (
     device_id INT IDENTITY(1,1) PRIMARY KEY,
     room_id INT, -- Thiết bị có thể chưa gán vào phòng nào (NULL)
+    home_id INT NOT NULL,
     name NVARCHAR(100) NOT NULL, -- Tên gợi nhớ (Đèn trần, Cảm biến cửa chính)
     
     -- Quan trọng: Loại thiết bị để phân chia logic xử lý [78]
@@ -150,7 +151,6 @@ CREATE TABLE Device (
     
     FOREIGN KEY (room_id) REFERENCES Room(room_id) ON DELETE SET NULL
 );
-GO
 
 -- =============================================
 -- PHẦN 5: NGỮ CẢNH NHÀ (HOME MODE)
@@ -209,7 +209,7 @@ GO
 -- =============================================
 CREATE TABLE [Rule] (
     rule_id INT IDENTITY(1,1) PRIMARY KEY,
-    home_id INT,
+    home_id INT, -- home_id = NULL thì là mẫu luật chung cho cả hệ thống (rule template do admin tạo ra)
     rule_name NVARCHAR(100), -- VD: Cảnh báo mở cửa quá lâu
     
     -- Loại trigger: 'Schedule' (Theo giờ), 'Event' (Theo sự kiện), 'Threshold' (Ngưỡng)
@@ -323,3 +323,30 @@ INSERT INTO AlertAction (alert_id, actor_user_id, action_type, note, action_ts) 
 -- Update trạng thái Alert thành 'Resolved'
 UPDATE Alert SET status = 'Resolved', end_ts = GETDATE() WHERE alert_id = 1;
 GO
+
+INSERT INTO Alert (home_id, device_id, rule_id, alert_type, severity, message, start_ts)
+VALUES
+-- 1 Door mở quá lâu (rule 1)
+(1, 3, 1, 'Security', 'Warning',
+ N'Cửa sổ bếp mở quá 15 phút',
+ '2026-03-14 18:45:00'),
+
+-- 2 Intrusion khi Away mode (rule 2)
+(1, 1, 2, 'Security', 'Critical',
+ N'Phát hiện cửa chính mở khi nhà ở chế độ Away',
+ '2026-03-14 22:30:00'),
+
+-- 3 SmartLock không khóa lúc nửa đêm (rule 18)
+(1, 2, 18, 'Security', 'Warning',
+ N'Khóa cửa phòng ngủ chưa được khóa sau 23:00',
+ '2026-03-14 23:10:00'),
+
+-- 4 Đèn bật lúc rạng sáng (rule 19)
+(1, 4, 19, 'Energy', 'Info',
+ N'Đèn phòng khách vẫn bật sau 01:00 sáng',
+ '2026-03-15 01:05:00'),
+
+-- 5 SmartLock lỗi (rule 20)
+(1, 2, 20, 'Security', 'Critical',
+ N'Phát hiện lỗi hoặc cạy phá khóa cửa phòng ngủ',
+ '2026-03-14 21:20:00');

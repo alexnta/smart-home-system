@@ -119,7 +119,11 @@ public class HomeDAO {
                     ptm.setString(2, home.getName());
                     ptm.setString(3, home.getAddressText());
                     ptm.setString(4, home.getStatus());
-                    ptm.setInt(5, home.getOwnerUserId());
+                    if (home.getOwnerUserId() > 0) {
+                        ptm.setInt(5, home.getOwnerUserId());
+                    } else {
+                        ptm.setNull(5, java.sql.Types.INTEGER);
+                    }
 
                     int rowsAffected = ptm.executeUpdate();
                     if (rowsAffected > 0) {
@@ -152,7 +156,11 @@ public class HomeDAO {
                 ptm.setString(2, home.getName());
                 ptm.setString(3, home.getAddressText());
                 ptm.setString(4, home.getStatus());
-                ptm.setInt(5, home.getOwnerUserId());
+                if (home.getOwnerUserId() > 0) {
+                    ptm.setInt(5, home.getOwnerUserId());
+                } else {
+                    ptm.setNull(5, java.sql.Types.INTEGER);
+                }
                 ptm.setInt(6, home.getHomeId());
 
                 int rowsAffected = ptm.executeUpdate();
@@ -192,6 +200,32 @@ public class HomeDAO {
             if (conn != null) conn.close();
         }
 
+        return result;
+    }
+    
+    public boolean assignOwnerToHome(String houseCode, int ownerUserId) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean result = false;
+
+        String sql = "UPDATE Home SET owner_user_id = ? WHERE code = ?";
+
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, ownerUserId);
+                ptm.setString(2, houseCode);
+
+                int rowsAffected = ptm.executeUpdate();
+                if (rowsAffected > 0) {
+                    result = true; 
+                }
+            }
+        } finally {
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
         return result;
     }
 }

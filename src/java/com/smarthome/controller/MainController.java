@@ -33,7 +33,7 @@ public class MainController extends HttpServlet {
     private static final String LOGIN_CONTROLLER = "LoginController";
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
-
+    
     private static final String VIEW_USER = "ViewUser";
     private static final String VIEW_USER_CONTROLLER = "ViewUserController";
     private static final String CREATE_USER = "CreateUser";
@@ -51,6 +51,24 @@ public class MainController extends HttpServlet {
     private static final String UPDATE_HOME_CONTROLLER = "UpdateHomeController";
     private static final String DELETE_HOME = "DeleteHome";
     private static final String DELETE_HOME_CONTROLLER = "DeleteHomeController";
+    
+    // HOME OWNER
+    private static final String HOME_DASHBOARD = "HODashboard";
+    private static final String HOME_DASHBOARD_CONTROLLER = "HODashboardController";
+    private static final String HO_VIEW_DEVICE = "HOViewDevice";
+    private static final String HO_VIEW_DEVICE_CONTROLLER = "HOViewDeviceController";
+    private static final String HO_CREATE_EVENT = "HOCreateEvent";
+    private static final String HO_CREATE_EVENT_CONTROLLER = "HOCreateEventController";
+    private static final String HO_SEARCH_EVENT = "HOSearchEvent";
+    private static final String HO_SEARCH_EVENT_CONTROLLER = "HOSearchEventController";
+    private static final String HO_VIEW_ALERT = "HOViewAlert";
+    private static final String HO_VIEW_ALERT_CONTROLLER = "HOViewAlertController";
+    private static final String HO_ACK_ALERT = "HOAckAlert";
+    private static final String HO_ACK_ALERT_CONTROLLER = "HOAckAlertController";
+    private static final String HO_UPDATE_MODE = "HOUpdateMode";
+    private static final String HO_UPDATE_MODE_CONTROLLER = "HOUpdateModeController";
+    private static final String HO_VIEW_RULE = "HOViewRule";
+    private static final String HO_VIEW_RULE_CONTROLLER = "HOViewRuleController";
 
     private static final String VIEW_ROOM = "ViewRoom";
     private static final String VIEW_ROOM_CONTROLLER = "ViewRoomController";
@@ -119,8 +137,8 @@ public class MainController extends HttpServlet {
     private static final String DELETE_ALERT_ACTION_CONTROLLER = "DeleteAlertActionController";
 
     private static final String VIEW_STATISTIC = "ViewStatistic";
-    private static final String VIEW_STATISTIC_CONTROLLER = "StatisticController";
-
+    private static final String STATISTIC_CONTROLLER = "StatisticController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -152,6 +170,30 @@ public class MainController extends HttpServlet {
                 url = UPDATE_HOME_CONTROLLER;
             } else if (DELETE_HOME.equals(action)) {
                 url = DELETE_HOME_CONTROLLER;
+                
+            // home owner
+            } else if (HOME_DASHBOARD.equals(action)) {
+                url = HOME_DASHBOARD_CONTROLLER;
+            } else if (HO_VIEW_DEVICE.equals(action)) {
+                url = HO_VIEW_DEVICE_CONTROLLER;
+            } else if (HO_CREATE_EVENT.equals(action)) {
+                url = HO_CREATE_EVENT_CONTROLLER;
+            } else if (HO_SEARCH_EVENT.equals(action)) {
+                url = HO_SEARCH_EVENT_CONTROLLER;
+            } else if (HO_SEARCH_EVENT.equals(action)) {
+                url = HO_SEARCH_EVENT_CONTROLLER;
+            } else if (HO_ACK_ALERT.equals(action)) {
+                url = HO_ACK_ALERT_CONTROLLER;
+            } else if (HO_UPDATE_MODE.equals(action)) {
+                url = HO_UPDATE_MODE_CONTROLLER;
+            } else if (HO_VIEW_RULE.equals(action)) {
+                url = HO_VIEW_RULE_CONTROLLER;
+                
+                
+                
+            // THÊM 2 DÒNG NÀY VÀO ĐÂY:
+            } else if (HO_VIEW_ALERT.equals(action)) {
+                url = HO_VIEW_ALERT_CONTROLLER;
                 // room
             } else if (VIEW_ROOM.equals(action)) {
                 url = VIEW_ROOM_CONTROLLER;
@@ -217,9 +259,9 @@ public class MainController extends HttpServlet {
                 url = CREATE_ALERT_ACTION_CONTROLLER;
             } else if (DELETE_ALERT_ACTION.equals(action)) {
                 url = DELETE_ALERT_ACTION_CONTROLLER;
-                
+               
             } else if (VIEW_STATISTIC.equals(action)) {
-                url = VIEW_STATISTIC_CONTROLLER;
+                url = STATISTIC_CONTROLLER;
                 
             } else {
                 request.setAttribute("ERROR", "Your action is not supported.");

@@ -13,31 +13,29 @@ import javax.servlet.http.HttpServletResponse;
 public class UpdateHomeController extends HttpServlet {
 
     private static final String ERROR_PAGE = "admin/admin.jsp";
-    private static final String SUCCESS_PAGE = "admin/admin.jsp";
+    private static final String SUCCESS_PAGE = "MainController?action=ViewHome";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
+        boolean isSuccess = false;
 
         try {
             String homeIdStr = request.getParameter("txtHomeId");
             String code = request.getParameter("txtCode");
-            String name = request.getParameter("txtName");
+            String name = request.getParameter("txtFacilityName"); // <-- ĐÃ SỬA THÀNH txtFacilityName
             String address = request.getParameter("txtAddress");
             String status = request.getParameter("txtStatus");
             String ownerIdStr = request.getParameter("txtOwnerId");
 
             if (homeIdStr == null || homeIdStr.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Home ID is required!");
-                request.setAttribute("CURRENT_SECTION", "house_management_section");
+                request.setAttribute("ERROR_MSG", "Home ID is required!");
             } else if (code == null || code.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Home code is required!");
-                request.setAttribute("CURRENT_SECTION", "house_management_section");
+                request.setAttribute("ERROR_MSG", "Home code is required!");
             } else if (name == null || name.trim().isEmpty()) {
-                request.setAttribute("ERROR", "Home name is required!");
-                request.setAttribute("CURRENT_SECTION", "house_management_section");
+                request.setAttribute("ERROR_MSG", "Home name is required!");
             } else {
                 int homeId = Integer.parseInt(homeIdStr);
                 int ownerId = 0;
@@ -54,37 +52,35 @@ public class UpdateHomeController extends HttpServlet {
                 home.setOwnerUserId(ownerId);
 
                 HomeDAO dao = new HomeDAO();
-                boolean success = dao.updateHome(home);
+                isSuccess = dao.updateHome(home);
 
-                if (success) {
+                if (isSuccess) {
                     url = SUCCESS_PAGE;
                 } else {
-                    request.setAttribute("ERROR", "Failed to update home!");
-                    request.setAttribute("CURRENT_SECTION", "house_management_section");
+                    request.setAttribute("ERROR_MSG", "Failed to update home in database!");
                 }
             }
-
         } catch (NumberFormatException e) {
-            request.setAttribute("ERROR", "Invalid number format!");
-            request.setAttribute("CURRENT_SECTION", "house_management_section");
+            request.setAttribute("ERROR_MSG", "Invalid number format for Home ID or Owner ID!");
         } catch (Exception e) {
             log("Error at UpdateHomeController: " + e.toString());
-            request.setAttribute("ERROR", "System error: " + e.getMessage());
-            request.setAttribute("CURRENT_SECTION", "house_management_section");
+            request.setAttribute("ERROR_MSG", "System error: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.setAttribute("CURRENT_SECTION", "house_management_section");
+            if (isSuccess) {
+                response.sendRedirect(url);
+            } else {
+                request.getRequestDispatcher(url).forward(request, response);
+            }
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
-
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 }

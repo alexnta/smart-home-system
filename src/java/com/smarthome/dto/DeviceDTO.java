@@ -14,6 +14,7 @@ public class DeviceDTO {
 
     private int deviceId;
     private int roomId;
+    private int homeId;
     private String name;
     private String deviceType; // DoorSensor, SmartLock, LightSwitch, SmartLight
     private String serialNo;
@@ -30,9 +31,10 @@ public class DeviceDTO {
     public DeviceDTO() {
     }
 
-    public DeviceDTO(int deviceId, int roomId, String name, String deviceType, String serialNo, String vendor, String status, Timestamp lastSeenTs, boolean isActive, Timestamp createdAt, String roomName, String homeName) {
+    public DeviceDTO(int deviceId, int roomId, int homeId, String name, String deviceType, String serialNo, String vendor, String status, Timestamp lastSeenTs, boolean isActive, Timestamp createdAt, String roomName, String homeName) {
         this.deviceId = deviceId;
         this.roomId = roomId;
+        this.homeId = homeId;
         this.name = name;
         this.deviceType = deviceType;
         this.serialNo = serialNo;
@@ -139,5 +141,13 @@ public class DeviceDTO {
 
     public void setHomeName(String homeName) {
         this.homeName = homeName;
+    }
+
+    public int getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(int homeId) {
+        this.homeId = homeId;
     }
 }
